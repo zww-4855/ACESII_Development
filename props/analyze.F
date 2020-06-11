@@ -18,6 +18,7 @@
       integer NATOM,closestatus,openstatus,writeFile
 
 #include "machsp.com"
+C       test
 C       SUBROUTINE takes the decomposed alpha&beta density matrix
 C       and, alongside the property integrals, calls compp.F. The emphasis
 C       of the property integrals focused on the evaluation of the 
