@@ -18,11 +18,17 @@
       integer NATOM,closestatus,openstatus,writeFile
 
 #include "machsp.com"
+C       SUBROUTINE takes the decomposed alpha&beta density matrix
+C       and, alongside the property integrals, calls compp.F. The emphasis
+C       of the property integrals focused on the evaluation of the 
+C       electronic density at the nucleus.
+C       compp.F then calculates the spin density, in this case per
+C       alpha&beta MO, and returns the spin density to SUBROUTINE.
+C       SUBROUTINE then writes this to output file.
  
+      IONE=1
 c       Sort spin density according to atom center
       CALL GETREC(20,'JOBARC','NATOMS  ',IONE,NATOM)
-c      CALL GETREC(20,'JOBARC','MAP2ZMAT',2,NATOM)
-c      CALL GETREC(20,'JOBARC','ATOMCHRG',NUMATOM,IATNUM)
       print*, 'number of atoms is: ', NATOM
 
         Nbfns2 = Nbfns*Nbfns 
@@ -31,29 +37,26 @@ c      CALL GETREC(20,'JOBARC','ATOMCHRG',NUMATOM,IATNUM)
       Idens_b = Idens_a + Nbfns2 
       Iend    = Idens_b + Nbfns2 
 
-c      Call Dzero(Work(Idens_a),Nbfns2)
-c      Call Dzero(Work(Idens_b),Nbfns2)
-c      CALL SEEKLB('   DEN  ',IERR,IRWND)
-
       allocate(spdena(Nocc_a),spdenb(Nocc_b),spdenall(Nocc_a))
       
       if (writeFile.eq.0) then
          open(unit=159, file='hfspinDen.txt',status='unknown',!old',
-     & ! form='FORMATTED',iostat=openstatus,
      &  action='write')!,position='rewind')
       else
            open(unit=159, file='CCspinDen.txt',status='unknown',!'old',
-     & ! form='FORMATTED',iostat=openstatus,
      &  action='write')!,position='rewind')
       endif
-
-      do n=1,2 !number of atoms in ZMAT!!!
+C       Do loop runs for every atom in ZMAT
+C       Work(Idens_a/b) is intended to hold a running summation
+C       ,using LAPACK daxpy routine,
+C       of the MO density matrices for later comparison against
+C       the total alpha/beta Density matrix. 
+      do n=1,NATOM 
               Call Dzero(Work(Idens_a),Nbfns2)
               Call Dzero(Work(Idens_b),Nbfns2) 
-c               CALL SEEKLB('   DEN  ',IERR,IRWND)
-c                IF(IERR.NE.0)RETURN
-c              IRWND=1
+C             2 Do loops for alpha&beta quantities
               Do Iocc = 1, Nocc_a
+C           SEEKLB offsets JOBARC to the appropriate density
                  if (n.eq.1) then
                      IRWND=0
                      CALL SEEKLB('   DEN  ',IERR,IRWND)
@@ -66,19 +69,16 @@ c              IRWND=1
                      CALL SEEKLB('   DEN  ',IERR,IRWND)
                  endif
                  spens=0.0d0
-c                CALL SEEKLB('   DEN  ',IERR,IRWND)
-c                IF(IERR.NE.0)RETURN
-c                 if (n.eq.1) then
-c                     IRWND=0
-c                 else
-c                     IRWND=1
-c                 endif
 
                 Call Daxpy(Nbfns2,Done,Dens_a(1,Iocc),1,Work(Idens_a),1)
-             call COMPPR(spens, Dens_a(1,Iocc), propInt, Nbfns, .False.)
+                call COMPPR(spens, Dens_a(1,Iocc), propInt, Nbfns, 
+     &                                                  .False.)
                 spdena(Iocc)=spens
+#ifdef _DEBUG_LVL0
                 print*, 'spin Density for alpha e: ', Iocc, spens
+#endif
               Enddo 
+
               Do Iocc = 1, Nocc_b
                 spens=0.0d0
                  if (n.eq.1) then
@@ -92,14 +92,16 @@ c                 endif
                      IRWND=1
                      CALL SEEKLB('   DEN  ',IERR,IRWND)
                  endif
-c                IRWND=0
-c                CALL SEEKLB('   DEN  ',IERR,IRWND)
                 Call Daxpy(Nbfns2,Done,Dens_b(1,Iocc),1,Work(Idens_b),1)
-             call COMPPR(spens, Dens_b(1,Iocc), propInt, Nbfns, .False.)
+                call COMPPR(spens, Dens_b(1,Iocc), propInt, Nbfns,
+     &                                                   .False.)
                 spdenb(Iocc)=spens
+#ifdef _DEBUG_LVL0
                 print*, 'spin Density for beta e: ', Iocc, spens
+#endif
               Enddo 
-
+C       Determines the spin density, defined as the difference
+C       between alpha and beta density, in this case at the nucleus
               do i=1,Nocc_a
                 if (i.eq.Nocc_a) then
                   spdenall(i)=spdena(i)
@@ -107,35 +109,27 @@ c                CALL SEEKLB('   DEN  ',IERR,IRWND)
                 endif
                 spdenall(i)=spdena(i)-spdenb(i)
               enddo
-      
-c      if (writeFile.eq.0) then
-c            open(unit=159, file='hfspinDen.txt',status='unknown',!old',
-c     & ! form='FORMATTED',iostat=openstatus,
-c     &  action='write')!,position='rewind')
-c      else
-c           open(unit=159, file='CCspinDen.txt',status='unknown',!'old',
-c     & ! form='FORMATTED',iostat=openstatus,
-c     &  action='write')!,position='rewind')
-c      endif
-      do i=1,Nocc_a
-        write(159,"(A14,I1,A9,F14.7,3X,F14.7,3X,F14.7)")
+C        Write to file
+         do i=1,Nocc_a
+            write(159,"(A14,I1,A9,F14.7,3X,F14.7,3X,F14.7)")
      &      'a/b MO ',i,' density:' , spdena(i),spdenb(i),spdenall(i)
-        if (i.eq.Nocc_a) then
-          write(159,*) '  '
-          exit
-        endif 
+            if (i.eq.Nocc_a) then
+              write(159,*) '  '
+              exit
+            endif 
+         enddo
+         iatom=iatom+1
       enddo
-c      close(159,iostat=closestatus)
-c      IRWND=1
-c      CALL SEEKLB('   DEN  ',IERR,1)
-      iatom=iatom+1
-      enddo
+
       close(159,iostat=closestatus)
-      IRWND=0
+      IRWND=0 ! necessary to reset this for subsequent calcs
       deallocate(spdena,spdenb,spdenall)
+
+C                       *********DEBUG**********
+C       Ensure the density matrices per MO summed equals the total
+C       Density matrix. Also verify diagonalization of density matrix
+C       yields eigenvector matrix whose trace is number of electrons
 #ifdef _DEBUG_LVL0
-c        write(6,"(a)") "The alpha density matrix"
-c        call output(Work(Idens_a),1,Nbfns,1,Nbfns,Nbfns,Nbfns,1)
 
       if (writeFile.eq.0) then
          Call Getrec(20,"JOBARC","SCFDENSA",Nbfns2*Iintfp,checka(1))
@@ -189,35 +183,9 @@ c        call output(Work(Idens_a),1,Nbfns,1,Nbfns,Nbfns,Nbfns,1)
       totalb=0.0d0
       do i=1,Nbfns*Nbfns
         total=total+diag(i)!(Nbfns*(i-1)+i)
-        !totalb=totalb+checkb(Nbfns*(i-1)+i)
       enddo
       print*, 'trace alpha matrix', total
       call output(checka(1),1,Nbfns,1,Nbfns,Nbfns,Nbfns,1)
-      !print*, 'trace beta matrix', totalb
-c      Call Daxpy(Nbfns2,Done,checkb(Idens_a),1,checka(1),1)!total DM
-
-
-
-c      print*, 'checka(1)',checka(1),checkb(1)
-c
-c      Call Daxpy(Nbfns2,-Done,Work(Idens_a),1,checka(1),1)
-c      print*, 'Difference between JOBarc/Calc alpha Density==0',
-c     &          checka(1),Work(Idens_a)
-c      call output(checka,1,Nbfns,1,Nbfns,Nbfns,Nbfns,1)
-c        write(6,"(a)") "The beta density matrix"
-c        call output(Work(Idens_b),1,Nbfns,1,Nbfns,Nbfns,Nbfns,1)
-c
-c
-c      Call Daxpy(Nbfns2,-Done,Work(Idens_b),1,checkb(1),1)
-c      print*, 'Difference between JOBarc/Calc beta Density==0',
-c     &          checkb(1),Work(Idens_b)
-c
-c
-c      CALL SEEKLB('   DEN  ',IERR,IRWND)
-c      Call Daxpy(Nbfns2,-Done,Work(Idens_b),1,Work(Idens_a),1)
-c      call COMPPR(spens,Work(Idens_a) , propInt, Nbfns,.False.)
-c         print*, 'spin Density for alpha e: ', Iocc, spens
-
 
 #endif
 
