@@ -1,0 +1,13 @@
+H2O SCF
+o
+h    1 ho2
+h    1 ho2         2 hoh3
+
+ho2  =     0.9639170877
+hoh3 =   104.1615101845
+
+*ACES2
+CALC=SCF,BASIS=STO-3G
+MULTIPLIC=1,REF=rhf
+SYM=OFF
+
