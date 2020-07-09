@@ -7,9 +7,10 @@ program partition
      real, allocatable::QM1coords(:,:)
      integer,allocatable::QM1index(:),QM2index(:)
      integer::lineCount,QM1count
-     integer::xmin,xmax,ymin,ymax,zmin,zmax
+     integer::i,j,xmin,xmax,ymin,ymax,zmin,zmax
      integer,allocatable::bondMat(:,:),fullBondMat(:,:)
-     integer,allocatable::hcapList(:,:)
+     integer,allocatable::hcapList(:,:),allList(:)
+
      print*,"Please enter the name of the input file containing NLSCC geometry:"
      read*, geometry
      geometry=trim(geometry)
@@ -35,7 +36,7 @@ program partition
 !        print*,atomName(i),coords(i,1),coords(i,2),coords(i,3)
      enddo
      close(159)
-
+print*,'atomname',atomName(2)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !       *** DETERMINE THE # OF ATOMS AND THEIR INDICES
 !       *** W.R.T INPUT GEOMETRY FILE
@@ -44,7 +45,7 @@ program partition
 !     print*, atomName, coords
      print*, "Please enter the number of atoms you will declare to be in QM1"
      read*, QM1count
-     allocate(QM1index(QM1count),QM1coords(QM1count,3))
+     allocate(allList(lineCount),QM1index(QM1count),QM1coords(QM1count,3))
      do i=1,QM1count
           print*, "Please enter numbering of the atoms you wish to be in QM1"
           read*,QM1index(i)
@@ -84,11 +85,11 @@ program partition
 !       zmin-cutoff < atomZZ < zmax+cutoff
 ! function: Returns QM2index that lists the index of coords() 
 !           that is within QM2 region. Double counts QM1 region!!
-   
+!           
+!       QM2index includes QM1!   
     call findQM2Bound(coords,lineCount,QM1coords,QM1count,QMcutoff,&
         &   QM1index,xmin,xmax,ymin,ymax,zmin,zmax,QM2index)
         
-
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !       Calculate all distances with respect to the origin
@@ -104,9 +105,14 @@ program partition
 !
 !       index#  | B.N.1 | B.N.2 | B.N.3 | B.N.4
 !         1     |   3   |   5   | -     | -
+!
+!
+!       *NOTE* It is assumed that the bonding pattern of QM1 region
+!              is irrelevant and therefore skipped over. So 
+!              'bondMat' holds no information of the QM1 region
 
-     bondCut=2.45664d0
-     call bondMatrix(coords,lineCount,QM2index,bondMat,bondCut)
+     call bondMatrix(coords,lineCount,QM1index,QM1count,&
+                    & QM2index,bondMat,atomName)
 
 
 
@@ -117,7 +123,11 @@ program partition
 ! ****IMPORTANT***
 !       HAS A SENSITIVE VARIABLE USED TO DETERMINE A UNIVERSAL 
 !       BOND LENGTH; MAY NEED TO PLAY AROUND WITH THIS PARAMETR
-     call fullBondMat1(coords,lineCount,fullBondMat)
+
+     call fullBondMat1(coords,lineCount,fullBondMat,atomName)
+
+
+
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 !       The difference between the fullBondMat and
@@ -125,8 +135,26 @@ program partition
 !       the QM2 boundaries.
 
      print*, "qm2 inex", QM2index
-     call diffBondMat(coords,fullBondMat,lineCount, bondMat, hcapList,QM1index)
+     print*, "List of atoms outside QM1/2", allList
+     call diffBondMat(coords,fullBondMat,lineCount, bondMat, hcapList,&
+                        &   QM1index,QM1count,QM2index)
      print*,'shape of QM2index:', shape(QM2index)
+     print*, "qm2 inex", QM2index
+
+!! Create list of indices with *ONLY* atoms outside QM1/2 region
+     j=1
+     allList=(/(0, i=1,lineCount)/)
+     print*,'before do loop'
+     do i=1,lineCount
+        print*,'i,j',i,j
+        if (.not.any(i .eq. QM2index )) then
+           print*, 'inside if', i,j
+           allList(j)=i
+           j=j+1
+        endif
+     enddo
+
+     print*, "List of atoms outside QM1/2", allList
      deallocate(QM1index,atomName,bondMat,QM2index,&
         &       fullBondMat,coords,QM1coords,hcapList)!xCoord,yCoord,zCoord)
 
