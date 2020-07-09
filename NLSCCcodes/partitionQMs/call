@@ -1,1000 +1,1000 @@
-   89  vi run.sh 
-   90  vi hc 
-   91  vi out 
-   92  vi remove.sh 
-   93  vi run.sh 
-   94  cd monomer/
-   95  ls
-   96  vi ZMAT
-   97  vi run.sh 
-   98  vi nlscc.out 
-   99  cd 631/
-  100  ls
-  101  vi ZMAT
-  102  vi run.sh 
-  103  vi NLO-diagnostic-debug-alpha 
-  104  vi out 
-  105  vi nlscc.out 
-  106  cd ..
+  102  ls
+  103  cd .
+  104  cd ..
+  105  ls
+  106  cd znporph/
   107  ls
-  108  cd ..
+  108  cd test79/
   109  ls
-  110  cd ..
-  111  ls
-  112  cd ethylene/
-  113  ls
-  114  vi example.zmat 
-  115  vi submit.job 
-  116  cd propenal/
-  117  ls
-  118  cd ..
-  119  ls
-  120  cd ..
-  121  ls
+  110  less summary.out 
+  111  cd ..
+  112  ls
+  113  cd ..
+  114  ls
+  115  cd adamantyl/
+  116  ls
+  117  cd test
+  118  ls
+  119  cd test79/
+  120  ls
+  121  rm *.server
   122  cd ..
-  123  ls
-  124  cd gradient/
+  123  vi runscript 
+  124  vi test79/aces3.out
   125  ls
-  126  cd water/
-  127  ls
-  128  cd normal/
+  126  vi runscript 
+  127  sbatch runscript 
+  128  cd test79/
   129  ls
-  130  file DEN-relax 
-  131  vi DEN-relax 
-  132  vi bondsize 
-  133  vi ZMAT
-  134  vi out
-  135  vi out-manual 
-  136  pwd
-  137  ls
-  138  vi intder.out 
-  139  vi paoval-out 
-  140  cd nlmo/
+  130  rm core.*
+  131  cd ..
+  132  ls
+  133  qn
+  134  dev1
+  135  ls
+  136  exit
+  137  dev2
+  138  exit
+  139  dev2
+  140  clear
   141  ls
-  142  vi ZMAT
-  143  vi remove.sh 
-  144  cd ..
+  142  work
+  143  ls
+  144  cd NLSCC/
   145  ls
-  146  pwd
-  147  vi out-manual 
-  148  cd ..
+  146  cd MY_ATTEMPTS/
+  147  ls
+  148  cd test/
   149  ls
-  150  cd ..
+  150  cd ../..
   151  ls
-  152  cd ..
+  152  cd nitro_triazine/
   153  ls
-  154  cd -
-  155  cd ..
+  154  cd rdx_aaa/
+  155  s
   156  ls
-  157  cd excited/
+  157  cd partition_QMs/
   158  ls
-  159  cd ethylene/
-  160  ls
-  161  cd ../hydrogen/
-  162  ls
-  163  vi ZMAT
-  164  vi run.sh 
-  165  cd ..
-  166  ls
-  167  cd ..
-  168  ls
-  169  cd RNO2/
-  170  ls
-  171  cd 10
-  172  ls
-  173  cd mp2-opt/
-  174  ls
-  175  vi submit.job 
-  176  cd ..
+  159  vi parititionQM.f90 
+  160  vi diffBondMat.F
+  161  vi parititionQM.f90 
+  162  vi fullBondMat1.f90 
+  163  vi parititionQM.f90 
+  164  vi diffBondMat.F 
+  165  dev1
+  166  exit
+  167  dev1
+  168  exit
+  169  qn
+  170  cd ACESII/
+  171  ls
+  172  cd test/
+  173  ls
+  174  vi ZMAT
+  175  ls -ltr *.out
+  176  vi temp.out 
   177  ls
-  178  cd ..
+  178  cd atom/
   179  ls
-  180  cd ..
+  180  cd C/
   181  ls
-  182  cd water_cluster/
+  182  cd ..
   183  ls
-  184  cd cage_21/
-  185  s
-  186  ls
-  187  cd QM_
-  188  cd QM_1
-  189  ls
-  190  cd 02
-  191  ls
-  192  vi submit.job 
-  193  vi orb-energy.out 
-  194  vi QMcenter 
-  195  vi bondsize 
-  196  vi nlscc.out 
-  197  vi test.log 
-  198  cd ..
-  199  ls
-  200  cd ..
+  184  cd qzpv/
+  185  ls
+  186  cd C
+  187  ls
+  188  vi revpvtzJ/
+  189  cd revpvtzJ/
+  190  ls
+  191  vi ZMAT
+  192  cd test/
+  193  diff ZMAT ../ZMAT
+  194  vi ZMAT
+  195  vi out.out 
+  196  aces2dev 
+  197  ls
+  198  vi call 
+  199  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  200  ./a.out 
   201  ls
-  202  cd ..
-  203  ls
-  204  cd ..
-  205  ls
-  206  cd fullerene/
-  207  ls
-  208  cd bowl/
-  209  ls
-  210  cd ..
-  211  ls
-  212  cd ..
-  213  ls
-  214  cd ..
-  215  ls
-  216  cd -
-  217  ls
-  218  cd program/
-  219  ls
-  220  cd extract/
-  221  ls
-  222  vi extract.f90 
-  223  vi make.output 
-  224  pwd
-  225  qn
-  226  work
-  227  ls
-  228  cd ACES/
-  229  ls
-  230  cd FC/
-  231  ls
-  232  cd FC_run/
-  233  ls
-  234  cd large_structures/
-  235  ls
-  236  cd ACES_FC/
-  237  ls
-  238  cd benzodithiazolyl/
-  239  ls
-  240  cd test79/
-  241  ls
-  242  less summary.out
-  243  less aces3.out
-  244  less aces3.restart
-  245  qn
-  246  cd ..
-  247  ls
-  248  cd ..
-  249  ls
-  250  cd nitroaniline/
-  251  ls
-  252  cd test79/
-  253  ls
-  254  less aces3.out 
-  255  less aces3.restart 
-  256  less aces3.su
-  257  less summary.out 
-  258  ls -ltr
-  259  exit
-  260  qn
-  261  work
-  262  ls
-  263  cd ACES/
-  264  ls
-  265  cd FC/
-  266  ls
-  267  cd FC_run/
-  268  ls
-  269  cd large_structures/
-  270  ls
-  271  cd ACES_FC/
-  272  ls
-  273  cd adamantyl/
-  274  ls
-  275  cd test79/
-  276  ls
-  277  rm *.server
-  278  cd ..
-  279  ls
-  280  vi runscript 
-  281  sbatch runscript 
-  282  dev2
-  283  qn
-  284  work
-  285  ls
-  286  cd ACES/
-  287  ls
-  288  cd FC/
-  289  ls
-  290  cd FC_run/
-  291  ls
-  292  cd large_structures/
-  293  ls
-  294  cd ACES_FC/
-  295  ls
-  296  cd nitroaniline/
+  202  vi parititionQM.f90 
+  203  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  204  ./a.out 
+  205  vi parititionQM.f90 
+  206  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  207  ./a.out 
+  208  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  209  ./a.out 
+  210  :q
+  211  l
+  212  vi test.f90 
+  213  ifort test.f90 
+  214  ./a.out 
+  215  vi test.f90 
+  216  ifort test.f90 
+  217  ./a.out 
+  218  vi test.f90 
+  219  ifort test.f90 
+  220  ./a.out 
+  221  vi test.f90 
+  222  ifort test.f90 
+  223  ./a.out 
+  224  vi test.f90 
+  225  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  226  vi parititionQM.f90 
+  227  vi bondMatrix.f90 
+  228  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  229  ./a.out 
+  230  vi test.f90 
+  231  ifort test.f90 
+  232  ./a.out 
+  233  vi test.f90 
+  234  ifort test.f90 
+  235  ./a.out 
+  236  vi test.f90 
+  237  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  238  ./a.out 
+  239  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  240  ./a.out 
+  241  vi parititionQM.f90 
+  242  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  243  ls
+  244  vi bondMatrix.f90 
+  245  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  246  ./a.out 
+  247  vi parititionQM.f90 
+  248  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  249  ./a.out 
+  250  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  251  vi parititionQM.f90 
+  252  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  253  clear
+  254  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  255  ./a.out 
+  256  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  257  ./a.out 
+  258  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  259  ./a.out 
+  260  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  261  ./a.out 
+  262  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  263  ./a.out 
+  264  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  265  ./a.out 
+  266  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  267  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 findQM2Bound.f90 findQM1Bound.f90 dist.f90 parititionQM.f90
+  268  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  269  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  270  ./a.out 
+  271  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  272  ./a.out 
+  273  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  274  ./a.out 
+  275  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  276  ./a.out 
+  277  vi findQM2Bound.f90 
+  278  vi bondMatrix.f90 
+  279  vi fullBondMat1.f90 
+  280  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  281  ./a.out 
+  282  :q
+  283  vi fullBondMat1.f90 
+  284  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  285  vi fullBondMat1.f90 
+  286  ./a.out 
+  287  vi bondMatrix.f90 
+  288  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  289  ./a.out 
+  290  vi distance.f90 
+  291  vi bondMatrix.f90 
+  292  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  293  ./a.out 
+  294  vi ../all/ZMAT 
+  295  qn
+  296  work
   297  ls
-  298  cd test79/
+  298  cd ACES/
   299  ls
-  300  tail summary.out 
-  301  less summary.out 
-  302  work
+  300  cd FC/
+  301  ls
+  302  cd FC_run/
   303  ls
-  304  work
+  304  cd large_structures/
   305  ls
-  306  cd DFT_functionals_test/
+  306  cd ACES_FC/
   307  ls
-  308  cd 
-  309  work
-  310  ls
-  311  cd pyscf/
-  312  ls
-  313  cd acenes/
-  314  ls
-  315  cd qtp00/
-  316  ls
-  317  qn
-  318  clear
-  319  work
-  320  ls
-  321  cd NLSCC/
-  322  ls
-  323  cd nitro_triazine/
+  308  cd adamantyl/
+  309  ls
+  310  cd test79/
+  311  ls
+  312  rm *.server
+  313  less summary.out
+  314  qn
+  315  ls -ltr
+  316  vi aces3.out
+  317  vi aces3.restart
+  318  rm core.2548 
+  319  cd ..
+  320  sbatch runscript 
+  321  qn
+  322  vi runscript 
+  323  cd /blue/bartlett/z.windom/NLSCC/nitro_triazine/rdx_aaa/partition_QMs
   324  ls
-  325  mkdir rdx_aaa
-  326  cd rdx_aaa/
-  327  ls
-  328  cd ..
-  329  ls
-  330  cd ..
-  331  ls
-  332  cd MY_ATTEMPTS/
-  333  ls
-  334  cd test/
-  335  ls
-  336  cd temp/
-  337  ls
-  338  cd newtest/
-  339  ls
-  340  vi submit.job 
-  341  cp submit.job /blue/bartlett/z.windom/NLSCC/nitro_triazine/rdx_aaa/1
-  342  vi ZMAT 
-  343  cp ZMAT /blue/bartlett/z.windom/NLSCC/nitro_triazine/rdx_aaa/1
-  344  cp GENBAS /blue/bartlett/z.windom/NLSCC/nitro_triazine/rdx_aaa/1
-  345  ls
-  346  mkdir uhfRef
-  347  cd uhfRef/
-  348  cp ../ZMAT .
-  349  cp ../submit.job .
-  350  cp ../GENBAS .
-  351  vi ZMAT 
-  352  sbatch submit.job 
-  353  cp ../QMcenter .
-  354  vi QMcenter 
-  355  ls
-  356  vi out 
-  357  vi o
-  358  vi orb-energy.out 
-  359  vi ../orb-energy.out 
-  360  vi QMcenter 
-  361  qn
-  362  ls
-  363  vi submit.job 
-  364  vi /blue/bartlett/auybv/old/aces/nlscc/program/Nlsread/Nlsread.f 
-  365  cd /blue/bartlett/z.windom/NLSCC/yifan_dir/aces/nlscc/biology/Ala4/nlmo/03/d25
-  366  ls
-  367  vi QMdisp1 
-  368  vi submit.job 
-  369  vi /blue/bartlett/auybv/old/aces/nlscc/program/dispersion/disp2/ccsd/ccsd.f90 
-  370  vi ZMAT 
-  371  qm
-  372  qn
-  373  ls
-  374  vi /blue/bartlett/auybv/old/aces/nlscc/program/dispersion/disp2/ccsd/ccsd.f90 
-  375  work
-  376  ls
-  377  cd NLSCC/
-  378  ls
-  379  cd MY_ATTEMPTS/
-  380  ls
-  381  cd test/
-  382  ls
-  383  cd temp/
-  384  ls
-  385  cd ..
-  386  ls
-  387  cd ..
-  388  ls
-  389  cd test/
-  390  ls
-  391  cd temp/
-  392  ls
-  393  cd eom
-  394  ls
-  395  cd compare_eom/
-  396  ls
-  397  cd ..
-  398  ls
-  399  cd ..
-  400  ls
-  401  cd newtest/
-  402  ls
-  403  vi ZMAT 
-  404  cd ..
-  405  sl
-  406  ls -ltr
-  407  cd newtest/
-  408  ls
-  409  vi ZMAT 
-  410  cd uhfRef/
-  411  ls
-  412  vi ZMAT 
-  413  cd temp/
-  414  ls
-  415  cd ..
-  416  ls
-  417  cd ...
-  418  cd ..
-  419  ls
-  420  cd ..
-  421  ls
-  422  cd ..
-  423  ls
-  424  cd ..
-  425  ls
-  426  cd ..
-  427  ls
-  428  cd nitro_triazine/
-  429  ls
-  430  cd rdx_aaa/
-  431  ls
-  432  cd noQM2/
-  433  ls
-  434  qn
-  435  ls
-  436  cd redo1
-  437  ls
-  438  vi QMcenter 
-  439  cd temp/
-  440  ls
-  441  vi nbocenters 
-  442  vi orb-energy.out 
-  443  qn
-  444  work
-  445  ls
-  446  cd ACES/
-  447  ls
-  448  cd FC
-  449  ls
-  450  cd FC_run/
-  451  ls
-  452  cd large_structures/
-  453  ls
-  454  cd ACES_FC/
-  455  ls
-  456  cd nitroaniline/
-  457  ls
-  458  cd test79/
-  459  ls
-  460  less summary.out 
-  461  qn
-  462  work
-  463  ls
-  464  cd -
-  465  cd ../../znporph/
-  466  ls
-  467  cd test79/
-  468  ls
-  469  less summary.out 
-  470  qn
-  471  exit
-  472  qn
-  473  work
-  474  ls
-  475  cd ACES/
-  476  ls
-  477  cd FC/
-  478  ls
-  479  cd FC_run/
-  480  ls
-  481  cd large_structures/
-  482  ls
-  483  cd ACES_FC/
-  484  ls
-  485  ls -ltr
-  486  cd benzodithiazolyl/
-  487  ls
-  488  cd test79/
-  489  ls
-  490  less aces3.out
-  491  cd ..
-  492  ls
-  493  cd ..
-  494  ls
-  495  ls -ltr
-  496  cd adamantyl/
-  497  ls
-  498  cd test79/
-  499  ls
-  500  less summary.out
-  501  less aces3.out
-  502  ls
-  503  rm *.server
-  504  ls
-  505  rm core.*
-  506  ls
-  507  cd ..
-  508  ls
-  509  vi runscript 
-  510  qn
-  511  sbatch runscript 
-  512  cd ..
-  513  cd nitroaniline/
-  514  ls
-  515  cd test79/
-  516  ls
-  517  less aces3.out 
-  518  less aces3.restart 
-  519  qn
-  520  pwd
-  521  less aces3.restart 
-  522  work
-  523  ls
-  524  cd pyscf/
-  525  ls
-  526  cd SC40/
-  527  ls
-  528  cd ../
-  529  ls
-  530  cd ace
-  531  cd acenes/
-  532  ls
-  533  cd qtp0-
-  534  cd qtp00/
-  535  ls
-  536  cd caps_smaller/
-  537  ls
-  538  cd acene_1
-  539  vi submit.py 
-  540  cd ..
-  541  ls
-  542  cd ..
-  543  ls
-  544  cd ..
-  545  ls
-  546  cd qtp01
-  547  ls
-  548  cd additional_geometries/
-  549  ls
-  550  cd caps_smaller/
-  551  cd acene_1
-  552  vi submit.py 
-  553  cd ..
-  554  ls
-  555  cd ..
-  556  ls
-  557  cd ..
-  558  ls
-  559  cd ..
-  560  ls
-  561  cd qtp02/
-  562  ls
-  563  cd additional_geometries/
-  564  ls
-  565  cd caps_larger/
-  566  ls
-  567  cd acene_1
-  568  ls
-  569  vi submit.py 
-  570  qn
-  571  work
-  572  ls
-  573  cd pyscf/
-  574  ls
-  575  cd acenes/
+  325  vi geometry.txt 
+  326  awk '{print $1,$2=$2*1.88973,$3=$3*1.88973,$4=$4*$4}' geometry.txt 
+  327  awk '{print $1,$2=$2*1.88973,$3=$3*1.88973,$4=$4*1.88973}' geometry.txt 
+  328  awk '{print $1,$2=$2*1.88973,$3=$3*1.88973,$4=$4*1.88973}' geometry.txt > anggeo.txt
+  329  cp anggeo.txt geometry.txt 
+  330  clear
+  331  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  332  ./a.out 
+  333  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  334  ./a.out 
+  335  vi distance.f90 
+  336  ls
+  337  vi parititionQM.f90 
+  338  vi checkbondDist.f90
+  339  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  340  vi test.f90 
+  341  ifort test.f90 
+  342  ./a.out 
+  343  vi checkbondDist.f90
+  344  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  345  vi test.f90 
+  346  ifort test.f90 
+  347  ./a.out 
+  348  vi test.f90 
+  349  ifort test.f90 
+  350  ./a.out 
+  351  vi test.f90 
+  352  vi checkbondDist.f90 
+  353  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  354  vi checkbondDist.f90 
+  355  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  356  clear
+  357  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  358  clear
+  359  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  360  clear
+  361  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  362  ./a.out 
+  363  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  364  ./
+  365  ./a.out 
+  366  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  367  ./a.out 
+  368  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  369  ./a.out
+  370  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  371  ./a.out 
+  372  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  373  ./a.out 
+  374  vi test.f90 
+  375  ifort test.f90 
+  376  ./a.out 
+  377  vi test.f90 
+  378  ifort test.f90 
+  379  ./a.out 
+  380  vi test.f90 
+  381  ifort test.f90 
+  382  ./a.out 
+  383  vi test.f90 
+  384  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  385  ./a.out 
+  386  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  387  ./a.out 
+  388  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  389  ./a.out 
+  390  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  391  ./a.out 
+  392  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  393  ./a.out 
+  394  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  395  vi test.f90 
+  396  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  397  ./a.out 
+  398  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  399  ./a.out 
+  400  vi test.f90 
+  401  vi checkbondDist.f90 
+  402  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  403  ./a.out 
+  404  vi test.f90 
+  405  ifort test.f90 
+  406  vi test.f90 
+  407  :q
+  408  vi checkbondDist.f90 
+  409  vi test.f90 
+  410  ifort test.f90 
+  411  vi test.f90 
+  412  ifort test.f90 
+  413  vi test.f90 
+  414  vi checkbondDist.f90 
+  415  ifort test.f90 
+  416  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  417  ./a.out 
+  418  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  419  ./a.out 
+  420  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  421  ./a.out 
+  422  ls
+  423  vi bondMatrix.f90 
+  424  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  425  ./a.out 
+  426  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  427  ./a.out 
+  428  vi distance.f90 
+  429  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  430  ./a.out 
+  431  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  432  ./a.out 
+  433  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  434  ./a.out 
+  435  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  436  ./a.out 
+  437  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  438  ./a.out 
+  439  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  440  gfortran diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  441  clear
+  442  gfortran diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  443  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  444  vi test.f90 
+  445  ifort test.f90 
+  446  vi test.f90 
+  447  ifort test.f90 
+  448  vi test.f90 
+  449  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  450  ./a.out 
+  451  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  452  ./a.out 
+  453  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  454  ./a.out 
+  455  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  456  ./a.out 
+  457  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  458  ./a.out 
+  459  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  460  ./a.out 
+  461  vi fullBondMat1.f90 
+  462  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  463  ./a.out 
+  464  vi fullBondMat1.f90 
+  465  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  466  vi fullBondMat1.f90 
+  467  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  468  ./a.out 
+  469  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  470  ./a.out 
+  471  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  472  ./a.out 
+  473  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  474  ./a.out 
+  475  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  476  ./a.out 
+  477  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  478  ./a.out 
+  479  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  480  vi test.f90 
+  481  ifort test.f90 
+  482  vi test.f90 
+  483  ifort test.f90 
+  484  vi test.f90 
+  485  ifort test.f90 
+  486  vi test.f90 
+  487  ifort test.f90 
+  488  ./a.out 
+  489  ifort test.f90 
+  490  vi test.f90 
+  491  ifort test.f90 
+  492  ./a.out 
+  493  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  494  ./a.out 
+  495  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  496  ./q
+  497  ./a.out 
+  498  vi bondMatrix.f90 
+  499  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  500  ./a.out 
+  501  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  502  ./a.out 
+  503  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  504  clear
+  505  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  506  ./a.out 
+  507  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  508  ./a
+  509  ./a.out 
+  510  ./a
+  511  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  512  ./a.out 
+  513  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  514  ./a.out 
+  515  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  516  ./a.out 
+  517  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  518  ./a.out 
+  519  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  520  ./a.out 
+  521  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  522  ./a.out 
+  523  vi parititionQM.f90 
+  524  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  525  ./a.out 
+  526  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  527  ./a.out 
+  528  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  529  ./a.out 
+  530  qn
+  531  vi bondMatrix.f90 
+  532  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  533  ./a.out 
+  534  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  535  ./a.out 
+  536  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  537  ./a.out 
+  538  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  539  ./a.out 
+  540  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  541  ./a.out 
+  542  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  543  ./a.out 
+  544  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  545  ./a.out 
+  546  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  547  ./a.out 
+  548  gfortran diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  549  ls -ltr
+  550  gfortran diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  551  ls -ltr
+  552  ./a.out 
+  553  vi test.f90 
+  554  ls -ltr
+  555  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  556  ./a.out 
+  557  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  558  ./a.out 
+  559  ls
+  560  cd 2git/
+  561  ls
+  562  cd ACESII_Development/
+  563  ls
+  564  cd NLSCCcodes/
+  565  cp ../../../* .
+  566  cd ..
+  567  ls
+  568  git add NLSCCcodes/
+  569  git commit -m "Fixed definitions for QM1/2 region. Added functionality to determine if a bond is cleaved in the process of not"
+  570  git push origin master
+  571  ls
+  572  cd NLSCCcodes/
+  573  ls
+  574  cp * partitionQMs/
+  575  cd partitionQMs/
   576  ls
-  577  cd hf/
+  577  cd ..
   578  ls
-  579  cd fixed_infLimit/
-  580  ls
-  581  cd isotropic/
-  582  ls
-  583  cd ewald/
-  584  ls
-  585  cd 222/
-  586  ls
-  587  ls -ltr
-  588  cd rcutOff/
+  579  cd NLSCCcodes/
+  580  rm *
+  581  ls
+  582  cd ..
+  583  ls
+  584  git add NLSCCcodes/
+  585  git add -A NLSCCcodes/
+  586  git commit -m "path change"
+  587  git push origin master
+  588  cd ..
   589  ls
-  590  less submit.py 
-  591  vi qtp02_333_90g.out 
-  592  grep HOMO qtp02_333_90g.out 
-  593  grep HOMO qtp02_333_90g.out " | awk '{print $3, $6}'
-  594  grep HOMO qtp02_333_90g.out  | awk '{print $3, $6}'
-  595  grep HOMO qtp02_333_90g.out  | awk '{print $3, $6}' | tail -n 1 
-  596  grep HOMO qtp02_333_90g.out  | awk '{print $3, $6}' | tail -n 1 > bg.out
-  597  ls
-  598  pwd
-  599  grep HOMO qtp02_333_90g.out  | awk '{print $3, $6}' | tail -n 1 > bg.txt
-  600  cd ..
-  601  ls
-  602  cd ..
-  603  ls
-  604  cd 333/
-  605  ls
-  606  cd rcutOff/
-  607  less submit.py
-  608  cd ../redo/
-  609  less submit.py 
-  610  grep HOMO qtp02_333_90g.out  | awk '{print $3, $6}' | tail -n 1 > bg.txt
-  611  pwd
+  590  cd ..
+  591  ls
+  592  cd ..
+  593  ls
+  594  cd -
+  595  ls
+  596  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+  597  history > call
+  598  vi c
+  599  vi call 
+  600  qn
+  601  exit
+  602  dev2
+  603  exit
+  604  qn
+  605  work
+  606  ls
+  607  cd ACES/
+  608  ls
+  609  cd FC/
+  610  ls
+  611  cd FC_run/
   612  ls
-  613  cd ..
+  613  cd large_structures/
   614  ls
-  615  cd ..
+  615  cd ACES_FC/
   616  ls
-  617  cd 444/
+  617  cd adamantyl/
   618  ls
-  619  cd redo/
-  620  less submit.py 
-  621  pwd
-  622  ls
-  623  vi qtp02_333_90g.out 
-  624  ls -lr
-  625  vi zzz.log 
-  626  cd ..
-  627  ls
-  628  cd ..
-  629  cd 222/
-  630  ls
-  631  cd rcutOff/
-  632  ls
-  633  less submit.py 
-  634  cd ../redo/
-  635  less submit.py 
-  636  diff submit.py ../rcutOff/submit.py 
-  637  less submit.py 
-  638  cd ..
-  639  ls
-  640  cd ../333/
-  641  ls
-  642  cd rcutOff/
-  643  ls
-  644  vi submit.py
-  645  cd ../redo/
-  646  ls
-  647  vi submit.py 
-  648  pwd
-  649  cd ..
-  650  ls
-  651  cd ..
-  652  ls
-  653  cd ..
-  654  ls
-  655  cd none/
-  656  ls
-  657  cd 222/
-  658  ls
-  659  cd redo/
-  660  ls
-  661  vi submit.py
-  662  grep HOMO qtp02_333_90g.out  | awk '{print $3, $6}' | tail -n 1 > bg.txt
-  663  vi bg.txt 
-  664  pwd
-  665  cd ..
+  619  cd test79/
+  620  ls
+  621  less summary.out
+  622  rm *.server
+  623  cd ..
+  624  ls
+  625  sbatch runscript 
+  626  qn
+  627  cd ..
+  628  cd znporph/
+  629  ls
+  630  cd test79/
+  631  ls
+  632  less summary.out 
+  633  ls -ltr
+  634  tail aces3.out
+  635  cd
+  636  qn
+  637  cd /blue/bartlett/z.windom/NLSCC/nitro_triazine/rdx_aaa/partition_QMs
+  638  ls
+  639  vi bondMatrix.f90 
+  640  vi parititionQM.f90 
+  641  vi bondMatrix.f90 
+  642  vi parititionQM.f90 
+  643  vi fullBondMat1.f90 
+  644  vi parititionQM.f90 
+  645  vi diffBondMat.f90 
+  646  vi test.f90
+  647  ifort test.f90 
+  648  vi test.f90 
+  649  vi diffBondMat.f90 
+  650  vi parititionQM.f90 
+  651  vi diffBondMat.f90 
+  652  vi parititionQM.f90 
+  653  vi diffBondMat.f90 
+  654  vi parititionQM.f90 
+  655  vi bondMatrix.f90 
+  656  vi parititionQM.f90 
+  657  vi diffBondMat.f90 
+  658  vi parititionQM.f90 
+  659  vi diffBondMat.f90 
+  660  qn
+  661  work
+  662  ls
+  663  cd ACES/
+  664  ls
+  665  cd FC/
   666  ls
-  667  cd ..
+  667  cd FC_run/
   668  ls
-  669  cd 333/
+  669  cd large_structures/
   670  ls
-  671  cd redo
+  671  cd ACES_FC/
   672  ls
-  673  less submit.py 
-  674  cd ..
-  675  ls
-  676  cd redo_norcut/
-  677  ls
-  678  less submit.py
-  679  grep HOMO qtp02_333_90g.out  | awk '{print $3, $6}' | tail -n 1 > bg.txt
-  680  cd ..
-  681  ls
-  682  cd ..
-  683  ls
-  684  cd 444/
-  685  ls
-  686  cd redo/
-  687  ls
-  688  less submit.py
-  689  vi slurm-54526429.out 
-  690  vi submit.sh 
-  691  qn
-  692  sbatch submit.sh 
-  693  qn
-  694  ls
-  695  less qtp02_333_90g.out 
-  696  cd ..
-  697  ls
-  698  cd ..
-  699  ls
-  700  cd 222/
-  701  ls
-  702  less qtp02_333_90g.out 
-  703  grep HOMO qtp02_333_90g.out 
-  704  grep HOMO redo/qtp02_333_90g.out 
-  705  cd redo/
-  706  diff submit.py ../submit.py 
-  707  grep HOMO qtp02_333_90g.out 
-  708  ls -ltr
-  709  cd ..
-  710  ls
-  711  cd ..
-  712  cd 333/
-  713  ls
-  714  cd ..
-  715  ls
-  716  cd ..
-  717  ls
-  718  cd ewald/
-  719  ls
-  720  cd 222/
-  721  ls
-  722  cd redo/
-  723  grep HOMO qtp02_333_90g.out 
-  724  grep HOMO ../qtp02_333_90g.out 
-  725  qn
-  726  scancel 54820149
-  727  ls
-  728  pwd
-  729  work
-  730  ls
-  731  cd ACES/
-  732  ls
-  733  cd FC/
-  734  ls
-  735  cd FC_run/
-  736  ls
-  737  cd large_structures/
-  738  ls
-  739  cd ACES_FC/
-  740  ls
-  741  cd nitroaniline/
-  742  ls
-  743  cd test79/
+  673  cd adamantyl/
+  674  ls
+  675  cd test79/
+  676  ls
+  677  less aces3.su
+  678  less summary.out
+  679  qn
+  680  pwd
+  681  less aces3.restart
+  682  ls
+  683  rm *.server
+  684  ls
+  685  cp aces3.restart aces3.restart2
+  686  rm core.18781 
+  687  cp summary.out summary.out2
+  688  cd ..
+  689  ls
+  690  sbatch runscript 
+  691  cd -
+  692  ls
+  693  vi summary.out
+  694  vi aces3.out
+  695  cd ..
+  696  ls
+  697  cd ..
+  698  ls
+  699  qn
+  700  ls
+  701  cd znporph/
+  702  ls
+  703  cd test79/
+  704  ls
+  705  less summary.out 
+  706  less aces3.restart
+  707  ls -ltr
+  708  less aces3.out
+  709  less summary.out 
+  710  qn
+  711  work
+  712  ls
+  713  cd NLSCC/
+  714  ls
+  715  cd nitro_triazine/
+  716  ls
+  717  cd rdx_aaa/
+  718  ls
+  719  cd partition_QMs/
+  720  ls
+  721  git clone https://github.com/zww-4855/ACESII_Development.git
+  722  ls
+  723  cd ACESII_Development/
+  724  ls
+  725  rm *
+  726  ls
+  727  cd ..
+  728  ls
+  729  rm -r ACESII_Development/
+  730  qn
+  731  ls
+  732  cd ACESII_Development/
+  733  ls
+  734  cd driver/
+  735  ls
+  736  cd ..
+  737  ls
+  738  cd ..
+  739  ls
+  740  git clone https://github.com/zww-4855/ACESII_Development.git
+  741  mkdir 2git
+  742  cd 2git/
+  743  git clone https://github.com/zww-4855/ACESII_Development.git
   744  ls
-  745  less aces3.out 
-  746  less aces3.restart 
-  747  less summary.out 
-  748  qn
-  749  work
+  745  cd ACESII_Development/
+  746  ls
+  747  cd ..
+  748  ls
+  749  cd ..
   750  ls
-  751  cd
+  751  cd 2git/
   752  ls
-  753  work
+  753  mkdir NLSCCcodes
   754  ls
-  755  cd pyscf/
-  756  ls
-  757  cd SC40/
-  758  ls
-  759  c
-  760  cd
+  755  cd NLSCCcodes/
+  756  mkdir partitionQMs
+  757  cd partitionQMs/
+  758  cp ../../../* .
+  759  ls
+  760  cd ..
   761  ls
-  762  work
+  762  cd ..
   763  ls
-  764  cd programs/
-  765  ls
-  766  cd Class/
-  767  ls
-  768  cd hf/
-  769  ls
-  770  cd ..
-  771  ls
-  772  cd scf
-  773  ls
-  774  vi README/history.txt 
-  775  vi README/part1.txt 
-  776  dev1
-  777  exit
-  778  dev2
-  779  exit
-  780  clear
+  764  cp -r NLSCCcodes/ ACESII_Development/
+  765  cd ACESII_Development/
+  766  ls
+  767  git add NLSCCcodes/
+  768  git commit -m "First iteration of Natural Linear Scaling Coupled Cluster (NLSCC) codes meant to automate the procedure into a blackbox"
+  769  git push origin master
+  770  ls
+  771  cd NLSCCcodes/
+  772  ls
+  773  cd partitionQMs/
+  774  ls
+  775  git checkout -b tests
+  776  ls
+  777  git config --global user.email "z.windom@ufl.edu"
+  778  git config --global user.email
+  779  ls
+  780  cd ..
   781  ls
-  782  work
-  783  cd
-  784  work
-  785  ls
-  786  cd programs/
-  787  ls
-  788  cd Class/
-  789  ls
-  790  cd scf
-  791  ls
-  792  dev1
-  793  exit
-  794  qn
-  795  work
-  796  ls
-  797  cd ACES/
-  798  ls
-  799  cd polyacene/
+  782  cd ..
+  783  ls
+  784  git add NLSCCcodes/
+  785  git commit -m "test"
+  786  git commit -a
+  787  git checkout master
+  788  git add NLSCCcodes/
+  789  git commit -m "test"
+  790  git push origin master
+  791  cd NLSCCcodes/
+  792  ls
+  793  vi test
+  794  cd ..
+  795  ls
+  796  git add NLSCCcodes/
+  797  git commit -m "test"
+  798  git push origin master
+  799  clear
   800  ls
-  801  cd exp_139_141/
-  802  ls
-  803  cd IP/
+  801  qm
+  802  qn
+  803  work
   804  ls
-  805  cd acene_4/
-  806  ls
-  807  vi ZMAT
-  808  ls
-  809  cd test37/
-  810  ls
-  811  cd ..
-  812  ls
-  813  cd ..
-  814  ls
-  815  cd acene_8/
-  816  ls
-  817  cd test37/
-  818  ls
-  819  cd
+  805  cd programs/
+  806  work
+  807  ls
+  808  cd NLSCC/
+  809  ls
+  810  cd nitro_triazine/
+  811  ls
+  812  cd rdx_aaa/
+  813  ls
+  814  cd partition_QMs/
+  815  ls
+  816  vi parititionQM.f90 
+  817  dev1
+  818  exit
+  819  aces2dev 
   820  ls
-  821  cd ACESII/
+  821  work
   822  ls
-  823  cd props/
-  824  ls
-  825  vi built_scf_orbdens.F
-  826  work
+  823  cd NLSCC/
+  824  cd nitro_triazine/
+  825  ls
+  826  cd rdx_aaa/
   827  ls
-  828  cd NLSCC/
+  828  cd partition_QMs/
   829  ls
-  830  cd nitro_triazine/
-  831  ls
-  832  cd ../tests/
-  833  ls
-  834  cd ../MY_ATTEMPTS/
-  835  ls
-  836  cd test/
-  837  ls
-  838  cd yifantest/
-  839  ls
-  840  cd ../temp/
-  841  ls
-  842  cd eom
-  843  ls
-  844  vi ZMAT 
-  845  vi submit.job 
-  846  vi ZMAT 
-  847  work
-  848  ls
-  849  cd programs/
-  850  ls
-  851  cd Class/
-  852  ls
-  853  cd scf
-  854  ls
-  855  cd ../driver/
-  856  ls
-  857  vi driver.F
-  858  vi Get_GMatrix.F
-  859  cd /blue/bartlett/z.windom/NLSCC/nitro_triazine/rdx_aaa/partition_QMs
-  860  ls
-  861  vi geometry.txt 
-  862  pwd
-  863  exit
-  864  d
-  865  cd
-  866  ls
-  867  cd ACESII/
+  830  vi bondMatrix.f90 
+  831  vi parititionQM.f90 
+  832  vi bondMatrix.f90 
+  833  vi diffBondMat.f90 
+  834  vi parititionQM.f90 
+  835  vi bondMatrix.f90 
+  836  vi parititionQM.f90 
+  837  vi bondMatrix.f90 
+  838  vi diffBondMat.f90 
+  839  vi bondMatrix.f90 
+  840  vi parititionQM.f90 
+  841  vi fullBondMat1.f90 
+  842  vi bondMatrix.f90 
+  843  vi fullBondMat1.f90 
+  844  vi parititionQM.f90 
+  845  vi fullBondMat1.f90 
+  846  vi parititionQM.f90 
+  847  vi dist.f90 
+  848  mv dist.f90 distance.f90
+  849  vi distance.f90 
+  850  vi fullBondMat1.f90 
+  851  vi bondMatrix.f90 
+  852  vi fullBondMat1.f90 
+  853  vi findQM1Bound.f90 
+  854  vi parititionQM.f90 
+  855  vi findQM1Bound.f90 
+  856  vi parititionQM.f90 
+  857  vi findQM2Bound.f90 
+  858  vi parititionQM.f90 
+  859  vi bondMatrix.f90 
+  860  vi fullBondMat1.f90 
+  861  vi bondMatrix.f90 
+  862  vi parititionQM.f90 
+  863  vi fullBondMat1.f90 
+  864  vi parititionQM.f90 
+  865  vi bondMatrix.f90 
+  866  vi parititionQM.f90 
+  867  vi geometry.txt 
   868  ls
-  869  cd props/
+  869  vi bondMatrix.f90 
   870  ls
-  871  vi orbdensCC.F
-  872  vi built_CC_orbdens.F
-  873  vi analyze.F
-  874  clear
-  875  work
-  876  ls
-  877  cd ACES/
-  878  ls
-  879  cd FC/
-  880  ls
-  881  cd FC_run/
-  882  ls
-  883  cd large_structures/
-  884  ls
-  885  cd ACES_FC/
-  886  ls
-  887  cd adamantyl/
-  888  ls
-  889  cd test79/
-  890  less aces3.restart
-  891  less summary.out
-  892  less aces3.restart
-  893  less summary.out
-  894  cd .
-  895  ls
-  896  cd ..
-  897  ls
-  898  cd ..
-  899  ls
-  900  cd znporph/
-  901  ls
-  902  cd test79/
-  903  ls
-  904  less summary.out 
-  905  qn
-  906  cd ..
-  907  ls
-  908  cd ..
-  909  ls
-  910  cd nitroaniline/
-  911  ls
-  912  cd test79/
-  913  ls
-  914  work
-  915  ls
-  916  cd pyscf/
-  917  ls
-  918  cd customDFTcode/
-  919  ls
-  920  cd lda/
-  921  ls
-  922  vi submit.py 
-  923  python3 submit.py | tee test.out
-  924  ls
-  925  vi ../../acenes/hf/fixed_infLimit/8grid/submit.sh 
-  926    export LD_PRELOAD=$MKLROOT/lib/intel64/libmkl_def.so:$MKLROOT/lib/intel64/libmkl_sequential.so:$MKLROOT/lib/intel64/libmkl_core.so
-  927  python3 submit.py | tee test.out
-  928  vi ../../acenes/hf/fixed_infLimit/8grid/submit.sh 
-  929  ml intel/2019.1.144 openmpi/4.0.1 python3-core/3.6.5
-  930  #export PYTHONPATH=/home/z.windom/pyscf_libs/pyscf-dev-2/lib:$PYTHONPATH
-  931  #export PYTHONPATH=/home/z.windom/pyscf_libs/lib:$PYTHONPATH
-  932  #export PYTHONPATH=/home/z.windom/pyscf_libs/pyscf-dev-2:$PYTHONPATH
-  933  #export PYTHONPATH=/ufrc/bartlett/z.windom/pyscf/cam_test/qtp02_test/final_pyscf/testdev/pyscf:$PYTHONPATH
-  934  unset PYTHONPATH
-  935  unset PYTHONHOME
-  936  #export PYTHONPATH=/ufrc/bartlett/z.windom/pyscf/fftw_oct/qtp02/shift_kpts/test_MDF/test_converence_prop/mdf/dzvp/222/ediis/test/verbose/GDF_shiftKpts/add_cores_6_31G/test/mpitest/pyscf/pyscf/lib/build/pyscf:$PYTHONPATH
-  937  export PYTHONPATH=/home/z.windom/pyscf_1_7_0a/pyscf:$PYTHONPATH
-  938  export LD_LIBRARY_PATH=/apps/compilers/intel/2019/1.144/mkl/lib/intel64:$LD_LIBRARY_PATH
-  939  exit
-  940  dev2
-  941  exit
-  942  qn
-  943  work
-  944  ls
-  945  cd ACES/
-  946  ls
-  947  cd FC/
-  948  ls
-  949  cd FC_run/
-  950  ls
-  951  cd large_structures/
-  952  ls
-  953  cd ACES_FC/
-  954  ls
-  955  cd nitroaniline/
-  956  ls
-  957  cd test79/
-  958  ls
-  959  vi summary.out 
-  960  vi aces3.out 
-  961  rm -r bkup/ bin/
-  962  rm BLOCK* J*
-  963  ls
-  964  du -h
-  965  cd ..
-  966  ls
-  967  cd .
-  968  cd ..
-  969  ls
-  970  cd znporph/
+  871  vi partition
+  872  vi parititionQM.f90 
+  873  vi fullBondMat1.f90 
+  874  vi bondMatrix.f90 
+  875  vi fullBondMat1.f90 
+  876  vi bondMatrix.f90 
+  877  vi parititionQM.f90 
+  878  vi geometry.txt 
+  879  ls
+  880  vi parititionQM.f90 
+  881  pwd
+  882  vi bondMatrix.f90 
+  883  vi distance.f90 
+  884  vi bondMatrix.f90 
+  885  vi parititionQM.f90 
+  886  vi bondMatrix.f90 
+  887  ls
+  888  vi parititionQM.f90 
+  889  vi bondMatrix.f90 
+  890  ls
+  891  vi parititionQM.f90 
+  892  vi bondMatrix.f90 
+  893  vi distance.f90 
+  894  vi bondMatrix.f90 
+  895  vi distance.f90 
+  896  vi bondMatrix.f90 
+  897  vi geometry.txt 
+  898  vi bondMatrix.f90 
+  899  vi geometry.txt 
+  900  vi distance.f90 
+  901  vi geometry.txt 
+  902  vi bondMatrix.f90 
+  903  vi checkbondDist.f90 
+  904  vi bondMatrix.f90 
+  905  vi checkbondDist.f90 
+  906  vi bondMatrix.f90 
+  907  vi parititionQM.f90 
+  908  vi bondMatrix.f90 
+  909  vi fullBondMat1.f90 
+  910  vi parititionQM.f90 
+  911  vi bondMatrix.f90 
+  912  vi distance.f90 
+  913  vi bondMatrix.f90 
+  914  vi parititionQM.f90 
+  915  vi bondMatrix.f90 
+  916  vi parititionQM.f90 
+  917  vi diffBondMat.f90 
+  918  vi bondMatrix.f90 
+  919  vi diffBondMat.f90 
+  920  vi bondMatrix.f90 
+  921  vi fullBondMat1.f90 
+  922  vi parititionQM.f90 
+  923  qn
+  924  exit
+  925  dev2
+  926  exit
+  927  dev1
+  928  exit
+  929  work
+  930  ls
+  931  cd ACES/
+  932  ls
+  933  cd l
+  934  cd FC/
+  935  ls
+  936  cd FC_run/
+  937  ls
+  938  cd large_structures/
+  939  ls
+  940  cd ACES_FC/
+  941  ls
+  942  cd adamantyl/
+  943  ls
+  944  cd test79/
+  945  ls -ltr
+  946  less summary.out
+  947  vi aces3.out
+  948  vi aces3.out1
+  949  vi summary.out2
+  950  vi summary.out2 
+  951  vi aces3.restart2 
+  952  vi aces3.restart
+  953  vi summary.out
+  954  diff summary.out summary.out2 
+  955  vi aces3.out
+  956  cd ..
+  957  ls
+  958  sbatch runscript 
+  959  cd ..
+  960  ls
+  961  cd znporph/
+  962  ls
+  963  cd test79/
+  964  ls
+  965  less summary.out 
+  966  rm *.server
+  967  cd ..
+  968  sbatch runscript 
+  969  qn
+  970  work
   971  ls
-  972  cd test79/
+  972  cd ACES/
   973  ls
-  974  less summary.out 
-  975  cd ..
-  976  ls
-  977  cd ..
-  978  ls
-  979  cd adamantyl/
-  980  ls
-  981  cd test
-  982  ls
-  983  cd test79/
-  984  ls
-  985  rm *.server
-  986  cd ..
-  987  vi runscript 
-  988  vi test79/aces3.out
-  989  ls
-  990  vi runscript 
-  991  sbatch runscript 
-  992  cd test79/
-  993  ls
-  994  rm core.*
-  995  cd ..
-  996  ls
-  997  qn
+  974  cd FC/
+  975  ls
+  976  cd FC_run/
+  977  ls
+  978  cd large_structures/
+  979  ls
+  980  cd ACES_FC/
+  981  ls
+  982  cd znporph/
+  983  ls
+  984  cd test79/
+  985  ls
+  986  less summary.out 
+  987  less aces3.restart
+  988  less aces3.out
+  989  rm *.server
+  990  ls
+  991  cd ..
+  992  ls
+  993  vi runscript 
+  994  sbatch runscript 
+  995  qn
+  996  dev1
+  997  dev2
   998  dev1
-  999  ls
- 1000  exit
- 1001  history
+  999  dev2
+ 1000  aces2dev 
+ 1001  work
  1002  ls
- 1003  ifort diffBondMat.F findQM2Bound.f90 dist.f90 findQM1Bound.f90 parititionQM.f90 
- 1004  aces2dev 
- 1005  ifort diffBondMat.F findQM2Bound.f90 dist.f90 findQM1Bound.f90 parititionQM.f90 
+ 1003  cd NLSCC/
+ 1004  ls
+ 1005  cd nitro_triazine/
  1006  ls
- 1007  vi diffBondMat.F 
- 1008  vi parititionQM.f90 
- 1009  vi diffBondMat.F 
- 1010  ifort diffBondMat.F findQM2Bound.f90 dist.f90 findQM1Bound.f90 parititionQM.f90 
- 1011  clear
- 1012  ifort diffBondMat.F findQM2Bound.f90 dist.f90 findQM1Bound.f90 parititionQM.f90 
- 1013  vi parititionQM.f90 
- 1014  ifort findQM2Bound.f90 dist.f90 findQM1Bound.f90 parititionQM.f90 
- 1015  vi parititionQM.f90 
- 1016  ifort findQM2Bound.f90 dist.f90 findQM1Bound.f90 parititionQM.f90 
- 1017  ls
- 1018  vi bondMatrix.f90 
- 1019  vi parititionQM.f90 
- 1020  ifort bondMatrix.f90 dist.f90 fullBondMat1.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1021  ./a.out 
- 1022  ls
- 1023  vi diffBondMat.F 
- 1024  ifort diffBondMat.F bondMatrix.f90 dist.f90 fullBondMat1.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1025  vi diffBondMat.F 
- 1026  vi parititionQM.f90 
- 1027  ifort diffBondMat.F bondMatrix.f90 dist.f90 fullBondMat1.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1028  vi parititionQM.f90 
- 1029  vi diffBondMat.F 
- 1030  vi parititionQM.f90 
- 1031  vi diffBondMat.F 
- 1032  mv diffBondMat.F diffBondMat.f90
- 1033  ifort diffBondMat.F bondMatrix.f90 dist.f90 fullBondMat1.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1034  ifort diffBondMat.f90 bondMatrix.f90 dist.f90 fullBondMat1.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
+ 1007  cd rdx_aaa/
+ 1008  ls
+ 1009  cd partition_QMs/
+ 1010  ls
+ 1011  vi toZMAT 
+ 1012  history
+ 1013  vi call 
+ 1014  ifort addCaps.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1015  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1016  ./a.out 
+ 1017  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1018  ./a.out 
+ 1019  vi toZMAT 
+ 1020  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1021  vi toZMAT 
+ 1022  ./a.out 
+ 1023  vi test.f90 
+ 1024  ifort test.f90 
+ 1025  ./a.out 
+ 1026  vi test.f90 
+ 1027  ifort test.f90 
+ 1028  ./a.out 
+ 1029  vi test.f90 
+ 1030  ifort test.f90 
+ 1031  ./a.out 
+ 1032  ifort test.f90 
+ 1033  ./a.out 
+ 1034  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
  1035  ./a.out 
- 1036  clear
- 1037  ls
- 1038  vi diffBondMat.f90 
- 1039  ifort diffBondMat.f90 bondMatrix.f90 dist.f90 fullBondMat1.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1040  ./a.out 
- 1041  ls
- 1042  vi bondMatrix.f90 
- 1043  pwd
- 1044  clear
- 1045  ls
- 1046  ./a.out 
- 1047  ls
- 1048  vi parititionQM.f90 
- 1049  ifort diffBondMat.f90 bondMatrix.f90 dist.f90 fullBondMat1.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1050  ./a.out 
- 1051  ls
- 1052  vi parititionQM.f90 
- 1053  ifort diffBondMat.f90 bondMatrix.f90 dist.f90 fullBondMat1.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
+ 1036  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1037  vi test.f90 
+ 1038  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1039  ./a.out 
+ 1040  vi toZMAT 
+ 1041  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1042  ./a.out 
+ 1043  vi test.f90 
+ 1044  ifort test.f90 
+ 1045  ./a.out 
+ 1046  vi test.f90 
+ 1047  ifort test.f90 
+ 1048  ./a.out 
+ 1049  vi test.f90 
+ 1050  ifort test.f90 
+ 1051  ./a.out 
+ 1052  vi test.f90 
+ 1053  ifort test.f90 
  1054  ./a.out 
- 1055  :q
- 1056  ifort diffBondMat.f90 bondMatrix.f90 dist.f90 fullBondMat1.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1057  ./a.out 
- 1058  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1059  ./a.out 
- 1060  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
+ 1055  ./a.out vi test.f90 
+ 1056  vi test.f90 
+ 1057  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1058  ./a.out 
+ 1059  vi toZMAT 
+ 1060  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
  1061  ./a.out 
- 1062  vi dist.f90 
- 1063  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1064  ./a.out 
- 1065  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
+ 1062  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1063  ./a.out 
+ 1064  vi test.f90 
+ 1065  ifort test.f90 
  1066  ./a.out 
- 1067  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1068  ./a.out 
- 1069  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1070  ./a.out 
- 1071  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
+ 1067  vi test.f90 
+ 1068  ifort test.f90 
+ 1069  ./a.out 
+ 1070  vi test.f90 
+ 1071  ifort test.f90 
  1072  ./a.out 
- 1073  :q
- 1074  ifort test.f90 
+ 1073  vi test.f90 
+ 1074  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
  1075  ./a.out 
- 1076  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
+ 1076  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
  1077  ./a.out 
- 1078  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1079  ./a.out 
- 1080  :q
- 1081  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1082  ./a.out 
- 1083  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1084  ./a.out 
- 1085  ifort diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 dist.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90 
- 1086  ./a.out 
- 1087  :q
- 1088  history >> call
+ 1078  ls
+ 1079  vi toZMAT 
+ 1080  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1081  ./a.out 
+ 1082  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1083  ./a.out 
+ 1084  ls -ltr
+ 1085  vi toZMAT 
+ 1086  vi parititionQM.f90 
+ 1087  vi makeUnitVector.f90 
+ 1088  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1089  ./a.out 
+ 1090  vi makeUnitVector.f90 
+ 1091  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1092  ./a.out 
+ 1093  vi makeUnitVector.f90 
+ 1094  vi toZMAT 
+ 1095  vi makeUnitVector.f90 
+ 1096  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1097  ./a.out 
+ 1098  vi toZMAT 
+ 1099  ls
+ 1100  ifort addCaps.f90 makeUnitVector.f90 diffBondMat.f90 fullBondMat1.f90 bondMatrix.f90 checkbondDist.f90 distance.f90 findQM2Bound.f90 findQM1Bound.f90 parititionQM.f90
+ 1101  history > call

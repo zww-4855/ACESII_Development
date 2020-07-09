@@ -9,7 +9,10 @@ program partition
      integer::lineCount,QM1count
      integer::i,j,xmin,xmax,ymin,ymax,zmin,zmax
      integer,allocatable::bondMat(:,:),fullBondMat(:,:)
-     integer,allocatable::hcapList(:,:),allList(:)
+     integer,allocatable::hcapList(:,:),outsideQMIndex(:)
+     real,allocatable:: revQMcoords(:,:)
+     character,allocatable::revAtomName(:)
+     real::scaleH
 
      print*,"Please enter the name of the input file containing NLSCC geometry:"
      read*, geometry
@@ -25,7 +28,8 @@ program partition
      end do
      allocate(QM2index(lineCount),atomName(lineCount),&
         &coords(lineCount,3),fullBondMat(lineCount,4),&
-        &       bondMat(lineCount,4),hcapList(lineCount,4))
+        &       bondMat(lineCount,4),hcapList(lineCount,4),&
+        &       revQMcoords(lineCount,4),revAtomName(lineCount))
 
      print*,'lineCount', lineCount   
      rewind(159)
@@ -45,7 +49,7 @@ print*,'atomname',atomName(2)
 !     print*, atomName, coords
      print*, "Please enter the number of atoms you will declare to be in QM1"
      read*, QM1count
-     allocate(allList(lineCount),QM1index(QM1count),QM1coords(QM1count,3))
+     allocate(outsideQMIndex(lineCount),QM1index(QM1count),QM1coords(QM1count,3))
      do i=1,QM1count
           print*, "Please enter numbering of the atoms you wish to be in QM1"
           read*,QM1index(i)
@@ -127,36 +131,65 @@ print*,'atomname',atomName(2)
      call fullBondMat1(coords,lineCount,fullBondMat,atomName)
 
 
-
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-!       The difference between the fullBondMat and
-!       bondMat will tell us which bonds we severed in defining 
-!       the QM2 boundaries.
-
-     print*, "qm2 inex", QM2index
-     print*, "List of atoms outside QM1/2", allList
-     call diffBondMat(coords,fullBondMat,lineCount, bondMat, hcapList,&
-                        &   QM1index,QM1count,QM2index)
-     print*,'shape of QM2index:', shape(QM2index)
-     print*, "qm2 inex", QM2index
-
 !! Create list of indices with *ONLY* atoms outside QM1/2 region
      j=1
-     allList=(/(0, i=1,lineCount)/)
+     outsideQMIndex=(/(0, i=1,lineCount)/)
      print*,'before do loop'
      do i=1,lineCount
         print*,'i,j',i,j
         if (.not.any(i .eq. QM2index )) then
            print*, 'inside if', i,j
-           allList(j)=i
+           outsideQMIndex(j)=i
            j=j+1
         endif
      enddo
 
-     print*, "List of atoms outside QM1/2", allList
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+!!
+!!ROUTINE diffBondMat: compares the values of bondMat(), whose indices contain
+!!                    information of all bonds of atoms within QM1/2, and outsideQMIndex,
+!!                    whose indices are all the atoms outside QM1/2
+!!        *Input*                       *Output*
+!! outsideQMIndex(x),bondMat(x,4)      hcapList(x)=atomIndex of site thats
+!!                                                  bonded with species in
+!!                                                   QM1/2. Value of 0
+!!                                                   otherwise--aka atom/bond
+!!                                                  combo is fully in or out of
+!                                                   QM1/2
+!                                       hcapList(inQMAtom)=[outQMAtomBond]
+     print*, "qm2 inex", QM2index
+     print*, "List of atoms outside QM1/2", outsideQMIndex
+     hcapList=0 !(/(0, i=1,lineCount)/)
+     call diffBondMat(coords,fullBondMat,lineCount, bondMat, hcapList,&
+                        &   QM1index,QM1count,QM2index,outsideQMIndex)
+     print*,'shape of QM2index:', shape(QM2index)
+     print*, "qm2 inex", QM2index
+     print*, "List of atoms outside QM1/2", outsideQMIndex
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!ROUTINE addCaps: Takes info of hcapList to determine the coords(i,4) 
+!                 of atom/bond pair in need a severing and capping with
+!                 a H atom. Uses coords(i,:)&coords(j,:) to creates a unit
+!                 vector along the bond axis. Can be scaled appropriately 
+!                 to adjust for H bond length. Creates revQMcoords(),
+!                 revAtomName() to be
+!                 written to file for use in ZMAT for NLSCC
+!
+!       *Input*                         *Output*
+! coords(x,4),bondMat(x,4)              revQMcoords(x,4),revAtomName(x)
+! atomName(x),hcapList(x,4)            
+!
+
+     scaleH=1.00d0
+     call addCaps(coords,bondMat,atomName,hcapList,lineCount,revQMcoords&
+        & ,revAtomName,QM2Index,QM1index,QM1count,scaleH)
+
+
+
      deallocate(QM1index,atomName,bondMat,QM2index,&
-        &       fullBondMat,coords,QM1coords,hcapList)!xCoord,yCoord,zCoord)
+        &       fullBondMat,coords,QM1coords,hcapList,&
+        &       revQMcoords,revAtomName)!xCoord,yCoord,zCoord)
 
 
 end program partition
