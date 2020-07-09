@@ -15,13 +15,18 @@ subroutine addCaps(coords,bondMat,atomName,hcapList,lineCount,&
         integer:: a,revQM2Index(lineCount),QM2realCount
         integer,allocatable::cutIndex(:)
         revQM2Index=0
+! Write all of QM1 to toZMAT first, then QM2 after
         open(1555,file="toZMAT")
+        do i=1,QM1count
+           write(1555,*) atomName(QM1Index(i)), coords(QM1Index(i),1),&
+                         & coords(QM1Index(i),2),coords(QM1Index(i),3)          
+        enddo
+
         QM2realCount=0
-! Write all of QM2/1 to ZMAT file
         do i=1,lineCount
            if (QM2Index(i) .eq. 0) cycle
-           if (.not.any(QM2Index(i) .eq. QM1Index)) then
-                revQM2Index(i)=QM2Index(i)
+           if (any(QM2Index(i) .eq. QM1Index)) then
+                cycle
            endif
            write(1555,*) atomName(QM2Index(i)), coords(QM2Index(i),1),&
                          & coords(QM2Index(i),2),coords(QM2Index(i),3)
@@ -30,8 +35,7 @@ subroutine addCaps(coords,bondMat,atomName,hcapList,lineCount,&
         enddo
 
         print*,"number of sites just in QM1:", QM1count
-        print*,'Number of sites in both QM2/QM1 ',QM2realCount
-        QM2realCount=QM2realCount-QM1count
+        print*,'Number of sites in both QM2/QM1 ',QM1count+QM2realCount
         print*,'Number of sites just in QM2, *not* QM1,w/o caps',QM2realCount
 
 
@@ -61,7 +65,6 @@ subroutine addCaps(coords,bondMat,atomName,hcapList,lineCount,&
                  call makeUnitVector(coords,lineCount,i,&
                                 & tempArr(cutIndex(j)),revQMcoords)
                  revQMcoords=scaleH*revQMcoords
-                 revQM2Index(QM2realCount)=QM2realCount+QM1count
                  QM2realCount=QM2realCount+1
                  write(1555,*) 'H',revQMcoords(1),revQMcoords(2),revQMcoords(3)
 
@@ -76,15 +79,15 @@ subroutine addCaps(coords,bondMat,atomName,hcapList,lineCount,&
         write(2555,*) QM1count
         write(2555,*)
         do i=1,QM1count
-                write(2555,*) QM1Index(i)
+                write(2555,*) i
         enddo   
         write(2555,*)
         write(2555,*) QM2realCount
         write(2555,*)
-        do i=1,lineCount
+        do i=QM1count,QM2realCount
            ! if (any(QM2Index(i) .eq. QM1Index)) cycle
-            if (revQM2Index(i).eq.0) cycle 
-            write(2555,*) revQM2Index(i)
+           ! if (revQM2Index(i).eq.0) cycle 
+            write(2555,*) i
         enddo
         write(2555,*)
 
