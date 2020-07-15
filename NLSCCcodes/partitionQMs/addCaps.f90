@@ -82,9 +82,9 @@ subroutine addCaps(coords,bondMat,atomName,hcapList,lineCount,&
                 write(2555,*) i
         enddo   
         write(2555,*)
-        write(2555,*) QM2realCount
+        write(2555,*) QM2realCount-QM1count
         write(2555,*)
-        do i=QM1count,QM2realCount
+        do i=QM1count+1,QM2realCount
            ! if (any(QM2Index(i) .eq. QM1Index)) cycle
            ! if (revQM2Index(i).eq.0) cycle 
             write(2555,*) i

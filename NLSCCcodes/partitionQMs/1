@@ -17,24 +17,19 @@ program partition
      character (len=15) :: tmpString
      character (len=65), allocatable :: QMlist(:)
      real::QM2boundary
-     integer::Counts
-
-
-
-
 
      open(unit=159, file='inputInfo.txt')!,status=unknown)
      if ( ios /= 0 ) stop "Error opening file inputInfo.dat"
-     Counts=0
+     lineCount=0
      do
         read(159, '(A)', iostat=ios)
         if (ios /= 0) exit
-        Counts = Counts + 1
+        lineCount = lineCount + 1
      end do
 
-     print*, 'Counts is:',Counts
+     print*, lineCount
      rewind(159)
-     allocate(QMlist(Counts-2))
+     allocate(QMlist(lineCount-2))
 
 !    Reads Geometry file
      read(159,fmt=*,iostat=ios) geometryFile
@@ -46,13 +41,12 @@ program partition
 
 !   Reads QM1xx.txt files
 ! https://stackoverflow.com/questions/26920180/fortran-array-of-strings
-   do i=1,Counts-2
-        read(159,fmt=*,iostat=ios) tmpString
-        print*, 'tmp str is: ',tmpString
+    do i=1,lineCount-2
+         read(159,fmt=*,iostat=ios) tmpString
          QMlist(i)=trim(tmpString)
     enddo
-!
-!    print*,QMlist
+
+    print*,QMlist
     close(159)
 
 
