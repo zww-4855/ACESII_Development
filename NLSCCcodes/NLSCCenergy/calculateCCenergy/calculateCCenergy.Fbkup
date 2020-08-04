@@ -1,0 +1,140 @@
+        program calculateCCenergy 
+        IMPLICIT INTEGER (A-Z)
+        integer::indx,iuhf,n_atm,nbas,nocc,nvirt
+        integer*8, dimension(2) :: scr
+        real,allocatable :: space(:)
+        integer::t1Size,t2abSize,t2aaSize
+c        real, allocatable :: tia(:),fia(:)
+        DOUBLE PRECISION tia, fia
+        DIMENSION tia(2*1060),fia(2*1060)
+        DIMENSION I0T(2),I0F(2)
+        DOUBLE PRECISION E,ETOT,FACTOR,ECORR(3),ESPIN,ET2,ETOTT2
+     &                          ESING,SDOT
+        LOGICAL TAU,NONHF
+        LOGICAL MBPT3,MBPT4,CC,TRPEND,SNGEND,GRAD,MBPTT,SING1
+
+        COMMON /SWITCH/ MBPT3,MBPT4,CC,TRPEND,SNGEND,GRAD,MBPTT,SING1,
+     &                QCISD
+        COMMON /MACHSP/ IINTLN,IFLTLN,IINTFP,IALONE,IBITWD
+#include "sym.com"
+#include "icore.com"
+#include "istart.com"
+
+        CALL ACES_INIT(icore,i0,icrsiz,iuhf,.true.)
+        MAXCOR=icrsiz
+c        allocate(space(MAXCORE))
+        CC=.TRUE. ! Global variable for cmpeng.F
+        SING1=.TRUE.
+        NONHF=.TRUE.
+
+        call getrec(1,'JOBARC','NREALATM',1,n_atm)
+        call getrec(1,'JOBARC','NBASTOT',1,nbas)
+        call getrec(1,'JOBARC','NOCCORB',2,scr)
+! Applies only to even numbers of electrons
+        nocc=scr(1)
+        nvirt=nbas-nocc
+        print*, 'number of atoms,#occ,#virt',n_atm,nocc,nvirt
+c        print*,'NT(1) & NT(2)', NT(1),NT(2)
+c        print*, 'NF1', NF1
+c        print*, 'NF2', NF2
+c        print*, iuhf
+
+c        print*,'pop', POP
+c        print*
+c        print*,'virt',VRT
+
+        ECORR=0.0d0
+        ETOT=0.0d0
+        ETOT2=0.0d0
+        call CMPENG(ICORE(i0),MAXCOR, 43,0,ECORR,ETOT,ETOT2,iuhf,.TRUE.)
+
+
+
+        t1Size=nocc*nvirt
+        NLIST1=0
+        NLIST2=44
+        indx=1
+        if (iuhf.eq.1) then
+          print*, 'inside bool'
+c           allocate(tia(2*t1Size),fia(2*t1Size))
+           tia=0.0d0
+           fia=0.0d0
+           FACTOR=1.0D0
+c           I0T(1)=indx
+c           index1=indx
+           CALL GETLST(ICORE(i0),1,1,1,1,90)
+           CALL GETLST(tia(1),1,1,1,1,90) 
+c           indx=indx+NT(1)*IINTFP
+                
+c           index2=indx
+c           I0T(2)=indx
+           print*, 'compare mem size:', t1Size, NT(1)*IINTFP
+           CALL GETLST(tia(1060+1),1,1,1,2,90)
+
+c           indx=indx+NT(2)*IINTFP
+
+c           I0F(1)=indx
+
+           CALL GETLST(fia(1),1,1,1,3,93)
+           CALL GETLST(ICORE(i0+1060),1,1,1,3,93)
+c           indx=indx+NT(1)*IINTFP
+           
+c           I0F(2)=indx
+
+c           CALL GETLST(fia(1+t1Size),1,1,1,4,93)
+
+c           indx=indx+NT(2)*IINTFP
+        else
+          FACTOR=2.0D0
+        endif
+        espin=0.0d0
+        print*, 't1Size:', t1Size
+        do i=1, t1Size
+                espin=espin+tia(i)*fia(i)
+                print*, tia(i), fia(i)
+        enddo
+        print*, 'revised espin', espin
+        print*,'ICORE compare', SDOT(1060,ICORE(i0), 1,
+     &                          ICORE(i0+1060),1)
+         ESPIN=0.0d0
+         ESING=0.0D0
+         ESING=SDOT(1060,tia,1,fia,1)
+         ESPIN=ESPIN+ESING
+         write(*,"(a)") "Printing from calculateNLSCCenergy"
+         Write(*, "(a,1x,F15.10)") "The NON-HF terms:", espin
+
+          ESPIN=0.0d0
+          do i=1,1060
+                espin=espin+tia(i)*fia(i)
+          enddo
+        print*, 'revised espin', espin
+c        ECORR=0.0d0
+c        ETOT=0.0d0
+c        ETOT2=0.0d0
+c        ETOTT2=0.0D0
+c        print*, 't1size vs nt(ISpin)', t1Size, NT(1)
+c        DO ISPIN=1,1!IUHF+1
+c          ESPIN=0.0D0
+c          do i=1,t1Size
+c         !       ESPIN=ESPIN+tia(i)*fia(i)
+c          enddo
+c        ESING=SDOT(NT(ISPIN),tia,1,fia,1)
+c        ESPIN=ESPIN+ESING
+c        write(*,"(a)") "Printing from CMPENEG"
+c        Write(*, "(a,1x,F15.10)") "The NON-HF terms:", espin
+c        ETOT=ETOT+FACTOR*ESING
+c        ETOTT2=ETOTT2+FACTOR*ESING
+c
+c        ENDDO
+        
+        
+
+
+
+
+
+C        deallocate(tia,fia)
+
+
+        call aces_fin
+        end program
