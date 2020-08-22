@@ -1,0 +1,71 @@
+        subroutine createCISmat(diaFockA,W,Wab,nocc,nvirt,CISmat)
+          integer, intent(in):: nocc,nvirt
+          double precision, intent(in)::diaFockA(nocc*nvirt)
+          double precision, intent(in)::W(nocc,nvirt,nocc,nvirt)
+          double precision, intent(in)::Wab(nocc,nvirt,nocc,nvirt)
+          double precision, intent(inout)::CISmat(2*nocc*nvirt,
+     &                                          2*nocc*nvirt)
+
+        integer ::del_ij,del_ab,nbas,offset
+        integer :: counter_i, counter_j,i,j,a,b
+        real(kind=8) :: term,fab, fij,fe,HFenergy
+        CISmat=0.0d0
+        print*, "inside CIS fxn"
+        counter_j=1
+        offset=nocc*nvirt
+        do i=1,nocc
+          do a=1,nvirt
+            counter_i=1
+            do j=1,nocc
+              do b=1,nvirt
+                 del_ij = (i == j)
+                 del_ab = (a == b)
+           CISmat(counter_j,counter_i)=del_ij*del_ab*(
+     +  diaFockA(a+nocc)-diaFockA(i))+W(i,nocc+a,j,b+nocc)
+                counter_i=counter_i+1
+
+
+           CISmat(offset+counter_j,offset+counter_i)=
+     &                  CISmat(counter_j,counter_i)
+              enddo
+            end do
+            counter_j=counter_j+1
+          enddo
+        enddo
+      print*, "EIGEN SYM TEST CIS hamil"
+      do i=1,2*nocc*nvirt
+        do j=1,2*nocc*nvirt
+          if (abs(CISmat(i,j)-CISmat(j,i)).gt.1e-5)then
+            print*, 'not symmetric at index: ', i,j
+          endif
+         enddo
+      enddo
+
+        counter_j=1
+        offset=nocc*nvirt
+        do b=1,nvirt
+          do j=1,nocc
+            counter_i=1
+            do a=1,nvirt
+              do i=1,nocc
+
+           CISmat(counter_j,offset+counter_i)=Wab(i,a,j,b)
+           CISmat(offset+counter_j,counter_i)=
+     &                          CISmat(counter_j,offset+counter_i)
+C               W(a+nocc,b+nocc,i,j)
+                counter_i=counter_i+1
+              enddo
+            end do
+            counter_j=counter_j+1
+          enddo
+        enddo 
+      print*, "2 e- integral sym check"
+      do i=1,2*nocc*nvirt
+        do j=1,2*nocc*nvirt
+          if (abs(CISmat(i,j)-CISmat(j,i)).gt.1e-5)then
+            print*, 'not symmetric at index: ', i,j
+          endif
+         enddo
+      enddo
+
+        end subroutine 
