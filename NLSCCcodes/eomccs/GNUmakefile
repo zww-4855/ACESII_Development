@@ -366,7 +366,7 @@ DEFINE_PARALLEL = -D_HAVE_MPI
 C_SUFFIX = 0 # append underscore to global structures and C routines
 DEFINE_C_SUFFIX = -DC_SUFFIX -DCB_SUFFIX
 
-DEBUG = 0
+DEBUG = 1 
 DEFINE_DEBUG = -D_DEBUG -D_ASSERT
 FLAG_DEBUG = -g
 # also switches DIR_DEBUGLIB on or off
@@ -879,15 +879,15 @@ endif
 # If ${CURR} is in this string, then BUILDBIN=NO.
 ACES_LIBS = \
    mpistubs mpw p_mpw blas lapack lb eispack linpack \
-   tools \
+   tools nlo \
    acescore p_acescore acesutil \
    libr crust oed erd gamess p_gamess \
    symcor \
    libr2 librt3 trp eomtrp\
    imm omm symtools diagtools \
    sbtools ecplib\
-   mrcca3 mrcccore apg apg2 cse eomprocs mbdirect mbgrad mbtest mbdiag mbtools \
-   molcas oeptools nlo lnczos
+   mrcca3 mrcccore apg apg2 cse_mn eomprocs mbdirect mbgrad mbtest mbdiag mbtools \
+   molcas oeptools lnczos
 
 # the names of the parallel libraries and binaries
 PACES_DIRS = \
@@ -920,7 +920,7 @@ ACES_LINK_LISTS = \
    vdint:ecplib:${LIST_DEF_LIBS} \
    vdintl:ecplib:${LIST_DEF_LIBS} \
    vea:libr2:${LIST_DEF_LIBS} \
-   vee:trp:librt3:libr2:crust:${LIST_DEF_LIBS} \
+   vee:trp:librt3:libr2:crust:hbar:vcc:${LIST_DEF_LIBS} \
    vmol:ecplib:${LIST_DEF_LIBS} \
    vmol2ja:ecplib:${LIST_DEF_LIBS} \
    a2rate:${LIST_DEF_LIBS} \
@@ -963,6 +963,13 @@ ACES_LINK_LISTS = \
    scrnc:vcceh:libr2:${LIST_DEF_LIBS} \
    ringcc:vcc:libr2:${LIST_DEF_LIBS} \
    ringcl:ringcc:vcc:libr2:${LIST_DEF_LIBS} \
+   prep:${LIST_DEF_LIBS} \
+   aux:libr2:${LIST_DEF_LIBS} \
+   ccd_light:${LIST_DEF_LIBS}\
+   ccsd_light:${LIST_DEF_LIBS}\
+   cse:${LIST_DEF_LIBS}\
+   cse12:${LIST_DEF_LIBS}\
+   hcmult:vee:libr2:${LIST_DEF_LIBS}\
 
 # the names of the main objects for each of the "problem" binaries
 # [A name may be omitted if the main object has the same name as ${CURR}]
@@ -997,8 +1004,14 @@ ACES_MAIN_OBJS = \
    scrnc:scrnc_main\
    ringcc:rcc_main\
    ringcl:rcl_main\
+   prep:import_ghess\
    scale_ints:scale_ints_main\
    dkh:dkh__main\
+   ccd_light:ccd_light_main\
+   ccsd_light:ccsd_light_main\
+   cse:cse_main\
+   cse12:cse12_main\
+   hcmult:hcmult_main\
 
 
 # more-or-less permanent defines that are ACES related that must be used
