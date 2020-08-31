@@ -1,6 +1,6 @@
 Directory containing all work dedicated towards the Natural Linear Scaling Coupled Cluster theory. 
 
-Thus far there are 2 directories:
+Thus far there are 3 directories: 8/31/2020
 
 1) NLSCCenergy:
       Contains all subroutines used to calculate NLSCCSD energy. Inspiration was taken from multiple existing ACES2 routines in */libr including cmpeng.F, tener.F, ftau.F.
@@ -27,6 +27,12 @@ Thus far there are 2 directories:
     in the direction of that bond. Very crude program. It works for linear molecules, but has difficulty cutting rings and double bonds where its necessary to add 2
     hydrogen atom caps. Will need to add an additional layer of sophistication to this module. 
     
-**** Work in Progress *****
 
-Add EOM-NLSCCSD capabilities to calculate spectra 
+
+ 3) eomccs:
+      This directory intends to establish ACESII first NLS-CIS capabilities for the purpose of calculating excited state spectra. As with
+      calculating the NLSCCenergy, after the ACES2 'xvscf' executable is called, the HF orbitals must be localized using the NLMO scheme
+      and the 'xnlorb' executable. Following this, the CIS procedure is the same as compared to the standard ACES2 CIS routines. 
+      * This module takes an UHF reference, and reads the NLMO orbital index and atom site it is associated with in the file 'nbocenters' --
+        a product of running 'xnlorb'. So far, the code works for standard CIS, and the latest commit strives to omit elements of CIS matrix
+        based on their proximity to the QM1 and QM2 regions. Work is ongoing 8/31/2020
