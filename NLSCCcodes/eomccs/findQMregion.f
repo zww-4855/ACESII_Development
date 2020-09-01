@@ -9,29 +9,48 @@
 
 
 
-        function findQMregion(indx,indxSize,QMregion,QMregSize)!,output)
-           integer,intent(in)::indxSize,QMregSize
-           integer,intent(in)::indx(indxSize),QMregion(QMregSize)
-           !logical, intent(inout)::findQMregion 
+        subroutine findQMregion(indx,indxSize,QM1,QM1Size,
+     &                             QM2,QM2Size,QMregOut)!,output)
+           integer,intent(in)::indxSize,QM1Size,QM2Size
+           integer,intent(in)::indx(indxSize),QM1(QM1Size),
+     &                                        QM2(QM2Size)
+           integer, intent(inout)::QMregOut(4)
+ 
            integer:: i,j
            logical:: finalOut(indxSize) 
            logical:: test(indxSize)
-           logical::findQMregion
-           test=(/ (.TRUE.,j=1,indxSize)  /)
+!******************************************************************
+!******************************************************************
+!  Purpose: receives the <aj||ib> indices in 'indx'. Iterates thru
+!           each element of indx(4) at a time. For each element
+!           ask:
+!               1) is index in QM1? if no, then index in QM2
+!               2) if yes, then ask is index also in QM2? 
+!               3a)if no, then index is only in QM1
+!               3b) if yes, then index is in both QM1&QM2
+!
+!
+!           Returns this logic in 'QMregOut(4)'. Each element of 
+!           array holds either:
+!                       1 - index only in QM1
+!                       2 - index only in QM2
+!                       3 - index in both QM1&QM2
+!
+!******************************************************************
+!******************************************************************
           do i=1,indxSize
-                if (any(indx(i).eq.QMregion)) then
-                   finalOut(i)=.TRUE.
+                if (any(indx(i).eq.QM1)) then
+                   if (any(indx(i).eq.QM2)) then
+                      QMregOut(i)=3
+                   else
+                      QMregOut(i)=1
+                   endif
                 else
-                   finalOut(i)=.FALSE.
+                   QMregOut(i)=2
                 endif
           enddo
-          print*,'**************************************'
-          print*,'** INside findQM  **'
-           print*,'test is: ', test
-           print*,'compare is: ', finalOut
-           print*,'indx is: ', indx
-          findQMregion=all(finalOut .eq. test,dim=1) 
-          print*, 'value of findQMreigon:', findQMregion
-          print*,'**************************************'
-          print*,'**************************************'
-        end function 
+!          print*,'**************************************'
+!          print*,'** INside findQM  **'
+!          print*,'**************************************'
+!          print*,'**************************************'
+        end subroutine 

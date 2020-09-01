@@ -70,6 +70,10 @@ c        real, allocatable :: tia(:),fia(:)
      &                                          Waa(:),diaFockA(:)
         double precision, allocatable::Wbb(:),Wab(:),Wabnew(:,:,:,:)
         double precision, allocatable:: WaanewOut(:)
+        double precision, allocatable::wr(:),wi(:),vl(:,:),
+     &                                  vr(:,:),work(:)
+        double precision :: tempor(6)
+        double precision:: revCIS(5,5)
 #include "sym.com"
 #include "icore.com"
 #include "istart.com"
@@ -296,16 +300,16 @@ c        enddo
         print*,'*****************************************************'
         print*, 'Calling Eigen for FULL CIS matrix'
         print*,'*****************************************************'
-        call eig(CISmat,CISevec,100,2*nocc*nvirt,1)
+!        call eig(CISmat,CISevec,100,2*nocc*nvirt,1)
         print*
         print*,'*****************************************************'
         print*,'** Eigenvalues for full CIS matrix **'
         print*,'*****************************************************'
         print*
-        print*,'     Excite E (au)           Excite E (eV) '
-        do i=1,2*nocc*nvirt
-           print*, CISmat(i,i),CISmat(i,i)*27.2114
-        enddo
+!        print*,'     Excite E (au)           Excite E (eV) '
+!        do i=1,2*nocc*nvirt
+!           print*, CISmat(i,i),CISmat(i,i)*27.2114
+!        enddo
         print*
         print*
         print*,'*****************************************************'
@@ -318,17 +322,41 @@ c        enddo
         print*,'*****************************************************'
         print*,'******        0th order Approx. NLS-CIS        ******'
         print*,'*****************************************************'
-!        call nlscisZ(CISmat,CISmat0,nocc,nvirt,QM1atoms,QM1num,
-!     &                  QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas)
-!        call output(CISmat0,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
-!        print*,'after nlscisZERO call'
+        call nlscisZ(CISmat,CISmat0,nocc,nvirt,QM1atoms,QM1num,
+     &                  QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas)
+        call output(CISmat0,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
+        print*,'after nlscisZERO call'
+        skip=0
+        skipC=0
+        tempor=(/ (0.0d0,i=1,2*nocc*nvirt) /)
+        print*, CISmat0(2,1:2*nocc*nvirt)
+        print*
+        print*
+        print*,tempor
+        do i=1,2*nocc*nvirt
+           do j=1,2*nocc*nvirt
+              print*, CISmat0(i,j)
+              revCIS(i-skip,j-skipC)=CISmat0(i,j)
+        enddo
+        print*
+        enddo
+        call eig(CISmat,CISevec,100,2*nocc*nvirt,1)
+        CALL output(CISmat,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
+        CALL output(CISevec,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
+!        where (CISmat0(i,i) .ne. 0.0d0) revCIS = CISmat0
+!        call output(revCIS,1,MATDIM-1,1,MATDIM-1,MATDIM-1,MATDIM-1,1)
+!        o=2*nocc*nvirt
+        allocate(wr(o),wi(o),vl(o,o),vr(o,o),work(1))
+!        call dgeev('V','V',o,revCIS,o,wr,wi,vl,o,vr,o,work,-1,info)
 !        call eig(CISmat0,CIS0vec,100,2*nocc*nvirt,1)
+!        print*,'info', info
 !        do i=1,2*nocc*nvirt
-!           print*, CISmat0(i,i),CISmat0(i,i)*27.2114
+!           print*, wr(i),wr(i)*27.2114
 !        enddo
 
 
 30      FORMAT (I4,2X,I4)
+        deallocate(wr,wi,vl,vr,work)
         ! Deallocate memory for T1, fia, T2, W for RHF and UHF cases
         deallocate(CISmat0,CIS0vec,QM1atoms,QM2atoms,Wab,Wabnew,scrat)
         deallocate(NLMO,Waa,Waanew,Waanewout,diaFockA,CISmat,CISevec)
