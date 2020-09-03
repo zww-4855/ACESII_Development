@@ -268,6 +268,9 @@ c        real, allocatable :: tia(:),fia(:)
         double precision, allocatable:: WaanewOut(:)
         double precision, allocatable::wr(:),wi(:),vl(:,:),
      &                                  vr(:,:),work(:)
+        double precision, allocatable::CISreduce(:,:),CISreduceVec(:,:)
+!        double precision ::CISreduce(10,10),CISreduceVec(10,10)
+        integer::QM2NLMOcount
         double precision :: tempor(6)
         double precision:: revCIS(5,5)
 c sym.com : begin
@@ -334,7 +337,7 @@ c        allocate(space(MAXCORE))
         NLIST1=0
         NLIST2=44
         indx=i0
-        print*,'icore',MAXCOR,IINTFP,iuhf
+        print*,'icore',NONHF,MAXCOR,IINTFP,iuhf
         call makess(icore(i0),MAXCOR,iuhf)
         call DRVTDA(icore(i0),MAXCOR/IINTFP,iuhf)
         allocate(diaFockA(nocc+nvirt),Waa(t2abSize),CISmat(2*nocc*nvirt
@@ -344,9 +347,9 @@ c        allocate(space(MAXCORE))
      &          Wab(t1Size**2),Wabnew(nvirt,nvirt,nocc,nocc))
 
         allocate(NLMOQM1(nbas),NLMOQM2(nbas))
-        allocate(CISmat0(nocc*nvirt,nocc*nvirt),
-     &                  CIS0vec(nocc*nvirt,nocc*nvirt),
-     &           CISmatCOPY(nocc*nvirt,nocc*nvirt))
+        allocate(CISmat0(2*nocc*nvirt,2*nocc*nvirt),
+     &                  CIS0vec(2*nocc*nvirt,2*nocc*nvirt),
+     &           CISmatCOPY(2*nocc*nvirt,2*nocc*nvirt))
         CALL GETREC(20,'JOBARC','SCFEVALA',(nocc+nvirt)*IINTFP,diaFockA)
         NLMOQM1=0
         NLMOQM2=0
@@ -355,7 +358,6 @@ c        allocate(space(MAXCORE))
         Wab=0.0d0
         Waanew=0.0d0
         CALL GETALL(WaanewOut,t2aaSize,1,14)
-!        CALL GETALL(Wab,t2abSize,1,16)
         CALL GETALL(Waanew,t2abSize,1,19)
         CALL GETALL(Wab,t2abSize,1,18)
         LISTW=23
@@ -369,13 +371,8 @@ c        allocate(space(MAXCORE))
         do idis=1,NUMDIS
           call GETLST(Waa(IOFF),idis,1,1,1,LISTW)
           IOFF=IOFF+nocc*nvirt
-!        call GETALL(Wbb,t2abSize,1,24)
         enddo
         call GETALL(Wbb,t2abSize,1,24)
-!        CALL GETALL(Waa,t2abSize,1,23)
-!        CALL GETALL(Waanew,t2aaSize,1,14)
-
-        print*,'waa/wab',WaanewOut(1),Wab(1)
 !******************************************************************
 ! * Read QMcenter
 !******************************************************************
@@ -412,6 +409,7 @@ c        print*, 'qm sites', QM1atoms, QM2atoms
         indx=1
         do while (ierr.eq.0)
            read(150,30,IOSTAT=ierr) NLMOnum2,NLMOorigin2
+           if (ierr.ne.0) exit
            if (NLMOnum.eq.NLMOnum2) then
               indx=indx+1
            else
@@ -422,6 +420,7 @@ c        print*, 'qm sites', QM1atoms, QM2atoms
            NLMOorigin2=NLMOorigin
         enddo 
         close(150)
+        print*,NLMO(4,1:5)
         print*, 'printing QMNLMO ownershop'
         do i=1,nbas
           do j=1,5
@@ -435,9 +434,13 @@ c        print*, 'qm sites', QM1atoms, QM2atoms
         print*,'QM1/2atoms',QM1atoms
         print*,'QM2atoms',QM2atoms
         print*,any(QM2atoms(1:).eq.NLMO(1,:))
+!******************************************************************
+! * Determine if the NLMO read from nbocenters is entirely within
+! * QM1, QM2, or both QM1&QM2
+!******************************************************************
         do i=1,nbas
           terminalIndex=findloc(NLMO(i,1:5),value=100,dim=1)
-          print*,'t index', NLMO(i,1:terminalIndex-1)
+!          print*,'t index', NLMO(i,1:terminalIndex-1)
           qm1switch=0
           qm2switch=0
           do j=1,terminalIndex-1
@@ -470,54 +473,42 @@ c        print*, 'qm sites', QM1atoms, QM2atoms
 !******************************************************************
 ! * Calculate NLSCCSD energy per QM1 region
 !****************************************************************** 
-        total=(occ*virt)**2
-        input='2134'
-        print*,'*****************************************************'
-        print*, '********        2 e- ints Wab           ************'
-        call output(Wab,1,nocc*nvirt,1,nocc*nvirt,nocc*nvirt,
-     &          nocc*nvirt,1)
-        print*,'*****************************************************'
-
-        print*,'*****************************************************'
-        print*, '********        2 e- ints Waa           ************'
-        call output(Waa,1,nocc*nvirt,1,nocc*nvirt,nocc*nvirt,
-     &          nocc*nvirt,1)
-        print*,'*****************************************************'
-        print*
-        print*,'*****************************************************'
-        print*, '********        2 e- ints Wbb           ************'
-        call output(Wbb,1,nocc*nvirt,1,nocc*nvirt,nocc*nvirt,
-     &          nocc*nvirt,1)
-        print*,'*****************************************************'
-        print*
-        iter=1
-        Waanew=0.0d0
-        do i=1,nocc
-          do j=1,nocc
-            do a=1,nvirt
-              do b=1,nvirt
-               ! if (j<i.and.b<a) then
-                        print*,'waanew',Waa(iter)
-                        iter=iter+1
-                !endif
-        enddo
-        enddo
-        enddo
-        enddo 
-c        CISmat=0.0d0
-c        offset=nocc*nvirt
-c        iter=1
-c        do i=1,nocc*nvirt
-c          do a=1,nocc*nvirt
-c           print*,Wab(iter)
-c           CISmat(i+offset,a)=Wab(iter)
-c           CISmat(i,offset+a)=Wab(iter)
-c           iter=iter+1
-c          enddo
-c           print*
-c        enddo    
+!        total=(occ*virt)**2
+!        input='2134'
+!        print*,'*****************************************************'
+!        print*, '********        2 e- ints Wab           ************'
+!        call output(Wab,1,nocc*nvirt,1,nocc*nvirt,nocc*nvirt,
+!     &          nocc*nvirt,1)
+!        print*,'*****************************************************'
+!
+!        print*,'*****************************************************'
+!        print*, '********        2 e- ints Waa           ************'
+!        call output(Waa,1,nocc*nvirt,1,nocc*nvirt,nocc*nvirt,
+!     &          nocc*nvirt,1)
+!        print*,'*****************************************************'
+!        print*
+!        print*,'*****************************************************'
+!        print*, '********        2 e- ints Wbb           ************'
+!        call output(Wbb,1,nocc*nvirt,1,nocc*nvirt,nocc*nvirt,
+!     &          nocc*nvirt,1)
+!        print*,'*****************************************************'
+!        print*
+!        iter=1
+!        Waanew=0.0d0
+!        do i=1,nocc
+!          do j=1,nocc
+!            do a=1,nvirt
+!              do b=1,nvirt
+!               ! if (j<i.and.b<a) then
+!                        print*,'waanew',Waa(iter)
+!                        iter=iter+1
+!                !endif
+!        enddo
+!        enddo
+!        enddo
+!        enddo 
         call createCISmat(diaFockA,Waa,Wab,nocc,nvirt,CISmat)
-        call dcopy((nocc*nvirt)**2,CISmat,1,CISmatCOPY,1)
+!        call dcopy((nocc*nvirt)**2,CISmat,1,CISmatCOPY,1)
         print*,'*****************************************************'
         print*,'******               CIS matrix                ******'
         print*,'*****************************************************'
@@ -561,34 +552,39 @@ c        enddo
         print*, CISmat0(2,1:2*nocc*nvirt)
         print*
         print*
-        print*,tempor
-        do i=1,2*nocc*nvirt
-           do j=1,2*nocc*nvirt
-              print*, CISmat0(i,j)
-              revCIS(i-skip,j-skipC)=CISmat0(i,j)
-        enddo
+        print*, 'before allocate'
+        print*, 'before allocate'
+        call GetNLMOQM2(NLMOQM1,NLMOQM2,nbas,QM2NLMOcount)
+        print*, 'after getnlmoQM2'
+        redDim=2*nocc*nvirt - 2*QM2NLMOcount
+        print*,'qm2',redDim,QM2NLMOcount
+
+!        allocate(CISreduce(redDim,redDim),CISreduceVec(redDim,redDim))
+        print*,ierr
+        print*, 'after getnlmoQM2'
+        call ReduceCISmat(CISmat0,2*nocc*nvirt,
+     &                    NLMOQM1,NLMOQM2,nbas,nocc,nvirt)
+
+!        call eig(CISmat,CISevec,100,2*nocc*nvirt,1)
+!        CALL output(CISmat,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
+!        CALL output(CISevec,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
         print*
-        enddo
-        call eig(CISmat,CISevec,100,2*nocc*nvirt,1)
-        CALL output(CISmat,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
-        CALL output(CISevec,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
-!        where (CISmat0(i,i) .ne. 0.0d0) revCIS = CISmat0
-!        call output(revCIS,1,MATDIM-1,1,MATDIM-1,MATDIM-1,MATDIM-1,1)
-!        o=2*nocc*nvirt
-        allocate(wr(o),wi(o),vl(o,o),vr(o,o),work(1))
-!        call dgeev('V','V',o,revCIS,o,wr,wi,vl,o,vr,o,work,-1,info)
-!        call eig(CISmat0,CIS0vec,100,2*nocc*nvirt,1)
-!        print*,'info', info
-!        do i=1,2*nocc*nvirt
-!           print*, wr(i),wr(i)*27.2114
+        print*
+        print*,'Reduced NLS-CIS matrix'
+        
+!        call output(CISreduce,1,redDim,1,redDim,redDim,redDim,1)
+!         call eig(CISreduce,CISreduceVec,100,redDim,1)
+!        do i=1,redDim
+!          print*, CISreduce(i,i),CISreduce(i,i)*27.2114
 !        enddo
 
-
+!        deallocate(CISreduce,CISreduceVec)
 30      FORMAT (I4,2X,I4)
-        deallocate(wr,wi,vl,vr,work)
+!        deallocate(wr,wi,vl,vr,work)
         ! Deallocate memory for T1, fia, T2, W for RHF and UHF cases
         deallocate(CISmat0,CIS0vec,QM1atoms,QM2atoms,Wab,Wabnew,scrat)
         deallocate(NLMO,Waa,Waanew,Waanewout,diaFockA,CISmat,CISevec)
         deallocate(NLMOQM1,NLMOQM2,Wbb,CISmatCOPY)
+
         call aces_fin
         end program

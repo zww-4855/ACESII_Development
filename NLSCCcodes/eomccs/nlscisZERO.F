@@ -39,7 +39,10 @@
                 print*,a,b
                 print*,all(QMreg.eq.(/ 1,1,1,1 /))
                 print*,QMreg
+                print*
                 print*,NLMOQM1
+                print*
+                print*,CISmat(counter_j,counter_i)
                 print*,'end'
                 print*
                 if (all(QMreg.eq.(/ 1,1,1,1 /))) then
@@ -66,43 +69,43 @@
                 else if (any(QMreg.eq.3)) then
                    if (sum(QMreg).eq.6) then! ie <31||11>
                    CISmat0(counter_j,counter_i)=
-     &                  CISmat(counter_j,counter_i)*0.75d0
+     &                  CISmat(counter_j,counter_i)!*0.75d0
 
                    CISmat0(offset+counter_j,counter_i)=
-     &                  CISmat(offset+counter_j,counter_i)*0.75d0
+     &                  CISmat(offset+counter_j,counter_i)!*0.75d0
 
                    CISmat0(counter_j,offset+counter_i)=
-     &                  CISmat(counter_j,offset+counter_i)*0.75d0
+     &                  CISmat(counter_j,offset+counter_i)!*0.75d0
 
                    CISmat0(offset+counter_j,offset+counter_i)=
-     &                  CISmat(offset+counter_j,offset+counter_i)*0.75d0
+     &                  CISmat(offset+counter_j,offset+counter_i)!*0.75d0
                
                     else if (sum(QMreg).eq.8) then! ie <33||11>
                    CISmat0(counter_j,counter_i)=
-     &                  CISmat(counter_j,counter_i)*0.5d0
+     &                  CISmat(counter_j,counter_i)!*0.5d0
 
                    CISmat0(offset+counter_j,counter_i)=
-     &                  CISmat(offset+counter_j,counter_i)*0.5d0
+     &                  CISmat(offset+counter_j,counter_i)!*0.5d0
 
                    CISmat0(counter_j,offset+counter_i)=
-     &                  CISmat(counter_j,offset+counter_i)*0.5d0
+     &                  CISmat(counter_j,offset+counter_i)!*0.5d0
 
                    CISmat0(offset+counter_j,offset+counter_i)=
-     &                  CISmat(offset+counter_j,offset+counter_i)*0.5d0
+     &                  CISmat(offset+counter_j,offset+counter_i)!*0.5d0
  
 
                     else if (sum(QMreg).eq.10) then! ie <33||31>
                    CISmat0(counter_j,counter_i)=
-     &                  CISmat(counter_j,counter_i)*0.25d0
+     &                  CISmat(counter_j,counter_i)!*0.25d0
 
                    CISmat0(offset+counter_j,counter_i)=
-     &                  CISmat(offset+counter_j,counter_i)*0.25d0
+     &                  CISmat(offset+counter_j,counter_i)!*0.25d0
 
                    CISmat0(counter_j,offset+counter_i)=
-     &                  CISmat(counter_j,offset+counter_i)*0.25d0
+     &                  CISmat(counter_j,offset+counter_i)!*0.25d0
 
                    CISmat0(offset+counter_j,offset+counter_i)=
-     &                  CISmat(offset+counter_j,offset+counter_i)*0.25d0
+     &                  CISmat(offset+counter_j,offset+counter_i)!*0.25d0
                     endif
 !                         all(QMreg.eq.(/ 2,2,2,2 /))
                 else
