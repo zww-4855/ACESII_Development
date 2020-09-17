@@ -42,7 +42,6 @@ C
        IF (DD) THEN
          LISTW=53+ISPIN
          CALL GETLST(SCR(ISCR),1,NDIM,1,IRREPX,LISTW)
-        call checksum("@-hbardiag,SS:",scr(iscr),ndim,s)
          CALL SAXPY (NDIM,ONEM,SCR(ISCR),NDIM+1,SCR(IOFFC),1)
        ENDIF
        IOFFC=ISCR
@@ -57,7 +56,6 @@ C
         NUMDIS=IRPDPD(IRREPR,ISYTYP(2,LISTD))
         DISSIZ=IRPDPD(IRREPL,ISYTYP(1,LISTD))
         CALL GETLST(SCR(IOFFC),1,NUMDIS,1,IRREPR,LISTD)
-        call checksum("@-hbardiag,DD:",scr(ioffc),NUMDIS*DISSIZ,s)
         CALL VMINUS(SCR(IOFFC),NUMDIS*DISSIZ)
         IOFFC=IOFFC+NUMDIS*DISSIZ
 30     CONTINUE

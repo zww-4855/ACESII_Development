@@ -32,7 +32,6 @@ C
       FACT = 0.0D0
       REF_ENG_IN_DEN = .TRUE. 
       IF (REF_ENG_IN_DEN) FACT = 1.0D0 
-      Write(6,"(a,1x,F10.5)") "Omega = ", FACT*Omega(Iroot)
 
       IEVALA=1
       IEND=IEVALA+NOCCO(1)+NVRTO(1)

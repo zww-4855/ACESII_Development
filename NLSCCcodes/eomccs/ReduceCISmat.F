@@ -15,8 +15,8 @@
         do i=1,CIS0dim
           colCount=sum(CISmat0(i,:))
           rowCount=sum(CISmat0(:,i))
-          if ((abs(colCount).lt.0.0000000001) .and.
-     &                  (abs(rowCount).lt.0.0000000001)) then
+          if ((abs(colCount).lt.0.0000001) .and.
+     &                  (abs(rowCount).lt.0.0000001)) then
                 ZEROindx(iter)=i
                 iter=iter+1
           endif
@@ -32,19 +32,41 @@
           do jb=1,CIS0dim
             if (any(jb.eq.ZEROindx)) cycle
             CISreduce(coi,coj)=CISmat0(ia,jb)
-            print*,CISmat0(ia,jb)
+!            print*,CISmat0(ia,jb)
             coj=coj+1
           enddo 
           coi=coi+1
         enddo
-        print*, 'revised reduce CIS mat'        
+
+#ifdef _DEBUG_LVL0
+        print*, '** Reduced NLS-CIS matrix **'        
         call output(CISreduce,1,ndim,1,ndim,ndim,ndim,1)
+#endif
          call eig(CISreduce,CISreduceVec,100,ndim,1)
+        print*,'*********************************************'
+        print*,'FINAL NLS-CIS EIGENVALUES'
+        print*,'*********************************************'
+        print*, 'original # of roots for full CIS',CIS0dim 
+        print*,'NLS-CIS # of roots: ', ndim
+        newindx=1
         do i=1,ndim
-          print*, CISreduce(i,i),CISreduce(i,i)*27.2114
+          print*, i,CISreduce(i,i)*27.2114
+          if (abs(CISreduce(i,i)).lt.0.0000001) then
+                newindx=newindx+1
+          endif
         enddo
-
+        print*,'*********************************************'
+        print*,'*********************************************'
+        print*,'*********************************************'
+#ifdef _DEBUG_LVL0
         call output(CISreduceVec,1,ndim,1,ndim,ndim,ndim,1)
+#endif
 
+        print*,'*********************************************'
+        print*,'FINAL NLS-CIS EIGENVECTORS FOR FIRST FEW STATES'
+        print*,'*********************************************'
+        PRINT*, CISreduceVec(:,newindx)
+        print*,'max vec',maxval(CISreduceVec(:,newindx))
+        print*,'min vec', minval(CISreduceVec(:,newindx))        
         deallocate(CISreduce,CISreduceVec)
         end subroutine

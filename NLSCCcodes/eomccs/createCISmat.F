@@ -36,12 +36,11 @@
         iter=1
         do i=1,nocc*nvirt
           do a=1,nocc*nvirt
-           print*,Wab(iter)
+!           print*,Wab(iter)
            CISmat(i+offset,a)=Wab(iter)
            CISmat(i,offset+a)=Wab(iter)
            iter=iter+1
           enddo
-           print*
         enddo
 
 ! ****************************************************************
@@ -67,7 +66,6 @@
               enddo
             enddo
             counter_j=counter_j+1
-            print*
           enddo
         enddo
 ! ****************************************************************

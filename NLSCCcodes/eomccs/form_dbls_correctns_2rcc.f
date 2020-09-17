@@ -48,38 +48,6 @@ c syminf.com : end
 
       Call Getrec(20,'JOBARC','EESYMINF',NIRREP,NRoot)
 
-      write(6,*)
-      write(6,"(a,2(1x,i2),1x,2l)") " IRREPX,IMULT and EOM_SF_D/RCCD:", 
-     &                    Irrepx,Imult,Eom_sf_rccd,Eom_sf_drccd
-CSSS      call check_ints(Work,Length,Iuhf,0)
-      write(6,*)
-      lengtha =irpdpd(irrepx,9)
-      lengthb =irpdpd(irrepx,10)
-      Do Iroot = 1, Nroot(Irrepx)
-      joff = 1
-      do ispin = 1, 1+iuhf 
-      joff = joff+lengtha*(ispin-1)
-      if (ispin.eq.1) then
-      call output(Rcc_vecr(joff,iroot),1,Lengtha,1,1,Lengtha,1,1)
-      call output(Rcc_vecl(joff,iroot),1,Lengtha,1,1,Lengtha,1,1)
-      write(6,*)
-      call checksum("Rcc_R(P,Q)",Rcc_vecr(joff,Iroot),Lengtha,s)
-      call checksum("Rcc_L(P,Q)",Rcc_vecl(joff,Iroot),Lengtha,s)
-      ovlp = Ddot(Lengtha,Rcc_vecr(joff,Iroot),1,
-     +                    Rcc_vecl(joff,Iroot),1)
-      else 
-      call output(Rcc_vecr(joff,iroot),1,Lengthb,1,1,Lengthb,1,1)
-      call output(Rcc_vecl(joff,iroot),1,Lengthb,1,1,Lengthb,1,1)
-      write(6,*)
-      ovlp = Ovlp+ Ddot(Lengtha,Rcc_vecr(joff,Iroot),1,
-     +                  Rcc_vecl(joff,Iroot),1)
-      call checksum("Rcc_R(P,Q)",Rcc_vecr(joff,Iroot),Lengthb,s)
-      call checksum("Rcc_L(P,Q)",Rcc_vecl(joff,Iroot),Lengthb,s)
-      endif 
-      Write(6,"(a,1x,F5.2)") "<L|R> norm: ", Ovlp 
-      enddo 
-      enddo 
-      write(6,*)
 
       Do My_root = 1, Nroot(Irrepx)
          Ioff = 1
@@ -124,36 +92,19 @@ C to built the first part of what is required for doubles correction,
      &                     Listc1,Imult)
          Call C1rpaint2c2b(Work,Length,Iuhf,Irrepx,Listw2,Listz0,
      &                     Listc1,Imult)
-         Write(6,"(a)") "W(ijka)*R1+W(abci)*R1-> W2 (in list 463)"
-         Call Check_vee_lists(Work,Length,Irrepx,Iuhf,1)
-         Write(6,*)
          Call form_new_c2(Work,Length,Iuhf,Irrepx,Listz0,Listd0)
 
-         Write(6,"(a)")"D2(W(ijka)*R1+W(abci)*R1)-> R2 (in list 463)"
-         Call Check_vee_lists(Work,Length,Irrepx,Iuhf,1)
-         Write(6,*)
          Call C2inc1a(Work,Length,Iuhf,Irrepx,Listw2,Listz0,
      &                Listc1,Imult)
          Call C2inc1b(Work,Length,Iuhf,Irrepx,Listw1,Listz0,
      &                Listc1,Imult)
-         Write(6,"(a)")"R2*W(ab,ci)+R2*W(ika))-> R1 (in list 490)"
-         Call Check_vee_lists(Work,Length,Irrepx,Iuhf,1)
          Call Dbls_correctns_2rpa(Work,Length,Iuhf,RCC_vecl(1,My_root),
      &                            Len_ph_aa,Len_ph_bb,Len_ph_pq,
      &                            E2_rcc_aa,E2_rcc_bb,Listc1)
-      write(6,*)
-      write(6,"(a,F15.9)") "E2_rcc_aa: ", E2_rcc_aa*Scale
-      if (Iuhf .eq. 1) write(6,"(a,F15.9)") "E2_rcc_bb: ", E2_rcc_bb*
-     &                                       Scale
          E2_rcc(My_root,Irrepx) = (E2_rcc_aa + E2_rcc_bb)*Scale 
 C
       Enddo     
 
-      Write(6,*) 
-      Write(6,"(a)") "EOM(S/F)-RCC(D) correction"
-      Do My_root = 1, Nroot(Irrepx)
-         write(6,"(a,F15.9)") "E2_rcc   : ", E2_rcc(My_root,Irrepx)
-      Enddo 
       Return
       End 
 

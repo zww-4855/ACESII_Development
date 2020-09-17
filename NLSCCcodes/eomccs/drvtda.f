@@ -34,9 +34,9 @@ C
       COMMON /SPINSTATE/TRIPLET
       double precision :: temp(9)
 C
-        IUHF=.TRUE.
+!        IUHF=.TRUE.
         CIS=.TRUE.
-        print*, 'inside drvtda.F'
+        print*, 'inside drvtda.F, iuhf cis',IUHF,CIS
       TOL=10.0D0**(-IFLAGS(98))
       NBAS=NOCCO(1)+NVRTO(1)
       NDIMS = 0
@@ -52,7 +52,8 @@ C
       CALL GETREC(20,'JOBARC','NBASTOT ',IONE,NBAST)
       I000=1
       I010=I000+NBAST*NBAST
-      CALL DIPLIST(W,W(I010),NBAS,NBAST,IUHF,IRREP)
+      print*, 'before diplist'
+!      CALL DIPLIST(W,W(I010),NBAS,NBAST,IUHF,IRREP)
       print*,'after diplist'
 C
 C WRITE OUT SOME STUFF
@@ -110,18 +111,14 @@ C
         LISTW=23
         NUMDIS=IRPDPD(IRREP,ISYTYP(1,LISTW))        
         IOFF=IOFFAAAA
-        a=1
+!        a=1
         DO 11 IDIS=1,NUMDIS
-        CALL GETLST(temp(a),IDIS,1,1,IRREP,LISTW)
+!        CALL GETLST(temp(a),IDIS,1,1,IRREP,LISTW)
          CALL GETLST(W(IOFF),IDIS,1,1,IRREP,LISTW)
-        Write(6,*) "alpha/alpha part of CIS matrix"
-        call output(W(IOFF),1,NUMAA,1,NUMAA,NUMAA,NUMAA,1)
-         a=a+3
+!         a=a+3
          IOFF=IOFF+MATDIM
 11      CONTINUE
-        Write(6,*) "tempalpha/alpha part of CIS matrix"
-        call output(temp,1,NUMAA,1,NUMAA,NUMAA,NUMAA,1)
-!#ifdef 1
+!#ifdef _DEBUG_LVL0
 !        Write(6,*) "alpha/alpha part of CIS matrix"
 !        call output(W(IOFFAAAA),1,NUMAA,1,NUMAA,NUMAA,NUMAA,1)
 !#endif
@@ -147,8 +144,6 @@ C
        ENDIF
 C      
         print*,'before CIS matrix print' 
-        Write(6,*) "Inside DRVTDA.F :: The CIS matrix"
-        call output(W,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
 
 C  IF IPATTERN .GT. 0 SPECIAL TREATMENT 
 C
@@ -296,6 +291,10 @@ C 08/2017, Ajith Perera
 C 
        CALL UPDMOI(NUMDIS,NUMDIS,IRREP,LISTVTDA,0,0)
        CALL UPDMOI(NUMDIS,1,IRREP,LISTETDA,0,0)
+        print*, 'numdis,irrep,listvtda'
+        print*,NUMDIS
+        print*,irrep
+        print*,listvtda
        CALL PUTLST(W(ILOCEVC),1,NUMDIS,1,IRREP,LISTVTDA)
        CALL PUTLST(W(ILOCEVL),1,NUMDIS,1,IRREP,LISTETDA)
 C

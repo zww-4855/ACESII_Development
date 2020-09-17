@@ -48,10 +48,6 @@ C
       CALL GETALL(ICORE(I010),ISIZE,1,23)
       CALL SAXPY(ISIZE,ONE,ICORE(I010),1,ICORE(I000),1)
 
-      call checksum("List-54: ",icore(i000),isize,s)
-C      nrow=irpdpd(1,isytyp(1,54))
-C      ncol=irpdpd(1,isytyp(2,54))
-C      call output(icore(i000),1,nrow,1,ncol,nrow,ncol,1)
 CSSS      CALL DSCAL(ISIZE,FACT,ICORE,1)
       CALL PUTALL(ICORE,ISIZE,1,254)
 C
@@ -66,10 +62,6 @@ C
       CALL GETALL(ICORE(I010),ISIZE,1,18)
       CALL SAXPY(ISIZE,ONEM,ICORE(I010),1,ICORE(I000),1)
 
-      call checksum("List-56: ",icore(i000),isize,s)
-C      nrow=irpdpd(1,isytyp(1,56))
-C      ncol=irpdpd(1,isytyp(2,56))
-C      call output(icore(i000),1,nrow,1,ncol,nrow,ncol,1)
 CSSS      CALL DSCAL(ISIZE,FACT,ICORE,1)
       CALL PUTALL(ICORE,ISIZE,1,256)
 C
@@ -88,7 +80,6 @@ C
       CALL GETALL(ICORE(I010),ISIZE,1,24)
       CALL SAXPY(ISIZE,ONE,ICORE(I010),1,ICORE(I000),1)
 
-      call checksum("List-55: ",icore(i000),isize,s)
 CSSS      CALL DSCAL(ISIZE,FACT,ICORE,1)
       CALL PUTALL(ICORE,ISIZE,1,255)
 C
@@ -103,10 +94,6 @@ C
       CALL GETALL(ICORE(I010),ISIZE,1,17)
       CALL SAXPY(ISIZE,ONEM,ICORE(I010),1,ICORE(I000),1)
 
-      call checksum("List-57: ",icore(i000),isize,s)
-C      nrow=irpdpd(1,isytyp(1,57))
-C      ncol=irpdpd(1,isytyp(2,57))
-C      call output(icore(i000),1,nrow,1,ncol,nrow,ncol,1)
 CSSS      CALL DSCAL(ISIZE,FACT,ICORE,1)
       CALL PUTALL(ICORE,ISIZE,1,257)
 C

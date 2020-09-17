@@ -69,9 +69,6 @@ CSSS       CALL GETLST(ICORE(IOFFEA),1,1,1,2+ISPIN,92)
         NUMMI=NOCC*NOCC
         NUMEA=NVRT*NVRT
 
-C       call output(icore(ioffmi),1,nocc,1,nocc,nocc,nocc,1)
-C       write(*,*)
-C       call output(icore(ioffmi),1,nvrt,1,nvrt,nvrt,nvrt,1)
         CALL SAXPY(NOCC,FACT,ICORE(IOFFO),1,ICORE(IOFFMI),NOCC+1)
         CALL SCOPY(NOCC,ICORE(IOFFMI),NOCC+1,ICORE(IOFFO),1)
         CALL SAXPY(NVRT,FACT,ICORE(IOFFV),1,ICORE(IOFFEA),NVRT+1)

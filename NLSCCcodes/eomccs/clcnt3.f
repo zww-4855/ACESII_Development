@@ -125,13 +125,11 @@ C
         E2BB = E2BB + SDOT(LNBB,CORE(I060),1,CORE(I070),1)
         E2AB = E2AB + SDOT(LNAB,CORE(I080),1,CORE(I090),1)
 C
-        WRITE(6,1000) e1a,e1b,e2aa,e2bb,e2ab
 C
 C     L1 * Q1 Hbar * R3, L2 * Q2 Hbar * R3
 C
         E1TOT = E1A + E1B
         E2TOT = E2AA + E2BB + E2AB
-        WRITE(6,1010) E1A,E1B,E1TOT,E2AA,E2BB,E2AB,E2TOT
 C
        ELSE
 C-----------------------------------------------------------------------
@@ -173,7 +171,6 @@ C
         E1A  = E1A  + SDOT(IRPDPD(IRREPX, 9),CORE(I000),1,CORE(I010),1)
         E2AB = E2AB + SDOT(LNAB,CORE(I020),1,CORE(I030),1)
 C
-        WRITE(6,1000) e1a,e1b,e2aa,e2bb,e2ab
 C
         ESPAD = 0.0D+00
         DO 30 IRREPR=1,NIRREP
@@ -203,14 +200,12 @@ C
         ENDIF
    30   CONTINUE
 C
-        WRITE(6,2010) ESPAD
 C
         E1B   = E1A
         E1TOT = E1A + E1B
         E2AA  = (ESPAD - E2AB)/2.0D+00
         E2BB  = E2AA
         E2TOT = ESPAD
-        WRITE(6,1010) E1A,E1B,E1TOT,E2AA,E2BB,E2AB,E2TOT
 C
        ENDIF
 C
@@ -260,10 +255,8 @@ C
         E2BB = E2BB + SDOT(LNBB,CORE(I060),1,CORE(I070),1)
         E2AB = E2AB + SDOT(LNAB,CORE(I080),1,CORE(I090),1)
 C
-        WRITE(6,1000) e1a,e1b,e2aa,e2bb,e2ab
 C 
         E2TOT = E2AA + E2BB + E2AB
-        WRITE(6,3010) E2AA,E2BB,E2AB,E2TOT
 C
        ELSE
 C-----------------------------------------------------------------------
@@ -294,7 +287,6 @@ C
 C
         E2AB = E2AB + SDOT(LNAB,CORE(I080),1,CORE(I090),1)
 C
-        write(6,1000) e1a,e1b,e2aa,e2bb,e2ab
 C
         ESPAD = 0.0D+00
         DO 130 IRREPR=1,NIRREP
@@ -326,12 +318,9 @@ C
         ENDIF
   130   CONTINUE
 C
-        WRITE(6,2010) ESPAD
-        WRITE(6,*)  
         E2AA  = (ESPAD - E2AB)/2.0D+00
         E2BB  = E2AA
         E2TOT = ESPAD
-        WRITE(6,3010) E2AA,E2BB,E2AB,E2TOT
 C
        ENDIF
       ENDIF

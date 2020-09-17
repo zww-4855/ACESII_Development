@@ -120,8 +120,6 @@ C
 CSSS#ifdef _DCC_FLAG
         If (Ispar) then
         IF (ISIDE .EQ. 2) THEN
-           Write(6, "(a,F5.2)") " In PDCC_W1LAD Scaling by",
-     &                            Wmnij_scale
            CALL DSCAL(NUMDST*DISSYT, Wmnij_scale, ICORE(I010), 1)
         ENDIF 
         Endif 
@@ -147,8 +145,6 @@ C
 CSSS#ifdef _DCC_FLAG
         If (Ispar) Then
         IF (ISIDE .EQ. 1) THEN
-           Write(6, "(a,F5.2)") " In PDCC_W1LAD Scaling by",
-     &                            Wmnij_scale
            CALL DSCAL(NUMDST*DISSYT, Wmnij_scale, ICORE(I010), 1)
         ENDIF 
         Endif 

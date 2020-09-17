@@ -61,9 +61,6 @@ c syminf.com : end
          Call Getlst(Work(Itda_vec),My_root,1,1,Irrepx,Listvtda)
          Call Getlst(Root,My_root,1,1,Irrepx,Listetda)
 
-         Write(6,"(a)") " TDA eigenvector and eigenvalue" 
-         Write(6,"(1x,F15.10)") Root
-         Write(6,"(4(1x,F15.10))") (Work(Itda_vec+i-1),i=1,Len_ov)
          Ioff = 1
          Call Form_d2_4rcc(Work(Iend),Root,Len_ov,Length,Iuhf,
      &                     Irrepx,Listd0,1)
@@ -101,30 +98,17 @@ C to built the first part of what is required for doubles correction,
      &                     Listc1,Imult)
          Call C1rpaint2c2b(Work(Iend),Length,Iuhf,Irrepx,Listw2,Listz0,
      &                     Listc1,Imult)
-         Write(6,"(a)") "W(ijka)*R1+W(abci)*R1-> W2 (in list 463)"
-         Call Check_vee_lists(Work(Iend),Length,Irrepx,Iuhf,1)
-         Write(6,*)
          Call form_new_c2(Work(Iend),Length,Iuhf,Irrepx,Listz0,Listd0)
 
-         Write(6,"(a)")"D2(W(ijka)*R1+W(abci)*R1)-> R2 (in list 463)"
-         Call Check_vee_lists(Work(Iend),Length,Irrepx,Iuhf,1)
-         Write(6,*)
          Call C2inc1a(Work(Iend),Length,Iuhf,Irrepx,Listw2,Listz0,
      &                Listc1,Imult)
          Call C2inc1b(Work(Iend),Length,Iuhf,Irrepx,Listw1,Listz0,
      &                Listc1,Imult)
-         Write(6,"(a)")"R2*W(ab,ci)+R2*W(ika))-> R1 (in list 490)"
-         Call Check_vee_lists(Work(Iend),Length,Irrepx,Iuhf,1)
          Call Dbls_correctns_2rpa(Work(Iend),Length,Iuhf,Work(Itda_vec),
      &                            Len_ph_aa,Len_ph_bb,Len_ph_pq,
      &                            E2_rcc_aa,E2_rcc_bb,Listc1)
-      write(6,*)
-      write(6,"(a,F15.9)") "E2_rcc_aa: ", E2_rcc_aa*Scale1
-      if (Iuhf .eq. 1) write(6,"(a,F15.9)") "E2_rcc_bb: ", E2_rcc_bb*
-     &                                       Scale1
          E2_rcc(My_root,Irrepx) = (E2_rcc_aa + E2_rcc_bb)*Scale1
 
-      Write(6,"(a)") "--------Forming R1*W(mb,ej)*T*L1*W=E(D)----------"
 C
 C This term applies only to CIS. For RPA and DRPA this term is alrready 
 C in HBAR
@@ -152,12 +136,8 @@ C in HBAR
      &                                         1,Work(Iwoff_bb),1)
          Enddo 
    
-      write(6,*)
-      write(6,"(a,F15.9)") "E2_rcc_aa: ", E2_rcc_aa
-      if (Iuhf .eq. 1) write(6,"(a,F15.9)") "E2_rcc_bb: ", E2_rcc_bb
          E2_rcc(My_root,Irrepx) = E2_rcc(My_root,Irrepx) + E2_rcc_aa + 
      &                            E2_rcc_bb
-      Write(6,"(a)") "--------Forming R1*W(mn,ef)*T*L1*W=E(D)----------"
          E2_rcc_oo = Dnull
          E2_rcc_vv = Dnull
          Itda_vec_off = 1
@@ -196,23 +176,12 @@ C in HBAR
             Itda_vec_off = Itda_vec_off +  Length_ai
          Enddo 
 
-      write(6,*)
-      write(6,"(a,2(1x,F15.9))") "E2_rcc_oo and E2_rcc_vv: ", 
-     &                            E2_rcc_oo,E2_rcc_vv
          E2_rcc(My_root,Irrepx) = E2_rcc(My_root,Irrepx) + E2_rcc_oo +
      &                            E2_rcc_vv
         
       Enddo     
       Enddo 
 
-      Write(6,*) 
-      Write(6,"(a)") "EOM(S/F)-RCC(D) correction"
-      Do Irrepx  = 1, Nirrep 
-      Do My_root = 1, Nroot(Irrepx)
-         write(6,"(a,F15.9)") "E2_rcc   : ", E2_rcc(My_root,Irrepx)
-      Enddo 
-      Enddo 
-      Stop
       Return
       End 
 

@@ -53,8 +53,6 @@ C
        IF(.NOT.CIS)THEN
         CALL GETLST(ICORE(I010),1,1,1,ISPIN+8,91)
         CALL GETLST(ICORE(I020),1,1,1,ISPIN+8,92)
-        call checksum("List91-9:",icore(i010),NFMI(ISPIN),s)
-        call checksum("List92-9:",icore(i020),NFEA(ISPIN),s)
        ENDIF
        IOFFO=I000
        IOFFV=NOCCO(ISPIN)*IINTFP+I000
@@ -80,8 +78,6 @@ C
        ENDIF
        CALL PUTLST(ICORE(I010),1,1,1,ISPIN+8,91)
        CALL PUTLST(ICORE(I020),1,1,1,ISPIN+8,92)
-        call checksum("List91-9:",icore(i010),NFMI(ISPIN),s)
-        call checksum("List92-9:",icore(i020),NFEA(ISPIN),s)
 10    CONTINUE
 C
       RETURN

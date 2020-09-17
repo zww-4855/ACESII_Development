@@ -277,46 +277,6 @@ C
 
 C Check the bi-orthognality
 C
-      If (IRREPX .NE. 1) Then
-          If (Iuhf .EQ. 0) Then
-              Length = IDSYMSZ(IRREPX,ISYTYP(1,46),ISYTYP(2,46)) +
-     &                 IRPDPD(IRREPX,9)
-              i000 = 1
-              i010 = i000 + length
-              i020 = i010 + length
-
-              CALL GETLST(ICORE(i000),2,1,1,1,472)
-              CALL GETLST(ICORE(i010),3,1,1,1,472)
-
-              sum = ddot(length, icore(i000), 1, icore(i000),1)
-              Write(6, "(a,F15.8)") "<R|R> =", sum 
-              sum = ddot(length, icore(i010), 1, icore(i010),1)
-              Write(6, "(a,F15.8)") "<L|L> =", sum
-              sum = ddot(length, icore(i000), 1, icore(i010),1)
-              Write(6, "(a,F15.8)") "<L|R> =", sum
-          Else 
-              Length = IDSYMSZ(IRREPX,ISYTYP(1,44),ISYTYP(2,44)) +
-     &                 IDSYMSZ(IRREPX,ISYTYP(1,45),ISYTYP(2,45)) +
-     &                 IDSYMSZ(IRREPX,ISYTYP(1,46),ISYTYP(2,46)) +
-     &                 IRPDPD(IRREPX,9) + IRPDPD(IRREPX,10)
-              i000 = 1
-              i010 = i000 + length
-              i020 = i010 + length
-
-              CALL GETLST(ICORE(i000),2,1,1,1,472)
-              CALL GETLST(ICORE(i010),3,1,1,1,472)
-
-              sum = ddot(length, icore(i000), 1, icore(i000),1)
-              Write(6, "(a,F15.8)") "<R|R> =", sum
-              sum = ddot(length, icore(i010), 1, icore(i010),1)
-              Write(6, "(a,F15.8)") "<L|L> =", sum
-              sum = ddot(length, icore(i000), 1, icore(i010),1)
-              Write(6, "(a,F15.8)") "<L|R> =", sum
-          Endif  
-        
-      Endif 
-
-C Prepare lists
 
       CALL GETLST(ICORE,2,1,1,1,472)
       CALL MKSD(IRREPX,ICORE,401,410,0,IUHF)

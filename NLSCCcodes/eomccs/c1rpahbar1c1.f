@@ -57,8 +57,6 @@ C
           CALL GETLST(ICORE(I030),1,1,1,10,92)
        ENDIF 
       
-       call checksum("@-c1rpa_Fmi1:",ICORE(I020),NFMI(ISPIN),s)
-       call checksum("@-c1rpa_Fae1:",ICORE(I030),NFEA(ISPIN),s)
 C
        IOFFZ=I000
        IOFFT=I010

@@ -26,9 +26,6 @@ C
       CALL ZERO(A,LENGTH)
       DO 10 I=1,NDIM
        CALL GETLST(TMP,IGET(I),1,1,ILIST1,ILIST2)
-       Write(6,"(a,i4)") "Checksum of basis vectors in list",ilist2
-       call checksum("@-forms          :",tmp,length,s)
-       write(6,"(a,3x,F15.7)") "The coefficients            :",coeff(i)
        CALL SAXPY (LENGTH,COEFF(I),TMP,1,A,1)
 10    CONTINUE
 C      

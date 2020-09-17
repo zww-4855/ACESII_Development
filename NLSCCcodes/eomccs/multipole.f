@@ -109,18 +109,6 @@ C Oxxz;rz,Oyyx;rx,Oyyz;rz,Ozzx;rx,Ozzy;ry)
       M_strength(22) = Mq_r(9)*Dm_l(2)+Mq_l(9)*Dm_r(2)
       M_strength(23) = Mq_r(9)*Dm_l(3)+Mq_l(9)*Dm_r(3)
 
-      Write(6,*)
-      Write(6,"(a)") " The tensor components" 
-      Write(6,"(a)") " The <(L_0|mu|n><n|mu|0> "
-      Write(6,"(3(1x,F15.10))") (D_strength(i),i=1,3)
-      Write(6,"(a)") " The <L_0|r^p|n><n|r^p>"
-      Write(6,"(3(1x,F15.10))") (A_strength(i),i=1,3)
-      Write(6,"(a)") " The <L_0|Q|n><n|Q|0>  "
-      Write(6,"(3(1x,F15.10))") (Q_strength(i),i=1,9)
-      Write(6,"(a)") " The <L_0|mu|n><n|O|0> "
-      Write(6,"(3(1x,F15.10))") (O_strength(i),i=1,9)
-      Write(6,"(a)") " The <L_0|mu|n><n|Mq|0> "
-      Write(6,"(3(1x,F15.10))") (M_strength(i),i=1,23)
 C Istropic averaging 
 
       Two_ov_three = Two/Three   

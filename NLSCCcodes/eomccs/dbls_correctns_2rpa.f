@@ -44,19 +44,15 @@ C compute the second-order correcion.
 
          Call Getlst(Work,1,1,1,2+Ispin,Listz)
          Ioff = Ioff + Len_ph_aa * (Ispin - 1)
-         If (Ispin .eq. 1) call checksum("CR(a,i)",Work,Len_ph_aa,s)
-         If (Ispin .eq. 2) call checksum("CR(b,j)",Work,Len_ph_bb,s)
          If (Ispin .Eq. 1) Then
 
 C This was done to compare with the UHF for debugging purposes.
 C            If (Iuhf .EQ. 0) Call Dscal(Len_ph_aa,1.00/Dsqrt(2.0D0),
 C     +                                  Rcc_vecl(Ioff),1)
 
-            call checksum("CL(a,i)",Rcc_vecl(Ioff),Len_ph_aa,s)
             E2_rcc_aa = Ddot(Len_ph_aa,Work(I000),1,Rcc_vecl(Ioff),1)
 
          Else if (Ispin .Eq. 2) Then
-       call checksum("CL(b,j)",Rcc_vecl(Ioff),Len_ph_bb,s)
             E2_rcc_bb = Ddot(Len_ph_bb,Work(I000),1,Rcc_vecl(Ioff),1)
 
          Endif

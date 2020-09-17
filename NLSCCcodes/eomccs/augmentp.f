@@ -39,10 +39,6 @@ C
       IF(IUHF.EQ.0)THEN
        CALL SPNTSING(IRREPX,SCR(I000),SCR(I010),MAXCOR-I010+1)
       ENDIF
-      write(6,*)
-      Call checksum(" @-AUGMENTP-R    :",SCR(I010),NSIZEC,S1)
-      Call checksum(" @-AUGMENTP-P    :",SCR(I020),NSIZEC,S1)
-      Call checksum(" @-AUGMENTP-PR   :",SCR(I000),NSIZEC,S1)
       DO 5 I=1,NDIMR
        CALL GETLST(SCR(I010),IGET(I),1,1,ISIDE,LISTC)
        P(INDXF(1,I,MAXORD))=SDOT(NSIZEC,SCR(I000),1,SCR(I010),1)

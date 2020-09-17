@@ -310,11 +310,6 @@ c YAU : end
          IF (ITMP .GT. 0) THEN
             CALL SUMSYM2(ICORE(I000),ICORE(I010),itmp,1,IRREPZR,LISTZ) 
          ENDIF 
-        Write(6,"(a,3I4)") "List-z,NUMDSZ,DISSYZ:",LISTZ,NUMDSZ,DISSYZ
-        if (Ispin.eq.1) call checksum("C1_to_C21(AA):", 
-     &                              ICORE(I010),NUMDSZ*DISSYZ,s)
-        if (Ispin.eq.2) call checksum("C1_to_C21(BB):", 
-     &                              ICORE(I010),NUMDSZ*DISSYZ,s)
         ELSE
 C
 C OUT-OF-CORE ALGORITHM

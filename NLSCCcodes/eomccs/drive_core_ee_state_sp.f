@@ -250,7 +250,7 @@ c flags2.com : end
 C
       PROJECT_SINGLES = (Iflags2(173) .NE. 0)
 
-C#ifdef 1
+C#ifdef _DEBUG_LVL0
       Write(6,"(a,a)") " Entering the core projection for specific", 
      &                 " core specified via %EXCITE*."
       Write(6,"(a,a)") " At entry, root and core indices: "

@@ -282,13 +282,9 @@ C
       CALL LOADVEC1(IRREPX,SCR,MAXCOR,IUHF,490,0,443,NSIZEC,
      &              .FALSE.)
       CALL PUTLST(SCR,IOLDEST,1,1,ISIDE,470)
-      Write(6,"(a)")" The checksum of the 490,443-445"
-      Call checksum(" @-NEXTDAV       :",SCR(I000),NSIZEC,S1)
 C
       CALL LOADVEC1(IRREPX,SCR,MAXCOR,IUHF,490,2,460,NSIZEC,
      &              .FALSE.)
-      Write(6,"(a)")" The checksum of the 490,460-463"
-      Call checksum(" @-NEXTDAV       :",SCR(I000),NSIZEC,S1)
 C
       IF (IPROJECT .GE. 2) THEN
 C
@@ -311,16 +307,12 @@ C different. I do not know which one is better. Ajith Perera, 12/2019.
           CALL VECPRD(SCR(I000),SCR(I010),SCR(I000),NSIZEC) 
         ENDIF 
 
-      Write(6,"(a)")" The checksum of the PR1+PR2"
-      Call checksum(" @-NEXTDAV       :",SCR(I000),NSIZEC,S1)
-      Write(6,*)
       ENDIF
 C
       CALL PUTLST(SCR,IOLDEST,1,1,ISIDE,471)
 C
       IOLDEST=1+MOD(IOLDEST,MAXORD+1)
 
-      Write(6,"(a,i3)") " Oldest:", ioldest 
 C
 C AUGMENT EXISTING SUBSPACE MATRIX
 C
@@ -402,7 +394,6 @@ C
       OVRLAP=SDOT(NDIMR,SJUNK,1,BUF(IBUFLC),1)
       ROOT=BUF(IEVAL+ILOC-1)
 
-      Write(6,"(a,F15.8)") "Root = ", Root
 C
       CALL ZERO(SJUNK,NDIMR+1)
       CALL SCOPY(NDIMR,BUF(IBUFLC),1,SJUNK(2),1)
@@ -416,18 +407,11 @@ C
       ITOP=I020+NSIZEC
       CALL FORMS(NSIZEC,NDIMR,SCR(I000),SCR(I020),BUF(IBUFLC),
      &           ISIDE,471,IOLDEST,MAXORD)
-      Write(6,*) 
-      Write(6,"(a)")" The checksum of 471:HC"
-      Call checksum(" @-NEXTDAV       :",SCR(I000),NSIZEC,S1)
       CALL FORMS(NSIZEC,NDIMR,SCR(I010),SCR(I020),BUF(IBUFLC),
      &           ISIDE,470,IOLDEST,MAXORD)
 
-      Write(6,"(a)")" The checksum of 470:C"
-      Call checksum(" @-NEXTDAV       :",SCR(I010),NSIZEC,S1)
       CALL SAXPY(NSIZEC,ROOT*ONEM,SCR(I010),1,SCR(I000),1)
 
-      Write(6,"(a)")" The checksum of the residual"
-      Call checksum(" @-NEXTDAV",SCR(I000),NSIZEC,S1)
 C
       IF (IPROJECT .GE. 2) THEN
 C
@@ -440,8 +424,6 @@ C
       CALL FNDMAXD(NSIZEC, SCR(I000), DIFF, I)
 C
       CALL GETLST(SCR(I010),1,1,1,1,472)
-      Write(6,"(a)")" The checksum of the denominator"
-      Call checksum(" @-NEXTDAV       :",SCR(I010),NSIZEC,S1)
 C
 C SAVE THIS VECTOR SO THAT WE CAN USE IT IF THE DAVIDSON
 C CORRECTION GENERATES A NEAR LINEAR DEPENDENCE
@@ -454,9 +436,6 @@ C
       IF(IUHF.EQ.0)THEN
        CALL SYMT2AB(IRREPX,SCR,SCR(I010),MAXCOR-I010+1)
       ENDIF
-      Write(6,"(a)")" The checksum of the correction vector"
-      Call checksum(" @-NEXTDAV       :",SCR(I000),NSIZEC,S1)
-      Write(6,*)
 C
 C SCHMIDT ORTHOGONALIZE NEW BASIS VECTOR TO EXISTING SPACE.
 C

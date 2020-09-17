@@ -346,11 +346,6 @@ C
 
 C        CALL SAXPY  (NUMDSZ*DISSYZ,ONE,ICORE(I010),1,ICORE(I000),1)
 C        CALL PUTLST (ICORE(I000),1,NUMDSZ,1,IRREPZR,LISTZ)
-        Write(6,"(a,3I4)") "List-z,NUMDSZ,DISSYZ:",LISTZ,NUMDSZ,DISSYZ
-        if (Ispin.eq.1) call checksum("C1_to_C22(AA):",
-     &                                 ICORE(I000),NUMDSZ*DISSYZ,s)
-        if (Ispin.eq.2) call checksum("C1_to_C22(BB):",
-     &                                 ICORE(I000),NUMDSZ*DISSYZ,s)
 210    CONTINUE
 200   CONTINUE
 C

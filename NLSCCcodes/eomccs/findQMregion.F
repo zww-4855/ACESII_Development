@@ -3,7 +3,7 @@
            integer,intent(in)::indxSize,QM1Size,QM2Size
            integer,intent(in)::indx(indxSize),QM1(QM1Size),
      &                                        QM2(QM2Size)
-           integer, intent(inout)::QMregOut(4)
+           integer, intent(inout)::QMregOut(indxSize)
  
            integer:: i,j
            logical:: finalOut(indxSize) 
@@ -27,6 +27,7 @@
 !
 !******************************************************************
 !******************************************************************
+          QMregOut=0
           do i=1,indxSize
                 if (any(indx(i).eq.QM1)) then
                    if (any(indx(i).eq.QM2)) then

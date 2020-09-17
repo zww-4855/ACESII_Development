@@ -428,8 +428,6 @@ C
        TRANABCI = (CC .AND. IFLAGS2(123) .EQ. 1 .AND. .NOT. DD)
        CALL MODHBAR(ICORE(I0), MAXCOR,IUHF, .FALSE., TRANABCI)
 
-      Write(6,*) "Enter checkhbar",TRANABCI
-      Call checkhbar(ICORE(I0), MAXCOR/IINTFP, IUHF)
 C
        IF (NODAVID) THEN
           IF (IFLAGS(87) .EQ. 8)

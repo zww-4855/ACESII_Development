@@ -77,6 +77,7 @@ c        real, allocatable :: tia(:),fia(:)
         integer::QM2NLMOcount
         double precision :: tempor(6)
         double precision:: revCIS(5,5)
+        logical :: incQM2
 #include "sym.com"
 #include "icore.com"
 #include "istart.com"
@@ -124,7 +125,6 @@ c        allocate(space(MAXCORE))
         CALL GETREC(20,'JOBARC','SCFEVALA',(nocc+nvirt)*IINTFP,diaFockA)
         NLMOQM1=0
         NLMOQM2=0
-        print*,'diafock elements:', diaFockA
         Waa=0.0d0
         Wab=0.0d0
         Waanew=0.0d0
@@ -133,7 +133,6 @@ c        allocate(space(MAXCORE))
         CALL GETALL(Wab,t2abSize,1,18)
         LISTW=23
         NUMDIS=IRPDPD(1,ISYTYP(1,LISTW))
-        print*, 'listw&numdis', LISTW,NUMDIS
         NUMAA=IRPDPD(IRREP,ISYTYP(1,19))
         NUMBB=IRPDPD(IRREP,ISYTYP(1,20))
         NUMSYT=IRPDPD(1,ISYTYP(2,LISTW))
@@ -167,7 +166,6 @@ c        allocate(space(MAXCORE))
           print*, "error opening QMcenter"
         endif
         close(250)
-c        print*, 'qm sites', QM1atoms, QM2atoms
 !******************************************************************
 ! * Read nbocenters
 !******************************************************************
@@ -191,20 +189,10 @@ c        print*, 'qm sites', QM1atoms, QM2atoms
            NLMOorigin2=NLMOorigin
         enddo 
         close(150)
-        print*,NLMO(4,1:5)
-        print*, 'printing QMNLMO ownershop'
-        do i=1,nbas
-          do j=1,5
-                if (NLMO(i,j).eq.100) exit
-                print*,i,NLMO(i,j)
-          enddo
-        enddo
-        print*
         counti=1
         countj=1
-        print*,'QM1/2atoms',QM1atoms
-        print*,'QM2atoms',QM2atoms
-        print*,any(QM2atoms(1:).eq.NLMO(1,:))
+!        print*,'QM1/2atoms',QM1atoms
+!        print*,'QM2atoms',QM2atoms
 !******************************************************************
 ! * Determine if the NLMO read from nbocenters is entirely within
 ! * QM1, QM2, or both QM1&QM2
@@ -244,114 +232,61 @@ c        print*, 'qm sites', QM1atoms, QM2atoms
 !******************************************************************
 ! * Calculate NLSCCSD energy per QM1 region
 !****************************************************************** 
-!        total=(occ*virt)**2
-!        input='2134'
-!        print*,'*****************************************************'
-!        print*, '********        2 e- ints Wab           ************'
-!        call output(Wab,1,nocc*nvirt,1,nocc*nvirt,nocc*nvirt,
-!     &          nocc*nvirt,1)
-!        print*,'*****************************************************'
-!
-!        print*,'*****************************************************'
-!        print*, '********        2 e- ints Waa           ************'
-!        call output(Waa,1,nocc*nvirt,1,nocc*nvirt,nocc*nvirt,
-!     &          nocc*nvirt,1)
-!        print*,'*****************************************************'
-!        print*
-!        print*,'*****************************************************'
-!        print*, '********        2 e- ints Wbb           ************'
-!        call output(Wbb,1,nocc*nvirt,1,nocc*nvirt,nocc*nvirt,
-!     &          nocc*nvirt,1)
-!        print*,'*****************************************************'
-!        print*
-!        iter=1
-!        Waanew=0.0d0
-!        do i=1,nocc
-!          do j=1,nocc
-!            do a=1,nvirt
-!              do b=1,nvirt
-!               ! if (j<i.and.b<a) then
-!                        print*,'waanew',Waa(iter)
-!                        iter=iter+1
-!                !endif
-!        enddo
-!        enddo
-!        enddo
-!        enddo 
         call createCISmat(diaFockA,Waa,Wab,nocc,nvirt,CISmat)
-!        call dcopy((nocc*nvirt)**2,CISmat,1,CISmatCOPY,1)
         print*,'*****************************************************'
         print*,'******               CIS matrix                ******'
         print*,'*****************************************************'
         NUMAA=IRPDPD(1,ISYTYP(1,19))
         NUMBB=IRPDPD(1,ISYTYP(1,20))
         MATDIM=NUMAA+NUMBB
-        Write(6,*) "The CIS matrix"
+#ifdef _DEBUG_LVL0
+        print*,'*****************************************************'
+        print*,'******           FullCIS matrix                ******'
+        print*,'*****************************************************'
         call output(CISmat,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
         print*,'*****************************************************'
         print*, 'Calling Eigen for FULL CIS matrix'
         print*,'*****************************************************'
-!        call eig(CISmat,CISevec,100,2*nocc*nvirt,1)
+        call eig(CISmat,CISevec,100,2*nocc*nvirt,1)
         print*
         print*,'*****************************************************'
         print*,'** Eigenvalues for full CIS matrix **'
         print*,'*****************************************************'
         print*
-!        print*,'     Excite E (au)           Excite E (eV) '
-!        do i=1,2*nocc*nvirt
-!           print*, CISmat(i,i),CISmat(i,i)*27.2114
-!        enddo
+        print*,'     Excite E (au)           Excite E (eV) '
+        do i=1,2*nocc*nvirt
+           print*, CISmat(i,i),CISmat(i,i)*27.2114
+        enddo
         print*
         print*
         print*,'*****************************************************'
         Print*,'*** End of eigenvalues for full CIS matrix ***'
         print*,'*****************************************************'
         print*,'*****************************************************'
+#endif
         print*
         print*
         print*
         print*,'*****************************************************'
         print*,'******        0th order Approx. NLS-CIS        ******'
         print*,'*****************************************************'
+        incQM2=.False.
         call nlscisZ(CISmat,CISmat0,nocc,nvirt,QM1atoms,QM1num,
-     &                  QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas)
-        call output(CISmat0,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
-        print*,'after nlscisZERO call'
-        skip=0
-        skipC=0
-        tempor=(/ (0.0d0,i=1,2*nocc*nvirt) /)
-        print*, CISmat0(2,1:2*nocc*nvirt)
-        print*
-        print*
-        print*, 'before allocate'
-        print*, 'before allocate'
-        call GetNLMOQM2(NLMOQM1,NLMOQM2,nbas,QM2NLMOcount)
-        print*, 'after getnlmoQM2'
-        redDim=2*nocc*nvirt - 2*QM2NLMOcount
-        print*,'qm2',redDim,QM2NLMOcount
+     &                  QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas,incQM2)
 
-!        allocate(CISreduce(redDim,redDim),CISreduceVec(redDim,redDim))
-        print*,ierr
-        print*, 'after getnlmoQM2'
+#ifdef _DEBUG_LVL0
+        print*, "** Reformatted NLS-CIS matrix **"
+        call output(CISmat0,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
+#endif
         call ReduceCISmat(CISmat0,2*nocc*nvirt,
      &                    NLMOQM1,NLMOQM2,nbas,nocc,nvirt)
 
-!        call eig(CISmat,CISevec,100,2*nocc*nvirt,1)
-!        CALL output(CISmat,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
-!        CALL output(CISevec,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
         print*
         print*
-        print*,'Reduced NLS-CIS matrix'
-        
-!        call output(CISreduce,1,redDim,1,redDim,redDim,redDim,1)
-!         call eig(CISreduce,CISreduceVec,100,redDim,1)
-!        do i=1,redDim
-!          print*, CISreduce(i,i),CISreduce(i,i)*27.2114
-!        enddo
-
-!        deallocate(CISreduce,CISreduceVec)
+        print*,'*****************************************************'
+        print*,'** END NLS-CIS **'
+        print*,'*****************************************************'
 30      FORMAT (I4,2X,I4)
-!        deallocate(wr,wi,vl,vr,work)
         ! Deallocate memory for T1, fia, T2, W for RHF and UHF cases
         deallocate(CISmat0,CIS0vec,QM1atoms,QM2atoms,Wab,Wabnew,scrat)
         deallocate(NLMO,Waa,Waanew,Waanewout,diaFockA,CISmat,CISevec)

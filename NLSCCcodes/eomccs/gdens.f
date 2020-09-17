@@ -96,10 +96,6 @@ C
      &             LSTR1,LSTL1,LSTR1OFF,LSTL1OFF,LISTR2,LISTL2,
      &             LSTR2RS,LSTL2RS)
       
-      call checksum("doo",DOO,LENOO(1)+IUHF*LENOO(2),s)
-      call checksum("dvv",DVV,LENvv(1)+IUHF*LENvv(2),s)
-      call checksum("dvo",DVO,LENvO(1)+IUHF*LENvO(2),s)
-      call checksum("dvo",DOV,LENvO(1)+IUHF*LENvO(2),s)
 C
       RETURN
       END
