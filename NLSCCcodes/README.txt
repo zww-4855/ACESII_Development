@@ -1,5 +1,8 @@
 Directory containing all work dedicated towards the Natural Linear Scaling Coupled Cluster theory. 
 
+*** NOTE *** As the size of files in lib/ were too large, used https://git-lfs.github.com instead to include them in the repository
+
+
 Thus far there are 3 directories: 8/31/2020
 
 1) NLSCCenergy:
