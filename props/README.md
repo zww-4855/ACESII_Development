@@ -18,7 +18,7 @@ In order to use alongside existing ACESII binaries, modify the PATH environment 
 ```
 export PATH=/home/z.windom/ACESII/props:/apps/shared/bartlett/ACESII-2.12.0/bin/:$PATH
 ```
- Then ACESII will use this "xprops" excutable that includes this procedure. 
+ Then ACESII will reference this "xprops" executable upon completing the relevant electronic structure calculation.  
 
 
 #TO DO: 
