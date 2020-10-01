@@ -402,7 +402,7 @@ FLAG_OPTIMIZE = -O
 #    DEF [TEST] [DEBUG] [PROF] [SRC] [EXTRA]
 
 # default directories
-DIR_DEFLIB = . ./lib     ../lib
+DIR_DEFLIB = . /home/z.windom/ACESII/lib ./lib     ../lib
 DIR_DEFINC =   ./include ../include
 
 # directories with test code
@@ -434,9 +434,9 @@ DIR_EXTRAINC =
 #    lib${CURR}mods.a:                   ${DIR_INSTMOD} -> ..            -> .
 #    ${CURRTGZ}:                         ${DIR_INSTTGZ}
 DIR_INSTBIN = ../bin
-DIR_INSTLIB = ../lib
+DIR_INSTLIB = /home/z.windom/ACESII/lib
 DIR_INSTINC = ../include
-DIR_INSTMOD = ../lib
+DIR_INSTMOD = /home/z.windom/ACESII/lib
 DIR_INSTTGZ = ./
 
 #
