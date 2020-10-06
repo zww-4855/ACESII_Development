@@ -6,15 +6,21 @@ Future work intends to generalize the NLS-CIS software to include NLS-EOM-CC cal
 
 ## Sub-Directories
 
-* **NLSCCenergy** - Contains the custom software to perform NLS-CCSD and NLS-MBPT(2)
+* **NLSCCenergy** - Contains the custom software to perform NLS-CCSD and NLS-MBPT(2). Important subroutines are as follows:
+    1. NLSCCenergy.F - Driver program that interfaces to ACESII in order to perform NLS-CCSD or NLS-MBPT(2). Harvests the T1, T2, and W integrals from ACESII output files using standard ACESII subroutines 'GETALL' and 'GETLST'. Calls ACESII subroutine 'TENER' to compute total ground state correlation energy, and its decomposition according to all alpha, all beta, of alpha-beta contribution. Then uses info from 'QMcenter' and 'nbocenters' to determine the correlation energy with respect to only QM1. 
+    
+    2. totalEnergy.F - Decomposes the correlation energy according to NLMO.
 
-* **eomccs** - Contains the custom software to perform NLS-CIS calculations for a UHF reference. 
+* **eomccs** - Contains the custom software to perform NLS-CIS calculations for a UHF reference. Important subroutines are as follows:
+     1. eomccs.F - Driver program that calls existing ACESII subroutines to build the full CIS matrix, and then modifies it according to NLS scheme.
+     2. createCISmat.F - Subroutine that checks the correct CIS matrix is being used. 
+     3. nlscisZ.F - Applies the NLS scheme to CIS matrix; zero out rows/columns where occupeid indices i,j not in QM1.
+     4. ReduceCISmat.F - Removes the rows/columns of CIS matrix that are 0, then diagonalizes the resulting NLS-CIS matrix.
 
 * **include** - Contains ACESII header files needed in order to successfully compile the NLS executables
 
-* **lib** - Contains compiled static libraries that are needed in order to successfully compile the NLS executables 
 
-* partitionQMs - Custom software to automate fragmentation of a molecule into logical subunits given an input geometry.
+* **partitionQMs** - Custom software to automate fragmentation of a molecule into logical subunits given an input geometry.
 
 
 
