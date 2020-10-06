@@ -25,8 +25,8 @@
 !     * This subroutine handles Diagonal elements of CIS matrix *
 !  * All alpha/alpha/alpha/alpha block and all Beta-Beta-beta-beta block
 !   
-!             A_ia,jb = delij*delab*(e_a-e_i) + <AJ||IB> for all alpha
-!             A_ia,jb = delij*delab*(e_a-e_i) + <aj||ib> for all beta
+!             A_ia,jb = delij*delab*(e_a-e_i) + <AJ||IB>+2Fia for all alpha
+!             A_ia,jb = delij*delab*(e_a-e_i) + <aj||ib>+2Fia for all beta
 !
 !   ** NOTE::: Off diagonal alpha/beta/alpha/beta block and
 !              beta/alpha/beta/alpha block are setup separately.

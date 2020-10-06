@@ -163,7 +163,9 @@
             counter_j=counter_j+1
           enddo
         enddo
-
+!*****************************************************
+!       *Check is matrix is symmetric*
+!*****************************************************
         do i=1,2*nocc*nvirt
           do j=1,2*nocc*nvirt
             if (abs(CISmat0(i,j)-CISmat0(j,i)).gt.1e-5) then
