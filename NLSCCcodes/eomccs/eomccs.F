@@ -77,7 +77,7 @@ c        real, allocatable :: tia(:),fia(:)
         integer::QM2NLMOcount
         double precision :: tempor(6)
         double precision:: revCIS(5,5)
-        logical :: incQM2
+        logical :: incQM2,CTflag
 #include "sym.com"
 #include "icore.com"
 #include "istart.com"
@@ -271,8 +271,9 @@ c        allocate(space(MAXCORE))
         print*,'******        0th order Approx. NLS-CIS        ******'
         print*,'*****************************************************'
         incQM2=.False.
+        CTflag=.True.
         call nlscisZ(CISmat,CISmat0,nocc,nvirt,QM1atoms,QM1num,
-     &                  QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas,incQM2)
+     &          QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas,incQM2,CTflag)
 
 #ifdef _DEBUG_LVL0
         print*, "** Reformatted NLS-CIS matrix **"

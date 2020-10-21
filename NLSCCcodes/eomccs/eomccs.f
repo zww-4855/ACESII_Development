@@ -273,7 +273,7 @@ c        real, allocatable :: tia(:),fia(:)
         integer::QM2NLMOcount
         double precision :: tempor(6)
         double precision:: revCIS(5,5)
-        logical :: incQM2
+        logical :: incQM2,CTflag
 c sym.com : begin
       integer      pop(8,2), vrt(8,2), nt(2), nfmi(2), nfea(2)
       common /sym/ pop,      vrt,      nt,    nfmi,    nfea
@@ -475,8 +475,9 @@ c        allocate(space(MAXCORE))
         print*,'******        0th order Approx. NLS-CIS        ******'
         print*,'*****************************************************'
         incQM2=.False.
+        CTflag=.True.
         call nlscisZ(CISmat,CISmat0,nocc,nvirt,QM1atoms,QM1num,
-     &                  QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas,incQM2)
+     &          QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas,incQM2,CTflag)
 
         call ReduceCISmat(CISmat0,2*nocc*nvirt,
      &                    NLMOQM1,NLMOQM2,nbas,nocc,nvirt)

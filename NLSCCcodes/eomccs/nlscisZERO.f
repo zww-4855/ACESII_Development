@@ -10,7 +10,7 @@
 
 
         subroutine nlscisZ(CISmat,CISmat0,nocc,nvirt,QM1atoms,QM1num,
-     &                     QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas,noQM2)
+     &             QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas,noQM2,CTflag)
           integer, intent(in):: nocc,nvirt,QM1num,QM2num,nbas
           integer, intent(in)::NLMOQM1(nbas), NLMOQM2(nbas)
           integer, intent(in):: QM1atoms(QM1num),QM2atoms(QM2num)
@@ -19,9 +19,9 @@
           double precision, intent(inout)::CISmat0(2*nocc*nvirt,
      &                                          2*nocc*nvirt)
 
-        logical, intent(in) :: noQM2
+        logical, intent(in) :: noQM2,CTflag
         integer::QMregIJ(2),QMreg(4),compareIJAB(4)
-        integer ::compareIJ(2),compareAB(2)
+        integer ::compareIJ(2),compareAB(2),origQM1(4),origQM3(4)
         integer ::iter,del_ij,del_ab,offset
         integer :: counter_i, counter_j,i,j,a,b
 !        real(kind=8) :: term,fab, fij,fe,HFenergy
@@ -133,16 +133,11 @@
                 QMregIJ=0
                 call findQMregion(compareIJ,size(compareIJ),NLMOQM1,
      &                   size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIJ)
-                  if (any(QMregIJ.eq.2)) then
-                   CISmat0(counter_j,counter_i)=0.0d0
-
-                   CISmat0(offset+counter_j,counter_i)=0.0d0
-
-                   CISmat0(counter_j,offset+counter_i)=0.0d0
-
-                   CISmat0(offset+counter_j,offset+counter_i)=0.0d0
-
-                  else
+                  if (CTflag) then ! Modeling Charge-transfer
+                    origQM1=(/ 2,1,1,2  /)
+                    origQM3=(/ 1,2,2,1  /)
+                    if ((all(QMreg.eq.origQM1)) .or.
+     &                  (all(QMreg.eq.origQM3))) then
                    CISmat0(counter_j,counter_i)=
      &                  CISmat(counter_j,counter_i)
 
@@ -154,6 +149,38 @@
 
                    CISmat0(offset+counter_j,offset+counter_i)=
      &                  CISmat(offset+counter_j,offset+counter_i)
+                    else
+                   CISmat0(counter_j,counter_i)=0.0d0
+
+                   CISmat0(offset+counter_j,counter_i)=0.0d0
+
+                   CISmat0(counter_j,offset+counter_i)=0.0d0
+
+                   CISmat0(offset+counter_j,offset+counter_i)=0.0d0
+                   endif   
+                  else ! Modeling Normal NLSCC state with QM2 region
+                   if (any(QMregIJ.eq.2)) then
+                   CISmat0(counter_j,counter_i)=0.0d0
+
+                   CISmat0(offset+counter_j,counter_i)=0.0d0
+
+                   CISmat0(counter_j,offset+counter_i)=0.0d0
+
+                   CISmat0(offset+counter_j,offset+counter_i)=0.0d0
+
+                   else
+                   CISmat0(counter_j,counter_i)=
+     &                  CISmat(counter_j,counter_i)
+
+                   CISmat0(offset+counter_j,counter_i)=
+     &                  CISmat(offset+counter_j,counter_i)
+
+                   CISmat0(counter_j,offset+counter_i)=
+     &                  CISmat(counter_j,offset+counter_i)
+
+                   CISmat0(offset+counter_j,offset+counter_i)=
+     &                  CISmat(offset+counter_j,offset+counter_i)
+                   endif
                   endif
                 endif
 
