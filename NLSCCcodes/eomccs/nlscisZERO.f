@@ -20,7 +20,7 @@
      &                                          2*nocc*nvirt)
 
         logical, intent(in) :: noQM2,CTflag
-        integer::QMregIJ(2),QMreg(4),compareIJAB(4)
+        integer::QMregIJ(2),QMregAB(2),QMreg(4),compareIJAB(4)
         integer ::compareIJ(2),compareAB(2),origQM1(4),origQM3(4)
         integer ::iter,del_ij,del_ab,offset
         integer :: counter_i, counter_j,i,j,a,b
@@ -133,11 +133,47 @@
                 QMregIJ=0
                 call findQMregion(compareIJ,size(compareIJ),NLMOQM1,
      &                   size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIJ)
+
+                compareAB=(/ a,b /)
+                QMregAB=0
+                call findQMregion(compareAB,size(compareIJ),NLMOQM1,
+     &                   size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregAB)
+
                   if (CTflag) then ! Modeling Charge-transfer
                     origQM1=(/ 2,1,1,2  /)
                     origQM3=(/ 1,2,2,1  /)
+
                     if ((all(QMreg.eq.origQM1)) .or.
      &                  (all(QMreg.eq.origQM3))) then
+                   CISmat0(counter_j,counter_i)=
+     &                  CISmat(counter_j,counter_i)
+
+                   CISmat0(offset+counter_j,counter_i)=
+     &                  CISmat(offset+counter_j,counter_i)
+
+                   CISmat0(counter_j,offset+counter_i)=
+     &                  CISmat(counter_j,offset+counter_i)
+
+                   CISmat0(offset+counter_j,offset+counter_i)=
+     &                  CISmat(offset+counter_j,offset+counter_i)
+!               *Adds in the shared virtual spaces*
+                    else if ((all(QMregIJ.eq.1)) .and.!QM1->QM3 
+     &                       (.not.any(QMregAB.eq.1))) then
+
+                   CISmat0(counter_j,counter_i)=
+     &                  CISmat(counter_j,counter_i)
+
+                   CISmat0(offset+counter_j,counter_i)=
+     &                  CISmat(offset+counter_j,counter_i)
+
+                   CISmat0(counter_j,offset+counter_i)=
+     &                  CISmat(counter_j,offset+counter_i)
+
+                   CISmat0(offset+counter_j,offset+counter_i)=
+     &                  CISmat(offset+counter_j,offset+counter_i)
+                    else if ((.not.any(QMregIJ.eq.1)) .and.
+     &                       (all(QMregAB.eq.1))) then!QM3->QM1
+
                    CISmat0(counter_j,counter_i)=
      &                  CISmat(counter_j,counter_i)
 
