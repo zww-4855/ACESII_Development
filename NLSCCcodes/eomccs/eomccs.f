@@ -271,9 +271,11 @@ c        real, allocatable :: tia(:),fia(:)
         double precision, allocatable::CISreduce(:,:),CISreduceVec(:,:)
 !        double precision ::CISreduce(10,10),CISreduceVec(10,10)
         integer::QM2NLMOcount
-        double precision :: tempor(6)
+        double precision :: temp,tempor(6)
         double precision:: revCIS(5,5)
         logical :: incQM2,CTflag
+        integer:: QMregIA(2), compareIA(2)
+        double precision,allocatable:: intermedAC(:),acesCISevecs(:)
 c sym.com : begin
       integer      pop(8,2), vrt(8,2), nt(2), nfmi(2), nfea(2)
       common /sym/ pop,      vrt,      nt,    nfmi,    nfea
@@ -345,7 +347,10 @@ c        allocate(space(MAXCORE))
      &          ,2*nocc*nvirt),CISevec(2*nocc*nvirt,2*nocc*nvirt),
      &          Waanew(t2abSize),scrat(nvirt*nvirt),
      &          WaanewOut(t2aaSize),Wbb(t2abSize),
-     &          Wab(t1Size**2),Wabnew(nvirt,nvirt,nocc,nocc))
+     &          Wab(t1Size**2),Wabnew(nvirt,nvirt,nocc,nocc),
+     &          acesCISevecs(6*2*nocc*nvirt),
+     &          intermedAC(6*2*nocc*nvirt)) ! CAN HOLD 10 DAVIDSON
+                                               !ROOTS
 
         allocate(NLMOQM1(nbas),NLMOQM2(nbas))
         allocate(CISmat0(2*nocc*nvirt,2*nocc*nvirt),
@@ -372,6 +377,23 @@ c        allocate(space(MAXCORE))
           IOFF=IOFF+nocc*nvirt
         enddo
         call GETALL(Wbb,t2abSize,1,24)
+        
+        acesCISevecs=0.0d0
+!        call Getlst(acesCISevecs,1,1,1,1,94)
+!        print*,'print CIS eigenvectors'
+!        iter=1
+!        do i=1,6
+!         do j=1,6
+!           print*, acesCISevecs(iter)
+!           iter=iter+j
+!         enddo
+!         print*
+!        enddo
+        Nirrep=1
+        Do Ispin=1,iuhf+1
+          Numdis=Irpdpd(Nirrep,8+Ispin)
+          call Getlst(acesCISevecs,1,Numdis,1,Nirrep,94)
+        enddo
 !******************************************************************
 ! * Read QMcenter
 !******************************************************************
@@ -468,6 +490,85 @@ c        allocate(space(MAXCORE))
         NUMAA=IRPDPD(1,ISYTYP(1,19))
         NUMBB=IRPDPD(1,ISYTYP(1,20))
         MATDIM=NUMAA+NUMBB
+!#ifdef _DEBUG_LVL0
+        print*,'*****************************************************'
+        print*,'******           FullCIS matrix                ******'
+        print*,'*****************************************************'
+        call output(CISmat,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
+        print*,'*****************************************************'
+        print*,'******           FullCIS eigenvectors          ******'
+        print*,'*****************************************************'
+        call output(acesCISevecs,1,MATDIM,1,6,6,6,1)
+        ! Re-Calculate the ACESII roots from Davidson 
+        intermedAC=0.0d0
+        iter=1
+        do i=1,4!6
+           call xgemm('N','N',2*nocc*nvirt,1,2*nocc*nvirt,1.0D0,CISmat,
+     &          2*nocc*nvirt,acesCISevecs(iter),2*nocc*nvirt,0.0D0,
+     &              intermedAC(iter),2*nocc*nvirt)
+!           call output(acesCISevecs,1,2*nocc*nvirt,1,2*nocc*nvirt,
+!     &          2*nocc*nvirt,2*nocc*nvirt,1)
+           temp=sdot(2*nocc*nvirt,acesCISevecs(iter),1,intermedAC(iter)
+     &                                  ,1) 
+           print*,temp!*27.2114
+           iter=iter+2*nocc*nvirt
+        enddo
+!
+!
+!
+!       Now omit relevant elements of the coefficient vectors
+        iter=1
+        next=1
+        offset=nocc*nvirt
+        do roots=1,4!6!10
+         do i=1,nocc
+          do a=nocc+1,nbas
+            compareIA=0
+            QMregIA=0
+            compareIA=(/ i,a /)
+!            print*, compareIA
+!            print*, 'NLMO manip', NLMOQM1
+            call findQMregion(compareIA,size(compareIA),NLMOQM1,
+     &           size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIA)
+!            print*,QMregIA
+!            print*
+            if (QMregIA(1).eq.2) then
+              acesCISevecs(iter)=0.0d0
+              acesCISevecs(iter+offset)=0.0d0
+            endif
+!           print*, acesCISevecs(iter)
+          iter=iter+1
+          enddo
+        enddo
+           call xgemm('N','N',2*nocc*nvirt,1,2*nocc*nvirt,1.0D0,CISmat,
+     &          2*nocc*nvirt,acesCISevecs(next),2*nocc*nvirt,0.0D0,
+     &              intermedAC(next),2*nocc*nvirt)
+           temp=sdot(2*nocc*nvirt,acesCISevecs(next),1,intermedAC(next)
+     &                                  ,1)
+        iter=iter+nocc*nvirt
+        next=next+2*nocc*nvirt
+           print*,'Ajith suggested root', temp*27.2114
+        enddo
+        print*,'*****************************************************'
+        print*, 'Calling Eigen for FULL CIS matrix'
+        print*,'*****************************************************'
+!        call eig(CISmat,CISevec,100,2*nocc*nvirt,1)
+!        print*
+!        print*,'*****************************************************'
+!        print*,'** Eigenvalues for full CIS matrix **'
+!        print*,'*****************************************************'
+!        print*
+!        print*,'     Excite E (au)           Excite E (eV) '
+!        do i=1,2*nocc*nvirt
+!           print*, CISmat(i,i),CISmat(i,i)*27.2114
+!        enddo
+!        print*
+        print*
+        print*,'*****************************************************'
+        Print*,'*** End of eigenvalues for full CIS matrix ***'
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+!#endif
         print*
         print*
         print*
@@ -475,10 +576,14 @@ c        allocate(space(MAXCORE))
         print*,'******        0th order Approx. NLS-CIS        ******'
         print*,'*****************************************************'
         incQM2=.False.
-        CTflag=.True.
+        CTflag=.False.!.True.
+        print*,'NLMOQM1', NLMOQM1
         call nlscisZ(CISmat,CISmat0,nocc,nvirt,QM1atoms,QM1num,
      &          QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas,incQM2,CTflag)
-
+!#ifdef _DEBUG_LVL0
+        print*, "** Reformatted NLS-CIS matrix **"
+        call output(CISmat0,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
+!#endif
         call ReduceCISmat(CISmat0,2*nocc*nvirt,
      &                    NLMOQM1,NLMOQM2,nbas,nocc,nvirt)
 
@@ -491,7 +596,8 @@ c        allocate(space(MAXCORE))
         ! Deallocate memory for T1, fia, T2, W for RHF and UHF cases
         deallocate(CISmat0,CIS0vec,QM1atoms,QM2atoms,Wab,Wabnew,scrat)
         deallocate(NLMO,Waa,Waanew,Waanewout,diaFockA,CISmat,CISevec)
-        deallocate(NLMOQM1,NLMOQM2,Wbb,CISmatCOPY)
+        deallocate(acesCISevecs,intermedAC,NLMOQM1,NLMOQM2,Wbb,
+     &                  CISmatCOPY)
 
         call aces_fin
         end program

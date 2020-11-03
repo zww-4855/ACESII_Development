@@ -45,7 +45,7 @@
                 print*,NLMOQM1
                 print*
                 print*,'val of noQM2',noQM2
-                print*,CISmat(counter_j,counter_i)
+!                print*,CISmat(counter_j,counter_i)
                 print*,'end'
                 print*
 #endif
@@ -143,6 +143,7 @@
      &                   size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregAB)
 
                   if (CTflag) then ! Modeling Charge-transfer
+                    print*, 'Modeling Charge-Transfer'
                     origQM1=(/ 2,1,1,2  /)
                     origQM3=(/ 1,2,2,1  /)
 
@@ -198,6 +199,13 @@
                    CISmat0(offset+counter_j,offset+counter_i)=0.0d0
                    endif   
                   else ! Modeling Normal NLSCC state with QM2 region
+!                  print*, 'Modeling Normal NLSCC state with a QM2region'
+                compareIJ=(/ i,j /)
+                QMregIJ=0
+                call findQMregion(compareIJ,size(compareIJ),NLMOQM1,
+     &                   size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIJ)
+!                  print*,'cmpIJ',compareIJ
+!                  print*, 'QMREG',QMregIJ
                    if (any(QMregIJ.eq.2)) then
                    CISmat0(counter_j,counter_i)=0.0d0
 
