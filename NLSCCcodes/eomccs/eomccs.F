@@ -79,7 +79,8 @@ c        real, allocatable :: tia(:),fia(:)
         double precision:: revCIS(5,5)
         logical :: incQM2,CTflag
         integer:: QMregIA(2), compareIA(2)
-        double precision,allocatable:: intermedAC(:),acesCISevecs(:)
+        double precision,allocatable:: intermedAC(:),acesCISevecs(:),
+     &                  acesCISevecsbkup(:)
 #include "sym.com"
 #include "icore.com"
 #include "istart.com"
@@ -119,8 +120,9 @@ c        allocate(space(MAXCORE))
      &          Waanew(t2abSize),scrat(nvirt*nvirt),
      &          WaanewOut(t2aaSize),Wbb(t2abSize),
      &          Wab(t1Size**2),Wabnew(nvirt,nvirt,nocc,nocc),
-     &          acesCISevecs(6*2*nocc*nvirt),
-     &          intermedAC(6*2*nocc*nvirt)) ! CAN HOLD 10 DAVIDSON
+     &          acesCISevecs(NROOT(1)*2*nocc*nvirt),
+     &          acesCISevecsBKUP(NROOT(1)*2*nocc*nvirt),
+     &          intermedAC(NROOT(1)*2*nocc*nvirt)) ! CAN HOLD 10 DAVIDSON
                                                !ROOTS
 
         allocate(NLMOQM1(nbas),NLMOQM2(nbas))
@@ -148,15 +150,16 @@ c        allocate(space(MAXCORE))
           IOFF=IOFF+nocc*nvirt
         enddo
         call GETALL(Wbb,t2abSize,1,24)
-        
+        acesCISevecsBKUP=0.0d0 
         acesCISevecs=0.0d0
 !        Nirrep=1
 !        Do Ispin=1,iuhf+1
 !          Numdis=Irpdpd(Nirrep,8+Ispin)
 !          call Getlst(acesCISevecs,1,Numdis,1,Nirrep,94)
 !        enddo
-        call Getlst(acesCISevecs,1,6,1,1,94)
-
+        call Getlst(acesCISevecs,1,NROOT(1),1,1,94)
+        CALL DCOPY(NROOT(1)*2*nocc*nvirt,acesCISevecs,1,acesCISevecsBKUP
+     &                                  ,1)
 !******************************************************************
 ! * Read QMcenter
 !******************************************************************
@@ -265,7 +268,7 @@ c        allocate(space(MAXCORE))
         ! Re-Calculate the ACESII roots from Davidson 
         intermedAC=0.0d0
         iter=1
-        do i=1,4!6
+        do i=1,NROOT(1)!4!6
            call xgemm('N','N',2*nocc*nvirt,1,2*nocc*nvirt,1.0D0,CISmat,
      &          2*nocc*nvirt,acesCISevecs(iter),2*nocc*nvirt,0.0D0,
      &              intermedAC(iter),2*nocc*nvirt)
@@ -273,7 +276,7 @@ c        allocate(space(MAXCORE))
 !     &          2*nocc*nvirt,2*nocc*nvirt,1)
            temp=sdot(2*nocc*nvirt,acesCISevecs(iter),1,intermedAC(iter)
      &                                  ,1) 
-           print*,'recalculating ACESII vars',temp!*27.2114
+           print*,'recalculating ACESII vars',temp*27.2114
            iter=iter+2*nocc*nvirt
         enddo
 !
@@ -281,8 +284,8 @@ c        allocate(space(MAXCORE))
 !
 !       Now omit relevant elements of the coefficient vectors
 
-        evecSize=6*2*nocc*nvirt !multiplied by number of roots
-        roots=6
+        evecSize=NROOT(1)*2*nocc*nvirt !multiplied by number of roots
+        roots=NROOT(1)
         call nlsMultiply(acesCISevecs,evecSize,CISmat,nocc,nvirt
      &      ,nbas,roots,NLMOQM1,size(NLMOQM1),NLMOQM2,size(NLMOQM2))
 !        iter=1
@@ -348,10 +351,16 @@ c        allocate(space(MAXCORE))
         print*,'NLMOQM1', NLMOQM1
         call nlscisZ(CISmat,CISmat0,nocc,nvirt,QM1atoms,QM1num,
      &          QM2atoms,QM2num,NLMOQM1,NLMOQM2,nbas,incQM2,CTflag)
-!#ifdef _DEBUG_LVL0
+!
+!
+! ***** Call second method that zeros out elements of A, then multiplies
+!                       C^t A C = E
+        call nlsAmodify(CISmat0,nocc,nvirt,acesCISevecsBKUP,evecSize,
+     &                          NROOT(1))
+#ifdef _DEBUG_LVL0
         print*, "** Reformatted NLS-CIS matrix **"
         call output(CISmat0,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
-!#endif
+#endif
         call ReduceCISmat(CISmat0,2*nocc*nvirt,
      &                    NLMOQM1,NLMOQM2,nbas,nocc,nvirt)
 
@@ -365,7 +374,7 @@ c        allocate(space(MAXCORE))
         deallocate(CISmat0,CIS0vec,QM1atoms,QM2atoms,Wab,Wabnew,scrat)
         deallocate(NLMO,Waa,Waanew,Waanewout,diaFockA,CISmat,CISevec)
         deallocate(acesCISevecs,intermedAC,NLMOQM1,NLMOQM2,Wbb,
-     &                  CISmatCOPY)
+     &             acesCISevecsBKUP, CISmatCOPY)
 
         call aces_fin
         end program
