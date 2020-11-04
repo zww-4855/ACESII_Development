@@ -150,21 +150,13 @@ c        allocate(space(MAXCORE))
         call GETALL(Wbb,t2abSize,1,24)
         
         acesCISevecs=0.0d0
-!        call Getlst(acesCISevecs,1,1,1,1,94)
-!        print*,'print CIS eigenvectors'
-!        iter=1
-!        do i=1,6
-!         do j=1,6
-!           print*, acesCISevecs(iter)
-!           iter=iter+j
-!         enddo
-!         print*
+!        Nirrep=1
+!        Do Ispin=1,iuhf+1
+!          Numdis=Irpdpd(Nirrep,8+Ispin)
+!          call Getlst(acesCISevecs,1,Numdis,1,Nirrep,94)
 !        enddo
-        Nirrep=1
-        Do Ispin=1,iuhf+1
-          Numdis=Irpdpd(Nirrep,8+Ispin)
-          call Getlst(acesCISevecs,1,Numdis,1,Nirrep,94)
-        enddo
+        call Getlst(acesCISevecs,1,6,1,1,94)
+
 !******************************************************************
 ! * Read QMcenter
 !******************************************************************
