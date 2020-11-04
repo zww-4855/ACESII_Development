@@ -281,45 +281,50 @@ c        allocate(space(MAXCORE))
 !     &          2*nocc*nvirt,2*nocc*nvirt,1)
            temp=sdot(2*nocc*nvirt,acesCISevecs(iter),1,intermedAC(iter)
      &                                  ,1) 
-           print*,temp!*27.2114
+           print*,'recalculating ACESII vars',temp!*27.2114
            iter=iter+2*nocc*nvirt
         enddo
 !
 !
 !
 !       Now omit relevant elements of the coefficient vectors
-        iter=1
-        next=1
-        offset=nocc*nvirt
-        do roots=1,4!6!10
-         do i=1,nocc
-          do a=nocc+1,nbas
-            compareIA=0
-            QMregIA=0
-            compareIA=(/ i,a /)
-!            print*, compareIA
-!            print*, 'NLMO manip', NLMOQM1
-            call findQMregion(compareIA,size(compareIA),NLMOQM1,
-     &           size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIA)
-!            print*,QMregIA
-!            print*
-            if (QMregIA(1).eq.2) then
-              acesCISevecs(iter)=0.0d0
-              acesCISevecs(iter+offset)=0.0d0
-            endif
-!           print*, acesCISevecs(iter)
-          iter=iter+1
-          enddo
-        enddo
-           call xgemm('N','N',2*nocc*nvirt,1,2*nocc*nvirt,1.0D0,CISmat,
-     &          2*nocc*nvirt,acesCISevecs(next),2*nocc*nvirt,0.0D0,
-     &              intermedAC(next),2*nocc*nvirt)
-           temp=sdot(2*nocc*nvirt,acesCISevecs(next),1,intermedAC(next)
-     &                                  ,1)
-        iter=iter+nocc*nvirt
-        next=next+2*nocc*nvirt
-           print*,'Ajith suggested root', temp*27.2114
-        enddo
+
+        evecSize=6*2*nocc*nvirt !multiplied by number of roots
+        roots=6
+        call nlsMultiply(acesCISevecs,evecSize,CISmat,nocc,nvirt
+     &      ,nbas,roots,NLMOQM1,size(NLMOQM1),NLMOQM2,size(NLMOQM2))
+!        iter=1
+!        next=1
+!        offset=nocc*nvirt
+!        do roots=1,4!6!10
+!         do i=1,nocc
+!          do a=nocc+1,nbas
+!            compareIA=0
+!            QMregIA=0
+!            compareIA=(/ i,a /)
+!!            print*, compareIA
+!!            print*, 'NLMO manip', NLMOQM1
+!            call findQMregion(compareIA,size(compareIA),NLMOQM1,
+!     &           size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIA)
+!!            print*,QMregIA
+!!            print*
+!            if (QMregIA(1).eq.2) then
+!              acesCISevecs(iter)=0.0d0
+!              acesCISevecs(iter+offset)=0.0d0
+!            endif
+!!           print*, acesCISevecs(iter)
+!          iter=iter+1
+!          enddo
+!        enddo
+!           call xgemm('N','N',2*nocc*nvirt,1,2*nocc*nvirt,1.0D0,CISmat,
+!     &          2*nocc*nvirt,acesCISevecs(next),2*nocc*nvirt,0.0D0,
+!     &              intermedAC(next),2*nocc*nvirt)
+!           temp=sdot(2*nocc*nvirt,acesCISevecs(next),1,intermedAC(next)
+!     &                                  ,1)
+!        iter=iter+nocc*nvirt
+!        next=next+2*nocc*nvirt
+!           print*,'Ajith suggested root', temp*27.2114
+!        enddo
         print*,'*****************************************************'
         print*, 'Calling Eigen for FULL CIS matrix'
         print*,'*****************************************************'
