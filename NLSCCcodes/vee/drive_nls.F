@@ -19,7 +19,10 @@ C
 #include "maxbasfn.par"
 C
 C
-      LOGICAL NLS_EXIST
+      CHARACTER*12 STRINGI(2), STRINGJ(2), STRINGA(2),STRINGB(2)
+      DIMENSION LS2OUT(2,2)
+      INTEGER LS1OUT
+      LOGICAL NLS_EXIST,NBO_EXIST,PROJECT_SINGLES
       integer ierr,natm,nbas
       INTEGER QM1num,NLMOnum,NLMOnum2,NLMOorigin,NLMOorigin2,indx
       INTEGER,allocatable::QM1atoms(:),QM2atoms(:),NLMO(:,:)
@@ -36,6 +39,7 @@ C
 #include "flags.com"
 #include "flags2.com"
 C
+      PROJECT_SINGLES = (Iflags2(h_IFLAGS2_prjct_single) .NE. 0)
       call getrec(1,'JOBARC','NBASTOT',1,nbas)
       call getrec(1,'JOBARC','NREALATM',1,natm)
 !******************************************************************
@@ -64,6 +68,9 @@ C
           print*, "error opening QMcenter"
         endif
         close(LUNITN)  
+      else
+        print*,'FATAL ERROR: QMcenter-NLS input file-can not be found'
+        call exit(1)
       endif
 
 !******************************************************************
@@ -72,6 +79,8 @@ C
 !               where x is the NLMO number and y are the atoms sharing
 !               the NLMO
 !******************************************************************
+      INQUIRE(FILE='nbocenters',EXIST=NBO_EXIST)
+      if (NBO_EXIST) THEN
         NBOfile=300
         allocate(NLMO(nbas,5))
         open(unit=NBOfile,file='nbocenters',status='old',iostat=ierr)
@@ -93,9 +102,75 @@ C
            NLMOorigin2=NLMOorigin
         enddo
         close(NBOfile)
+      ELSE
+        print*,'FATAL ERROR: nbocenters-output of N. Flocke NLMO code-
+     &               can not be found'
+        call exit(1)
+      endif     
+
+!******************************************************************
+#ifdef _DEBUG_LVL0
+        print*, 'INSIDE DRIVE_NLS.F'
+        print*, 'Contents of NLMO()'
+        
+        print*, NLMO
+#endif
+
+!******************************************************************
+      LS1OUT      = 490
+      LS2OUT(1,1) = 444
+      LS2OUT(1,2) = 446
+      LS2OUT(2,1) = 446
+      LS2OUT(2,2) = 445
+C
+      STRINGI(2)='i  [i_SYM]  '
+      STRINGJ(2)='j  [j_SYM]  '
+      STRINGA(2)='a  [a_SYM]  '
+      STRINGB(2)='b  [b_SYM]  '
+      STRINGI(1)='I  [I_SYM]  '
+      STRINGJ(1)='J  [J_SYM]  '
+      STRINGA(1)='A  [A_SYM]  '
+      STRINGB(1)='B  [B_SYM]  '
+      CALL ZERO(SCR,NSIZEC)
+!******************************************************************
+!******************************************************************
+!******************************************************************
+! * Modified version of 'drive_nto_ee_state_prjct.F' lines 165-233
+! * Works on the single excitation coefficient C(i,a) by zeroing out
+! * the i not in QM1
+! *** FIRST TEST FOR JUST THE UHF CASE, THEN TRY RHF WHICH HAS NEVER 
+! *** BEEN DONE IN THE NLS SCHEME 12/1/2020
+      IF (PROJECT_SINGLES) THEN
+        DO 500 SSPIN = 1, 1+IUHF
+          CALL GETLST(SCR, 1, 1, 1, SSPIN, LS1OUT)
+          ICOUNT = 1
+          DO IIRREP = 1, NIRREP
+            AIRREP=DIRPRD(IIRREP,IRREPX)
+
+          DO 1 I = 1, POP(IIRREP, SSPIN)
+            DO 2 A = 1, VRT(AIRREP,SSPIN)
 
 
-
+                IF (IIRREP.EQ.INTOO(1) .AND. AIRREP.EQ.INTOV(1)) THEN
+                   IF (I.EQ.INTOO(2) .AND. A.EQ.INTOV(2)) THEN
+                      WRITE(6,'(2(A,I3,A,I1,A))')'R1:',I,'[',IIRREP,']',
+     &                                           ' ->',A,'[',AIRREP,']'
+                      SCR(ICOUNT) = 1.0D0
+                   ELSE
+                      SCR(ICOUNT) = 0.0D0
+                   ENDIF
+                ELSE
+                   SCR(ICOUNT) = 0.0D0
+                ENDIF
+              ICOUNT = ICOUNT + 1
+    2       CONTINUE
+    1     CONTINUE
+        ENDDO
+        CALL PUTLST(SCR, 1, 1, 1, SSPIN, LS1OUT)
+  500 CONTINUE
+      ENDIF
+!******************************************************************
+!******************************************************************
 
 
 30      FORMAT (I4,2X,I4)

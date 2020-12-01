@@ -224,7 +224,10 @@ c mxcbf.par as well.
 c maxbasfn.par : end
 C
 C
-      LOGICAL NLS_EXIST
+      CHARACTER*12 STRINGI(2), STRINGJ(2), STRINGA(2),STRINGB(2)
+      DIMENSION LS2OUT(2,2)
+      INTEGER LS1OUT
+      LOGICAL NLS_EXIST,NBO_EXIST,PROJECT_SINGLES
       integer ierr,natm,nbas
       INTEGER QM1num,NLMOnum,NLMOnum2,NLMOorigin,NLMOorigin2,indx
       INTEGER,allocatable::QM1atoms(:),QM2atoms(:),NLMO(:,:)
@@ -250,6 +253,7 @@ c flags2.com : begin
       common /flags2/ iflags2
 c flags2.com : end
 C
+      PROJECT_SINGLES = (Iflags2(173) .NE. 0)
       call getrec(1,'JOBARC','NBASTOT',1,nbas)
       call getrec(1,'JOBARC','NREALATM',1,natm)
 !******************************************************************
@@ -278,6 +282,9 @@ C
           print*, "error opening QMcenter"
         endif
         close(LUNITN)  
+      else
+        print*,'FATAL ERROR: QMcenter-NLS input file-can not be found'
+        call exit(1)
       endif
 
 !******************************************************************
@@ -286,6 +293,8 @@ C
 !               where x is the NLMO number and y are the atoms sharing
 !               the NLMO
 !******************************************************************
+      INQUIRE(FILE='nbocenters',EXIST=NBO_EXIST)
+      if (NBO_EXIST) THEN
         NBOfile=300
         allocate(NLMO(nbas,5))
         open(unit=NBOfile,file='nbocenters',status='old',iostat=ierr)
@@ -307,10 +316,31 @@ C
            NLMOorigin2=NLMOorigin
         enddo
         close(NBOfile)
+      ELSE
+        print*,'FATAL ERROR: nbocenters-output of N. Flocke NLMO code-
+     &               can not be found'
+        call exit(1)
+      endif     
 
+!******************************************************************
 
-
-
+!******************************************************************
+      LS1OUT      = 490
+      LS2OUT(1,1) = 444
+      LS2OUT(1,2) = 446
+      LS2OUT(2,1) = 446
+      LS2OUT(2,2) = 445
+C
+      STRINGI(2)='i  [i_SYM]  '
+      STRINGJ(2)='j  [j_SYM]  '
+      STRINGA(2)='a  [a_SYM]  '
+      STRINGB(2)='b  [b_SYM]  '
+      STRINGI(1)='I  [I_SYM]  '
+      STRINGJ(1)='J  [J_SYM]  '
+      STRINGA(1)='A  [A_SYM]  '
+      STRINGB(1)='B  [B_SYM]  '
+      CALL ZERO(SCR,NSIZEC)
+! lines 203-214 of driveNTO code:
 
 30      FORMAT (I4,2X,I4)
       end subroutine
