@@ -22,7 +22,9 @@ CEND
       LOGICAL CONVRG
       LOGICAL ESPROP
       LOGICAL NONSTD
+      logical DONLS
       LOGICAL MBPT2,CC,CCD,RCCD,DRCCD,LCCD,LCCSD,CC2
+
       INTEGER END,BGN,BGN_IRP,END_IRP
       DIMENSION ICORE(MAXCOR)
       COMMON/FLAGS/IFLAGS(100)
@@ -204,6 +206,11 @@ C
 C
 C Handle the EOM_PRJCT=NTO; Y. Park and A. Perera, 02/2017,
 C
+! **********************************************
+! **********************************************
+! * MODEL NLS SCHEME AFTER THESE FUNCTION CALLS *
+! **********************************************
+! **********************************************
       IF (IFLAGS2(120) .EQ. 5) THEN
          Write(6,"(a)") "Excitations energies via NTO-projection."
 
@@ -215,7 +222,24 @@ C
           ENDDO 
 
       ENDIF 
-
+! **********************************************
+! **********************************************
+! **********************************************
+! *     NLS PROCEDURE THAT ZEROS OUT C(IJ,AB)
+! **********************************************
+! **********************************************
+! **********************************************
+      DONLS=.TRUE.
+      if (DONLS) THEN
+        CALL DRIVE_NLS(ICORE,MAXCOR/IINTFP,IRREPX,IUHF,IROOT+1)
+        DO ITOP=1,2
+             CALL PUTEXCP(IUHF, ICORE, MAXCOR/IINTFP, IRREPX,
+     &                   IPROJECT, LISTH0, ICOLPR1, NSIZEC,ITOP)
+        enddo
+      endif
+! **********************************************
+! **********************************************
+! ********************************************** 
 C      DO ISPIN=3,3-2*IUHF,-1
 C        CALL ZEROLIST(SCR,MAXCOR,443+ISPIN)
 C      ENDDO
