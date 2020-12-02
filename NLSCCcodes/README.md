@@ -16,8 +16,14 @@ Future work intends to generalize the NLS-CIS software to include NLS-EOM-CC cal
      2. createCISmat.F - Subroutine that checks the correct CIS matrix is being used. 
      3. nlscisZ.F - Applies the NLS scheme to CIS matrix; zero out rows/columns where occupeid indices i,j not in QM1.
      4. ReduceCISmat.F - Removes the rows/columns of CIS matrix that are 0, then diagonalizes the resulting NLS-CIS matrix.
+     
+     <p> <strong><em> UPDATE 12/1/2020 </strong></em>: With the addition of vee, this directory is somewhat obsolete as it was intended to be a proof of concept for testing. Any further tests involving CIS will be done here first; otherwise this will become an outdated standard to perform NLS-CIS as optimized routines will be built into ACESII source code thru ~/vee.
+    
+    </p>
 
 * **include** - Contains ACESII header files needed in order to successfully compile the NLS executables
+
+* **vee** - Modified source code that directly interfaces with ACESII. Slight modification to eom driver file doeomcc.F, but most work will be accomplished inside drive_nls.F. Will be general enough to perform CIS or any variant of EOM-CC.
 
 
 * **partitionQMs** - Custom software to automate fragmentation of a molecule into logical subunits given an input geometry.
