@@ -18,10 +18,6 @@
         print*,'******           FullCIS matrix                ******'
         print*,'*****************************************************'
         MATDIM=2*nocc*nvirt
-!        call output(CISmat,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
-
-!        call output(acesCISevecs,1,2*nocc*nvirt,1,2*nocc*nvirt,
-!     &          2*nocc*nvirt,2*nocc*nvirt,1)
 
         intermed=0.0d0
         iter=1
@@ -33,33 +29,20 @@
             compareIA=0
             QMregIA=0
             compareIA=(/ i,a /)
-!            print*, compareIA
-!            print*, 'NLMO manip', NLMOQM1
             call findQMregion(compareIA,size(compareIA),NLMOQM1,
      &           size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIA)
-!            print*,QMregIA
-!            print*
             if (QMregIA(1).eq.2) then
               acesCISevecs(iter)=0.0d0
               acesCISevecs(iter+offset)=0.0d0
             endif
-!           print*, acesCISevecs(iter)
           iter=iter+1
           enddo
         enddo
-!           call output(acesCISevecs,1,2*nocc*nvirt,1,2*nocc*nvirt,
-!     &          2*nocc*nvirt,2*nocc*nvirt,1)
 
 
-        ! call output(intermed(next),1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
            call xgemm('N','N',2*nocc*nvirt,1,2*nocc*nvirt,1.0D0,CISmat,
      &          2*nocc*nvirt,acesCISevecs(next),2*nocc*nvirt,0.0D0,
      &              intermed,2*nocc*nvirt)
-!        print*, 'output of matrix multiply'
-!        print*,intermed
-!         call output(intermed(next),1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
-!           call output(acesCISevecs,1,2*nocc*nvirt,1,2*nocc*nvirt,
-!     &          2*nocc*nvirt,2*nocc*nvirt,1)
         call dcopy(2*nocc*nvirt,acesCISevecs(next),1,matmulcopy,1)
         temp=dot_product(matmulcopy, intermed)
         iter=iter+nocc*nvirt

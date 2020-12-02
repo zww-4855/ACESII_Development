@@ -231,6 +231,10 @@ C
       integer ierr,natm,nbas
       INTEGER QM1num,NLMOnum,NLMOnum2,NLMOorigin,NLMOorigin2,indx
       INTEGER,allocatable::QM1atoms(:),QM2atoms(:),NLMO(:,:)
+      integer,allocatable:: NLMOQM1(:),NLMOQM2(:)
+      integer::compareIA(2),QMregIA(2)
+
+
       COMMON /MACHSP/ IINTLN,IFLTLN,IINTFP,IALONE,IBITWD
       COMMON /PROJECT/ IPROJECT, IPATTERN, NCALC, ICALC, IWINDOW(8)
       COMMON /SYMINF/ NSTART,NIRREP,IRREPS(255,2),DIRPRD(8,8)
@@ -254,8 +258,12 @@ c flags2.com : begin
 c flags2.com : end
 C
       PROJECT_SINGLES = (Iflags2(173) .NE. 0)
+      print*, 'value of proj singles: ', PROJECT_SINGLES
       call getrec(1,'JOBARC','NBASTOT',1,nbas)
       call getrec(1,'JOBARC','NREALATM',1,natm)
+      allocate(NLMOQM1(nbas),NLMOQM2(nbas))
+      NLMOQM1=0
+      NLMOQM2=0
 !******************************************************************
 ! * Read NLS file detailing QM regions 'QMcenter'
 !******************************************************************
@@ -267,17 +275,23 @@ C
           rewind LUNITN
           read(LUNITN,*) QM1num
           read(LUNITN,*)
-          allocate(QM1atoms(QM1num),QM2atoms(natm-QM1num))
+          if (natm-QM1num .gt. 0) then
+            allocate(QM1atoms(QM1num),QM2atoms(natm-QM1num))
+          else 
+            allocate(QM1atoms(QM1num))
+          endif
           do i=1,QM1num
             read(LUNITN,*) site
             QM1atoms(i)=site
           enddo
           read(LUNITN,*)
           read(LUNITN,*) QM2num
-          do i=1,QM2num
-            read(LUNITN,*) site
-            QM2atoms(i)=site
-          enddo
+          if (QM2num.gt.0) then
+            do i=1,QM2num
+              read(LUNITN,*) site
+              QM2atoms(i)=site
+            enddo
+          endif
         else
           print*, "error opening QMcenter"
         endif
@@ -323,8 +337,52 @@ C
       endif     
 
 !******************************************************************
+        print*, 'INSIDE DRIVE_NLS.F'
 
 !******************************************************************
+! * Determine if the NLMO read from nbocenters is entirely within
+! * QM1, QM2, or both QM1&QM2
+!******************************************************************
+        do i=1,nbas
+          terminalIndex=findloc(NLMO(i,1:5),value=100,dim=1)
+          qm1switch=0
+          qm2switch=0
+          do j=1,terminalIndex-1
+                if (any(NLMO(i,j).eq.QM1atoms)) then
+                   qm1switch=1
+                else if (any(NLMO(i,j).eq.QM2atoms)) then
+                   qm2switch=1
+                endif
+          enddo
+!         * Handles if NLMO is shared between QM1 and QM2
+          if ((qm1switch.eq.1) .and. (qm2switch.eq.1)) then
+                NLMOQM1(counti)=i
+                counti=counti+1
+
+                NLMOQM2(countj)=i
+                countj=countj+1
+!         * Only if NLMO is in QM1
+          else if ((qm1switch.eq.1) .and. (qm2switch.eq.0)) then
+                NLMOQM1(counti)=i
+                counti=counti+1
+!         * Only if NLMO is in QM2
+          else if ((qm1switch.eq.0) .and. (qm2switch.eq.1)) then
+                NLMOQM2(countj)=i
+                countj=countj+1
+          endif
+        enddo
+!#ifdef _DEBUG_LVL0
+        print*
+        print*,'NLMOQM1', NLMOQM1
+        print*,'NLMOQM2',NLMOQM2
+!#endif
+!******************************************************************
+!******************************************************************
+!       *       DONE OBTAINING AUXILLARY NLS INFO       *
+!       *       NOW MAKE MODIFCATIONS TO GUESS VECTOR   *
+!******************************************************************
+!******************************************************************
+
       LS1OUT      = 490
       LS2OUT(1,1) = 444
       LS2OUT(1,2) = 446
@@ -340,7 +398,74 @@ C
       STRINGA(1)='A  [A_SYM]  '
       STRINGB(1)='B  [B_SYM]  '
       CALL ZERO(SCR,NSIZEC)
-! lines 203-214 of driveNTO code:
 
-30      FORMAT (I4,2X,I4)
-      end subroutine
+
+!******************************************************************
+!******************************************************************
+!******************************************************************
+! * Modified version of 'drive_nto_ee_state_prjct.F' lines 165-233
+! * Works on the single excitation coefficient C(i,a) by zeroing out
+! * the i not in QM1
+! *** FIRST TEST FOR JUST THE UHF CASE, THEN TRY RHF WHICH HAS NEVER 
+! *** BEEN DONE IN THE NLS SCHEME 12/1/2020
+
+
+      IF (PROJECT_SINGLES) THEN
+        DO 500 SSPIN = 1, 1+IUHF
+          CALL GETLST(SCR, 1, 1, 1, SSPIN, LS1OUT)
+          ICOUNT = 1
+          DO IIRREP = 1, NIRREP
+            AIRREP=DIRPRD(IIRREP,IRREPX)
+
+          DO 1 I = 1, POP(IIRREP, SSPIN)
+            DO 2 A = 1, VRT(AIRREP,SSPIN)
+
+            compareIA=0
+            QMregIA=0
+            compareIA=(/ i,a /)
+            call findQMregion(compareIA,size(compareIA),NLMOQM1,
+     &           size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIA)
+
+            if (QMregIA(1).eq.2) then
+              SCR(ICOUNT) = 0.0D0
+            else
+              SCR(ICOUNT) =1.0d0
+            endif
+            print*, SCR(ICOUNT)
+!                IF (IIRREP.EQ.INTOO(1) .AND. AIRREP.EQ.INTOV(1)) THEN
+!                   IF (I.EQ.INTOO(2) .AND. A.EQ.INTOV(2)) THEN
+!                      WRITE(6,'(2(A,I3,A,I1,A))')'R1:',I,'[',IIRREP,']',
+!     &                                           ' ->',A,'[',AIRREP,']'
+!                      SCR(ICOUNT) = 1.0D0
+!                   ELSE
+!                      SCR(ICOUNT) = 0.0D0
+!                   ENDIF
+!                ELSE
+!                   SCR(ICOUNT) = 0.0D0
+!                ENDIF
+              ICOUNT = ICOUNT + 1
+    2       CONTINUE
+    1     CONTINUE
+        ENDDO
+        CALL PUTLST(SCR, 1, 1, 1, SSPIN, LS1OUT)
+  500 CONTINUE
+      ENDIF
+      print*, SCR(1:ICOUNT)
+30    FORMAT (I4,2X,I4)
+!******************************************************************
+!******************************************************************
+!       * DONE MODIFYING CIS COEFF      *
+!******************************************************************
+!******************************************************************
+
+
+
+
+
+
+
+!      deallocate(NLMOQM1,NLMOQM2)
+          return
+          end subroutine
+
+

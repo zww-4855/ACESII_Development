@@ -81,6 +81,7 @@ C
       DO IRREP = 1, NIRREP
          CORE_WINDOW=CORE_WINDOW + IWINDOW(IRREP)
       ENDDO
+        PRINT*, 'CALLING FROM DOEOMEE.F modified to do nls'
 C     
 C  put eigval and oscstr to zero
 C
@@ -229,8 +230,10 @@ C
 ! **********************************************
 ! **********************************************
 ! **********************************************
+        PRINT*, 'CALLING DRIVE_NLS.F FROM DOEOMEE.F'
       DONLS=.TRUE.
       if (DONLS) THEN
+        PRINT*, 'CALLING DRIVE_NLS.F FROM DOEOMEE.F'
         CALL DRIVE_NLS(ICORE,MAXCOR/IINTFP,IRREPX,IUHF,IROOT+1)
         DO ITOP=1,2
              CALL PUTEXCP(IUHF, ICORE, MAXCOR/IINTFP, IRREPX,
