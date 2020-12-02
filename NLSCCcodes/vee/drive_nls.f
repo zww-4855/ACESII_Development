@@ -228,12 +228,13 @@ C
       DIMENSION LS2OUT(2,2)
       INTEGER LS1OUT
       LOGICAL NLS_EXIST,NBO_EXIST,PROJECT_SINGLES
-      integer ierr,natm,nbas
+      integer*8, dimension(2) :: scratch
+      integer ierr,natm,nbas,nocc,nvirt
       INTEGER QM1num,NLMOnum,NLMOnum2,NLMOorigin,NLMOorigin2,indx
       INTEGER,allocatable::QM1atoms(:),QM2atoms(:),NLMO(:,:)
       integer,allocatable:: NLMOQM1(:),NLMOQM2(:)
       integer::compareIA(2),QMregIA(2)
-
+        double precision, allocatable :: Waa(:),Wab(:) 
 
       COMMON /MACHSP/ IINTLN,IFLTLN,IINTFP,IALONE,IBITWD
       COMMON /PROJECT/ IPROJECT, IPATTERN, NCALC, ICALC, IWINDOW(8)
@@ -261,6 +262,9 @@ C
       print*, 'value of proj singles: ', PROJECT_SINGLES
       call getrec(1,'JOBARC','NBASTOT',1,nbas)
       call getrec(1,'JOBARC','NREALATM',1,natm)
+        call getrec(1,'JOBARC','NOCCORB',2,scratch)
+      nocc=scr(1)
+      nvirt=nbas-nocc
       allocate(NLMOQM1(nbas),NLMOQM2(nbas))
       NLMOQM1=0
       NLMOQM2=0
@@ -451,6 +455,38 @@ C
   500 CONTINUE
       ENDIF
       print*, SCR(1:ICOUNT)
+!#ifdef _DEBUG_LVL0
+!******************************************************************
+!******************************************************************
+! * Read in CIS matrix and compute the product C^t AC^t is equivalent
+!   to prior excitaiton energies
+        print*, "number of occ and virt", nocc,nvirt
+        intSize=(nocc*nvirt)**2
+        allocate(Waa(intSize),Wab(intSize))
+        Waa=0.0d0
+        Wab=0.0d0
+
+        LISTW=23
+        NUMDIS=IRPDPD(1,ISYTYP(1,LISTW))
+        IOFF=1
+        do idis=1,NUMDIS
+          call GETLST(Waa(IOFF),idis,1,1,1,LISTW)
+          IOFF=IOFF+nocc*nvirt
+        enddo
+
+        CALL GETALL(Wab,intSize,1,18)
+        NUMAA=IRPDPD(1,ISYTYP(1,19))
+        NUMBB=IRPDPD(1,ISYTYP(1,20))
+        MATDIM=NUMAA+NUMBB
+        call createCISmat(Waa,Wab,nocc,nvirt,MATDIM)
+
+
+
+        deallocate(Waa,Wab)
+!#endif
+
+
+
 30    FORMAT (I4,2X,I4)
 !******************************************************************
 !******************************************************************
@@ -465,7 +501,7 @@ C
 
 
 !      deallocate(NLMOQM1,NLMOQM2)
-          return
+
           end subroutine
 
 
