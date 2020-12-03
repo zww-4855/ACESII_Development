@@ -104,11 +104,13 @@ C
         open(unit=NBOfile,file='nbocenters',status='old',iostat=ierr)
         rewind NBOfile
         read(NBOfile,30,IOSTAT=ierr) NLMOnum,NLMOorigin
+        print*,'line1',NLMOnum,NLMOorigin 
         NLMO=100
         NLMO(NLMOnum,1)=NLMOorigin
         indx=1
         do while (ierr.eq.0)
            read(NBOfile,30,IOSTAT=ierr) NLMOnum2,NLMOorigin2
+           print*,NLMOnum2,NLMOorigin2
            if (ierr.ne.0) exit
            if (NLMOnum.eq.NLMOnum2) then
               indx=indx+1
@@ -139,6 +141,8 @@ C
 ! * Determine if the NLMO read from nbocenters is entirely within
 ! * QM1, QM2, or both QM1&QM2
 !******************************************************************
+        counti=1
+        countj=1
         do i=1,nbas
           terminalIndex=findloc(NLMO(i,1:5),value=100,dim=1)
           qm1switch=0
@@ -218,10 +222,11 @@ C
 
             compareIA=0
             QMregIA=0
-            compareIA=(/ i,a /)
+            compareIA=(/ i,a+nocc /)
             call findQMregion(compareIA,size(compareIA),NLMOQM1,
      &           size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIA)
-
+            print*,'QMredIA', QMregIA
+            print*, 'value of Eig?', SCR(ICOUNT)
             if (QMregIA(1).eq.2) then
               SCR(ICOUNT) = 0.0D0
             else
@@ -242,11 +247,12 @@ C
               ICOUNT = ICOUNT + 1
     2       CONTINUE
     1     CONTINUE
+        print*,'Evecs modified'
+        print*,SCR(1:ICOUNT)
         ENDDO
         CALL PUTLST(SCR, 1, 1, 1, SSPIN, LS1OUT)
   500 CONTINUE
       ENDIF
-      print*, SCR(1:ICOUNT)
 !#ifdef _DEBUG_LVL0
 !******************************************************************
 !******************************************************************
