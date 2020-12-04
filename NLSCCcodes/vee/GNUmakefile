@@ -366,19 +366,19 @@ DEFINE_PARALLEL = -D_HAVE_MPI
 C_SUFFIX = 0 # append underscore to global structures and C routines
 DEFINE_C_SUFFIX = -DC_SUFFIX -DCB_SUFFIX
 
-DEBUG = 0 
+DEBUG = 1 
 DEFINE_DEBUG = -D_DEBUG -D_ASSERT
-FLAG_DEBUG = -g -fbacktrace -fno-align-commons -fbounds-check
+FLAG_DEBUG = -g
 # also switches DIR_DEBUGLIB on or off
 
-PROFILE = 1 
+PROFILE = 0
 FLAG_PROFILE = -pg
 # also switches DIR_PROFLIB on or off
 
 TEST = 0
 # switches DIR_TEST* on or off
 
-OPTIMIZE = 0
+OPTIMIZE = 1
 FLAG_OPTIMIZE = -O
 # I'm not sure yet if we should have DIR_OPTLIBs or not.
 
@@ -721,8 +721,8 @@ ifeq (${CMPLR},gnu) ############################################################
    C_SUFFIX = 1
    CXX = g++ -c
    CC  = gcc -c
-   FC  = gfortran  -g -c -fbacktrace -fno-align-commons -fbounds-check
-   F9XC = gfortran -g -c -fbacktrace -fno-align-commons -fbounds-check
+   FC  = gfortran  -c 
+   F9XC = gfortran -c
    LD  = gfortran
  # make sure the other compilers f9x, cc, and CC all get double alignment
    CFLAGS  = -malign-double
@@ -758,9 +758,8 @@ ifeq (${CMPLR},gnu) ############################################################
        CPP = cpp -traditional-cpp
        CPPFLAGS = -P #-C
        FFLAGS  = -fno-second-underscore -finit-local-zero \
-                 -fno-range-check -fdefault-integer-8 \
+                 -fno-range-check -fdefault-integer-8
        DEFINES       += -D_USE_SBRK -DF_ADR=integer*8
-       FLAG_DEBUG    += -g -c -fbacktrace -fno-align-commons -fbounds-check	
        FLAG_OPTIMIZE += -O2 -pipe -march=amdfam10
    endif
 endif
@@ -869,7 +868,6 @@ ifeq (${OPSYS},linux) ##########################################################
    CPPFLAG_DEPEND = -MM # do not check system includes
    AR_REPLACE = rs
 endif
-
 
 #
 
@@ -2161,14 +2159,14 @@ debug: FORCE
 #	@${ECHO} "cache spec       : ${CACHE}"
 #   endif
 	@${ECHO}
-	${ECHO} "   SWITCH STATES:"
+	@${ECHO} "   SWITCH STATES:"
 	@${ECHO}
-	${ECHO} DEBUG=${DEBUG}, PROFILE=${PROFILE}, OPTIMIZE=${OPTIMIZE}, \
+	@${ECHO} DEBUG=${DEBUG}, PROFILE=${PROFILE}, OPTIMIZE=${OPTIMIZE}, \
 	         FAST=${FAST}, TEST=${TEST}, 64BIT=${64BIT}, \
 	         PARALLEL=${PARALLEL}
    ifdef debug
-	${ECHO} "DEFINE_DEBUG := ${define_debug}"
-	${ECHO} "FLAG_DEBUG   := ${flag_debug}"
+	@${ECHO} "DEFINE_DEBUG := ${define_debug}"
+	@${ECHO} "FLAG_DEBUG   := ${flag_debug}"
    endif
    ifdef profile
 	@${ECHO} FLAG_PROFILE := ${flag_profile}

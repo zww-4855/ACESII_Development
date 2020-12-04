@@ -15,12 +15,13 @@
           double precision, intent(in)::Wab(nvirt*nocc*nocc*nvirt)
 
 
-
+          double precision,allocatable:: intermedAC(:),acesCISevecs(:)
           double precision::CISmat(2*nocc*nvirt,2*nocc*nvirt)
-
+        double precision:: output1,temp
         integer ::iter,del_ij,del_ab,nbas,offset
         integer :: counter_i, counter_j,i,j,a,b
         real(kind=8) :: term,fab, fij,fe,HFenergy
+        COMMON/CALCINFO/NROOT(8)
 ! ****************************************************************
 ! ****************************************************************
 !     * This subroutine handles Diagonal elements of CIS matrix *
@@ -43,6 +44,8 @@
 !              beta/alpha/beta/alpha blocks first. 
 ! ****************************************************************
 ! ****************************************************************
+        print*,'Waa integrals',W
+        print*, 'Wab integrals', Wab
         CISmat=0.0d0
         offset=nocc*nvirt
         iter=1
@@ -103,7 +106,49 @@
         print*,'******           FullCIS matrix                ******'
         print*,'*****************************************************'
         call output(CISmat,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
+        print*,'reprint cis mat'
+        print*,CISmat
         print*,'*****************************************************'
+        print*,'NUMBER OF ROOTS: ', NROOT(1)
+        allocate(intermedAC(NROOT(1)*2*nocc*nvirt),
+     &                  acesCISevecs(NROOT(1)*2*nocc*nvirt))
+        acesCISevecs=0.0d0
+        call Getlst(acesCISevecs,1,NROOT(1),1,1,94)
+        print*,'acesii CIS eigenvecs'
+        print*, acesCISevecs
+
+        print*,'*****************************************************'
+        print*,'******           FullCIS eigenvectors          ******'
+        print*,'*****************************************************'
+        call output(acesCISevecs,1,MATDIM,1,6,6,6,1)
+
+!        print*,'MATDIM',MATDIM,nocc,nvirt
+!        intermedAC=0.0d0
+!        iter=1
+!        do i=1,1!NROOT(1)!4!6
+!           call xgemm('N','N',2*nocc*nvirt,1,2*nocc*nvirt,1.0D0,CISmat,
+!     &          2*nocc*nvirt,acesCISevecs(iter),2*nocc*nvirt,0.0D0,
+!     &              intermedAC(iter),2*nocc*nvirt)
+!          print*,'intermedAC',intermedAC(iter:2*nocc*nvirt)
+!          print*,'aces evecs', acesCISevecs(iter:2*nocc*nvirt)
+!!           temp=ddot(2*nocc*nvirt,acesCISevecs(iter),1,intermedAC(iter)
+!!     &                                  ,1)
+!           temp=sdot(6,acesCISevecs(iter),1,
+!     &                  intermedAC(iter),1)
+!           print*,'recalculating ACESII vars',temp*27.2114
+!           print*, 'test', ddot(6,acesCISevecs(iter:2*nocc*nvirt),1,
+!     &                  intermedAC(iter:2*nocc*nvirt),1)
+!           print*,'dtprd',27.2114*
+!     &          dot_product(acesCISevecs(1:6),intermedAC(1:6))
+!          output1=0.0d0
+!          do j=1,6
+!                output1=output1+acesCISevecs(j)*intermedAC(j)
+!          enddo
+!          print*,'output',27.2114*output1
+!           iter=iter+2*nocc*nvirt
+!        enddo
 
 
+
+        deallocate(intermedAC,acesCISevecs)
         end subroutine 

@@ -144,6 +144,7 @@ c        allocate(space(MAXCORE))
         NUMBB=IRPDPD(IRREP,ISYTYP(1,20))
         NUMSYT=IRPDPD(1,ISYTYP(2,LISTW))
         MATDIM=NUMAA+NUMBB
+        print*, 'MATDIM IS: ', MATDIM
         IOFF=1
         do idis=1,NUMDIS
           call GETLST(Waa(IOFF),idis,1,1,1,LISTW)
@@ -256,6 +257,7 @@ c        allocate(space(MAXCORE))
         NUMAA=IRPDPD(1,ISYTYP(1,19))
         NUMBB=IRPDPD(1,ISYTYP(1,20))
         MATDIM=NUMAA+NUMBB
+        print*,'MATDIM',MATDIM
 !#ifdef _DEBUG_LVL0
         print*,'*****************************************************'
         print*,'******           FullCIS matrix                ******'
@@ -265,7 +267,7 @@ c        allocate(space(MAXCORE))
         print*,'******           FullCIS eigenvectors          ******'
         print*,'*****************************************************'
         call output(acesCISevecs,1,MATDIM,1,6,6,6,1)
-        ! Re-Calculate the ACESII roots from Davidson 
+        ! Re-Calculate the ACESII roots from Davidson
         intermedAC=0.0d0
         iter=1
         do i=1,NROOT(1)!4!6
@@ -274,6 +276,8 @@ c        allocate(space(MAXCORE))
      &              intermedAC(iter),2*nocc*nvirt)
 !           call output(acesCISevecs,1,2*nocc*nvirt,1,2*nocc*nvirt,
 !     &          2*nocc*nvirt,2*nocc*nvirt,1)
+           print*, 'evecs',acesCISevecs(iter:iter+2*nocc*nvirt)
+           print*, 'intermedAC',intermedAC(iter:iter+2*nocc*nvirt)
            temp=sdot(2*nocc*nvirt,acesCISevecs(iter),1,intermedAC(iter)
      &                                  ,1) 
            print*,'recalculating ACESII vars',temp*27.2114
