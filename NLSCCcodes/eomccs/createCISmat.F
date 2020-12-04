@@ -31,6 +31,8 @@
 !              beta/alpha/beta/alpha blocks first. 
 ! ****************************************************************
 ! ****************************************************************
+        print*,'Waa integrals',W
+        print*, 'Wab integrals', Wab
         CISmat=0.0d0
         offset=nocc*nvirt
         iter=1

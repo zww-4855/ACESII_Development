@@ -28,7 +28,7 @@ C
       INTEGER QM1num,NLMOnum,NLMOnum2,NLMOorigin,NLMOorigin2,indx
       INTEGER,allocatable::QM1atoms(:),QM2atoms(:),NLMO(:,:)
       integer,allocatable:: NLMOQM1(:),NLMOQM2(:)
-      integer::compareIA(2),QMregIA(2)
+      integer::compareIA(2),QMregIA(2),compareIJ(2),QMregIJ(2)
         double precision, allocatable :: Waa(:),Wab(:) 
 
       COMMON /MACHSP/ IINTLN,IFLTLN,IINTFP,IALONE,IBITWD
@@ -225,6 +225,7 @@ C
             compareIA=(/ i,a+nocc /)
             call findQMregion(compareIA,size(compareIA),NLMOQM1,
      &           size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIA)
+            print*,'ia',I,A
             print*,'QMredIA', QMregIA
             print*, 'value of Eig?', SCR(ICOUNT)
             if (QMregIA(1).eq.2) then
@@ -253,11 +254,16 @@ C
         CALL PUTLST(SCR, 1, 1, 1, SSPIN, LS1OUT)
   500 CONTINUE
       ENDIF
-!#ifdef _DEBUG_LVL0
+#ifdef _DEBUG_LVL0
 !******************************************************************
 !******************************************************************
 ! * Read in CIS matrix and compute the product C^t AC^t is equivalent
 !   to prior excitaiton energies
+!
+! *     Waa integrals here are not equivalent to the Waa integrals of eomcc 
+! *     making comparing wrong. 12/3 ZW 
+! *     Could check logic exclusively on eigenvectors, which are correct
+! *     b/t softwares. 
         print*, "number of occ and virt", nocc,nvirt
         intSize=(nocc*nvirt)**2
         allocate(Waa(intSize),Wab(intSize))
@@ -281,24 +287,153 @@ C
 
 
         deallocate(Waa,Wab)
-!#endif
+#endif
 
 
 
 30    FORMAT (I4,2X,I4)
 !******************************************************************
 !******************************************************************
-!       * DONE MODIFYING CIS COEFF      *
+!       * BEGIN MODIFYING R(IJ,AB)      *
 !******************************************************************
 !******************************************************************
 
+      DO ICASE = 1, 1 + 2 * IUHF
+        IF (ICASE .EQ. 1) THEN
+          ASPIN = 1
+          BSPIN = 2
+        ELSEIF (ICASE .EQ. 2) THEN
+          ASPIN = 1
+          BSPIN = 1
+        ELSEIF (ICASE .EQ. 3) THEN
+          ASPIN = 2
+          BSPIN = 2
+        ENDIF
+
+      LISTS2EX = LS2OUT(ASPIN, BSPIN)
+
+      DO 10 RIRREP = 1, NIRREP
+        LIRREP = DIRPRD(RIRREP,IRREPX)
+        IF (ICASE .EQ. 1) THEN
+          DISSYS = IRPDPD(LIRREP, ISYTYP(1,LISTS2EX))
+          NUMDSS = IRPDPD(RIRREP, ISYTYP(2,LISTS2EX))
+          DISSYA = DISSYS
+          NUMDSA = NUMDSS
+        ELSE
+          DISSYA = IRPDPD(LIRREP, ISYTYP(1,LISTS2EX))
+          NUMDSA = IRPDPD(RIRREP, ISYTYP(2,LISTS2EX))
+          DISSYS = IRPDPD(LIRREP, 18 + ASPIN)
+          NUMDSS = IRPDPD(RIRREP, 20 + ASPIN)
+        ENDIF
 
 
 
+       IF (DISSYA * NUMDSA .GT. 0) THEN
+          I000 = 1
+          I010 = I000 + DISSYS*NUMDSS *IINTFP
+          IF (ICASE .EQ. 1) THEN
+            CALL GETLST(SCR(I000), 1, NUMDSS, 1, RIRREP,
+     $       LISTS2EX)
+            CALL ZERO(SCR(I000),DISSYS*NUMDSS)
+          ELSE ! expands I<J, A<B into IJ;AB
+            CALL GETLST(SCR(I000), 1, NUMDSA, 1, RIRREP,
+     $       LISTS2EX)
+            CALL SYMEXP(RIRREP, POP(1,ASPIN),DISSYA,SCR(I000))
+            CALL SYMEXP2(LIRREP,VRT(1,ASPIN),DISSYS, DISSYA,
+     &         NUMDSS, SCR(I000), SCR(I000))
+            CALL ZERO(SCR(I000),DISSYS*NUMDSS)
+          ENDIF
+          ICOUNT = I000
+          DO 20 JIRREP = 1, NIRREP
+            IIRREP = DIRPRD(JIRREP, RIRREP)
+!       ******** Begin NLS logic *******
+!       If i,j outside of user-defined QM1, then that
+!       element in the vector is 0; 1 otherwise.
 
+            DO 300 J= 1, POP(JIRREP,BSPIN)
+              DO 40 I = 1, POP(IIRREP, ASPIN)
+                DO 50 BIRREP = 1, NIRREP
+                  AIRREP = DIRPRD(LIRREP, BIRREP)
+                  DO 60 B = 1, VRT(BIRREP, BSPIN)
+                    DO 70 A = 1, VRT(AIRREP, ASPIN)
 
+! **NOTE** : Will only implement normal NLS scheme
+!            Once tested, will implement charge transfer
+!            modification. ZW 12/3/2020
 
-!      deallocate(NLMOQM1,NLMOQM2)
+            compareIJ=0
+            QMregIJ=0
+            compareIJ=(/ i,j /)
+            call findQMregion(compareIJ,size(compareIJ),NLMOQM1,
+     &           size(NLMOQM1),NLMOQM2,size(NLMOQM2),QMregIJ)
+            print*,'ia',I,J
+            print*,'QMredIA', QMregIJ
+            if (any(QMregIJ.eq.2)) then
+              SCR(ICOUNT) = 0.0D0
+            else
+              SCR(ICOUNT) =1.0d0
+            endif
+
+!                       IF (ICASE .EQ. 1) THEN
+!
+!                          SCR(ICOUNT) = 1.0D0
+!
+!                       ELSE IF (ICASE .EQ. 2) THEN
+!
+!                          SCR(ICOUNT) = 1.0D0
+!
+!
+!                       ELSE IF (ICASE .EQ. 3) THEN
+!
+!                          SCR(ICOUNT) = 1.0D0
+!
+!                       ENDIF
+
+                    ICOUNT = ICOUNT + 1
+   70             CONTINUE
+   60           CONTINUE
+   50         CONTINUE
+   40       CONTINUE
+  300     CONTINUE
+   20   CONTINUE
+
+      ENDIF
+! ***********************************************************
+! ***********************************************************!
+! ***********************************************************
+! * ICASE=1 is only case in RHF; other ICASE available in UHF
+      IF (ICASE .EQ. 1) THEN
+         CALL PUTLST(SCR(I000), 1, NUMDSS, 1, RIRREP,
+     $               LISTS2EX)
+      ELSE
+C
+C SQUEEZE ARRAY IN PROPER FORM A<B, I<J
+C
+         CALL SQSYM(LIRREP, VRT(1,ASPIN),DISSYA,DISSYS,
+     &              NUMDSS,SCR(I010), SCR(I000))
+         CALL TRANSP(SCR(I010), SCR(I000),NUMDSS,DISSYA)
+         CALL SQSYM(RIRREP,POP(1,ASPIN), NUMDSA, NUMDSS,
+     &              DISSYA, SCR(I010), SCR(I000))
+         CALL TRANSP(SCR(I010), SCR(I000),DISSYA,NUMDSA)
+         CALL PUTLST(SCR(I000), 1, NUMDSA, 1, RIRREP,
+     $               LISTS2EX)
+      ENDIF
+
+   10 CONTINUE
+      ENDDO
+C
+      CALL LOADVEC1(IRREPX,SCR,MAXCOR,IUHF,490,0,443,NSIZEC,
+     &              .FALSE.)
+C
+C  PUT NORMALIZED PROJECTION VECTORS BACK ON LIST
+C
+#ifdef _DEBUG_LVLM
+      Write(6,"(a)")" The checksum of the state spe. core projection"
+      Call checksum(" @-DRIVE_CORE_EE",SCR,NSIZEC,S1)
+#endif
+      CALL UPDATES(IRREPX,SCR,444,0,490,IUHF)
+C
+      RETURN
 
           end subroutine
 
