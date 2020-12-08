@@ -69,9 +69,13 @@ C Angular momentum contribution (rxp + s)
          Am(Icomp) = Am(Icomp) + Ddot(Nao*Nao,Dens,1,Scr2,1)
       Enddo
 
-      Call Putrec(20,"JOBARC",A_string(Iside),Ithr,Om)
+C For excited states <0|S|Psi_k> is zero. This term contribute
+C only to ioniized or attached states. 
+
+      Call Putrec(20,"JOBARC",A_string(Iside),Ithr,Am)
 
 C Lets do the orbital magnetic quadrupole contribution 
+C r(rxp) - (rxp)r
 
       Do Icomp = 1,3
          Call Getrec(20,"JOBARC",Label_Dmom(Icomp),Length,Scr1)
@@ -80,14 +84,18 @@ C Lets do the orbital magnetic quadrupole contribution
       Enddo
 
       Do Icomp = 1, 9
-         Call Getrec(20,"JOBARC",Label_Octp(Icomp),Length,Scr1)
+         Call Getrec(20,"JOBARC",Label_magd(Icomp),Length,Scr1)
          Call Expnd2(Scr1,Scr2,Nao)
          Mq(Icomp) = Mq(Icomp) + Ddot(Nao*Nao,Dens,1,Scr2,1)
       Enddo 
 
 C These are the contributions from the second part of the 
 C magtentic quadrupole operator (L*r) piece. This translate to 
-C usinng dipole moment integrals. 
+C using dipole moment integrals. 
+C This is (r^p) r is evaluated as 
+C  (yd/dz-zd/dy)(x,y,z) =>  (0,-z,y)
+C -(xd/dz-zd/dx)(x,y,z) => -(-z,0,x)
+C  (yd/dx-xd/dy)(x,y,z) =>  (y,-x,0)
 
       Mq(1) = Mq(1)
       Mq(2) = Mq(2) - Dm(3)

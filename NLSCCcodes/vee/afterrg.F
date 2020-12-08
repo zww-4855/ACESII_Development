@@ -17,7 +17,7 @@ C
        CALL SCOPY(NORDER,EVEC(1,J),1,SCR(1,I),1)
 11    CONTINUE
       CALL SCOPY(NORDER*NORDER,SCR,1,EVEC,1)
-#ifdef _DEBUG_LVLM
+#ifdef _DEBUG_LVL0
       write(6,*) "The eigenvectors"
       call output(evec,1,norder,1,norder,norder,norder,1)
 #endif 
@@ -28,8 +28,7 @@ C
 13    CONTINUE
       CALL SCOPY(NORDER,SCR,1,EVALI,1)
 C
-CSSS      IF(IPRINT.GE.10)THEN
-#ifdef _DEBUG_LVL0
+      IF(IPRINT.GE.10)THEN
        WRITE(6,999)
 999    FORMAT(T4,'Eigenvalue',T22,'Real Part',T43,'Imaginary',
      &        ' Part')
@@ -37,9 +36,7 @@ CSSS      IF(IPRINT.GE.10)THEN
         WRITE(6,1000)I,EVALR(I),EVALI(I)
 1000    FORMAT(T6,I6,T21,F20.14,T44,F20.14)
 14     CONTINUE
-#endif 
-CSSS      ENDIF
-
+      ENDIF
       IF(IPRINT.GT.20)THEN
 CSSS       DO 12 I=1,NORDER
        DO 12 I=1,1

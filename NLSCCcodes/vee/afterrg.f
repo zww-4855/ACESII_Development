@@ -35,9 +35,15 @@ C
 13    CONTINUE
       CALL SCOPY(NORDER,SCR,1,EVALI,1)
 C
-CSSS      IF(IPRINT.GE.10)THEN
-CSSS      ENDIF
-
+      IF(IPRINT.GE.10)THEN
+       WRITE(6,999)
+999    FORMAT(T4,'Eigenvalue',T22,'Real Part',T43,'Imaginary',
+     &        ' Part')
+       DO 14 I=1,NORDER
+        WRITE(6,1000)I,EVALR(I),EVALI(I)
+1000    FORMAT(T6,I6,T21,F20.14,T44,F20.14)
+14     CONTINUE
+      ENDIF
       IF(IPRINT.GT.20)THEN
 CSSS       DO 12 I=1,NORDER
        DO 12 I=1,1

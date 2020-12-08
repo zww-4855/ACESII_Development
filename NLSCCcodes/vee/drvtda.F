@@ -6,7 +6,7 @@ C
       INTEGER DIRPRD,DISSIZ
       LOGICAL CIS,RPA,EOMCC,CISD,FULDIAG,INCORE,READGUES,PRINT
       LOGICAL DOUBLE,NONSTD, TRIPLET
-      DIMENSION W(MAXCOR),KROOT(8)
+      DIMENSION W(MAXCOR),KROOT(8),NROOT_ORG(8)
       COMMON/MACHSP/IINTLN,IFLTLN,IINTFP,IALONE,IBITWD
       COMMON/SYMINF/NSTART,NIRREP,IRREP0(255,2),DIRPRD(8,8)
       COMMON/SYMPOP/IRPDPD(8,22),ISYTYP(2,500),ID(18)
@@ -26,7 +26,7 @@ C
       NBAS=NOCCO(1)+NVRTO(1)
       NDIMS = 0
 C
-      PRINT=IFLAGS(1).GE.30 
+      PRINT=IFLAGS(1).GE.0
       CALL IZERO(KROOT,8)
 C
       LISTDIAG=42
@@ -38,21 +38,26 @@ C
       I000=1
       I010=I000+NBAST*NBAST
       CALL DIPLIST(W,W(I010),NBAS,NBAST,IUHF,IRREP)
+#ifdef _DEBUG_LVL0
+      Write(6,"(a)") "  Requested number of roots:"
+      Write(6,"(8(1x,I2))") (Nroot(I),I=1,NIRREP)
+#endif 
+      CALL ICOPY(8,NROOT,1,NROOT_ORG,1)
 C
 C WRITE OUT SOME STUFF
 C
-      IF(PRINT)THEN
+       IF (PRINT) THEN
        IF(FULDIAG)THEN
         WRITE(6,1010)
-1010    FORMAT(T3,'@DRVTDA-I, Roots obtained by full diagonalization.')
+1010    FORMAT(T2,' @DRVTDA-I, Roots obtained by full diagonalization.')
        ELSE
         WRITE(6,1020)
-1020    FORMAT(T3,'@DRVTDA-I, Roots obtained by Davidson method.')
+1020    FORMAT(T2,' @DRVTDA-I, Roots obtained by Davidson method.')
        ENDIF
-      ENDIF
        IF (IPATTERN .NE. 0) THEN
          WRITE(6,*) ' Projection is used in TDA calculation'
        ENDIF
+       ENDIF 
 C    
         IBLOCK = 1
         IF (TRIPLET) IBLOCK = 2
@@ -60,7 +65,6 @@ C
 C LOOP OVER SYMMETRY BLOCKS, READ THE MATRIX IN AND DIAGONALIZE IT
 C
       DO 10 IRREP=1,NIRREP
-
        IF(NROOT(IRREP).EQ.0)GOTO 10
        CALL NEWLST(IRREP,W,MAXCOR,IUHF)
 C This is borrowed from John to debug RPA(D). Commented for standard runs.
@@ -88,23 +92,10 @@ C
         LISTW=23
         NUMDIS=IRPDPD(IRREP,ISYTYP(1,LISTW))        
         IOFF=IOFFAAAA
-        a=1
         DO 11 IDIS=1,NUMDIS
          CALL GETLST(W(IOFF),IDIS,1,1,IRREP,LISTW)
-#ifdef _DEBUG_LVL0
-        Write(6,*) "alpha/alpha part of CIS matrix"
-        call output(W(IOFF),1,NUMAA,1,NUMAA,NUMAA,NUMAA,1)
-#endif
-         a=a+3
          IOFF=IOFF+MATDIM
 11      CONTINUE
-#ifdef _DEBUG_LVL0
-        Write(6,*) "tempalpha/alpha part of CIS matrix"
-#endif
-!#ifdef _DEBUG_LVL0
-!        Write(6,*) "alpha/alpha part of CIS matrix"
-!        call output(W(IOFFAAAA),1,NUMAA,1,NUMAA,NUMAA,NUMAA,1)
-!#endif
         LISTW=24
         NUMDIS=IRPDPD(IRREP,ISYTYP(1,LISTW))        
         IOFF=IOFFBBBB
@@ -126,7 +117,7 @@ C
         NUMDIS=MATDIM
        ENDIF
 C       
-#ifdef _DEBUG_LVL0
+#ifdef _DEBUG_LVLM
         Write(6,*) "The CIS matrix"
         call output(W,1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
 #endif 
@@ -140,7 +131,16 @@ C
          CALL FNDNDIMS(IUHF, W(I010), MAXCOR-I010+1, NDIMS,
      &      IRREP)
 C
+#ifdef _DEBUG_LVLM
+      Write(6,"(a,1x,ES17.9E2)") " The dimension of CIS matrix:",
+     &                              DBLE(NDIMS)
+#endif 
       
+      IF (NDIMS .GT. 5000) THEN
+         Write(6,"(3a)") " The Dimension of the CIS matrix is greater", 
+     &                   " than 5000. Full diagonalization"
+         Write(6,"(a)")  " is not used"
+      ENDIF 
       IF (NDIMS .LE. 5000) THEN
 C
 C DIAGONALIZE PROJECTED TDA MATRIX IN CORE
@@ -183,8 +183,22 @@ C
      &     NSIZEC, IRREP)
       ENDIF
       ENDIF
+
+#ifdef _DEBUG_LVLM
+      Write(6,"(a,1x,ES17.9E2)") " The dimension:", DBLE(NUMDIS)
+#endif 
+C If the IPATTERN (for core projection) is zero, then NDIMS is zero, Test is 
+C trivial, Ajith Perera, 09/2020 
 C
-      IF (IPATTERN .EQ. 0 .OR. NDIMS .GT. 5000) THEN
+CSSS      IF (IPATTERN .EQ. 0 .OR. NDIMS .GT. 5000) THEN
+C
+      IF (IPATTERN .EQ. 0) THEN
+
+      IF (.NOT. (FULDIAG .OR. NROOT(IRREP).GT.15)) THEN
+         Write(6,"(3a)") " The Dimension of the CIS matrix is greater",
+     &                   " than 5000. Full diagonalization"
+         Write(6,"(a)")  " is not used"
+      ENDIF
 C
 C  OBTAIN RELEVANT EIGENVALUES BY DAVIDTDA
 C
@@ -213,9 +227,10 @@ cYAU
         I050=I040+NUMDIS*NUMDIS
         ITOP=I040+NUMDIS
        ELSE
+
+      Write(6,"(2a)") " Roots are searched using the Davidson",
+     &                " algorithm:"
         MAXOFF1=0
-        print*, 'NROOT(IRREP)', NROOT(IRREP)
-        print*
         DO 14 J=1,NROOT(IRREP)
          MAXOFF1=MAX(MAXOFF1,IMAP(J,IRREP))
 14      CONTINUE
@@ -268,10 +283,10 @@ CSSS       CALL PUTLST(W(ILOCEVC),1,IROOT,1,IRREP,LISTVTDA)
 CSSS       CALL PUTLST(W(ILOCEVL),1,IROOT,1,IRREP,LISTETDA)
 C 08/2017, Ajith Perera
 C 
-       CALL UPDMOI(NUMDIS,NUMDIS,IRREP,LISTVTDA,0,0)
-       CALL UPDMOI(NUMDIS,1,IRREP,LISTETDA,0,0)
-       CALL PUTLST(W(ILOCEVC),1,NUMDIS,1,IRREP,LISTVTDA)
-       CALL PUTLST(W(ILOCEVL),1,NUMDIS,1,IRREP,LISTETDA)
+       CALL UPDMOI(IROOT,NUMDIS,IRREP,LISTVTDA,0,0)
+       CALL UPDMOI(IROOT,1,IRREP,LISTETDA,0,0)
+       CALL PUTLST(W(ILOCEVC),1,IROOT,1,IRREP,LISTVTDA)
+       CALL PUTLST(W(ILOCEVL),1,IROOT,1,IRREP,LISTETDA)
 C
 C IF THIS IS A PROPERTY/OPTIMIZATION CALCULATION, THEN COMPUTE
 C THE DENSITY AND STORE IT ON DISK.
@@ -313,7 +328,7 @@ C
 c     I020 = I000 + MAXLEN
       I020 = I010 + MAXLEN
       CALL TRNMOM1(W(I000),W(I010),W(I020),MAXCOR-I020+1,
-     &             NROOT,IUHF)
+     &             NROOT,NROOT_ORG,IUHF)
 C
 C Lets try to do CIS(D) as debugging mechanism of RPA(D). If this works
 C nicely then we will make this option available.A

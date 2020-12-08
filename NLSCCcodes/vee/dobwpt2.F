@@ -213,7 +213,7 @@ C
                     CALL TDENS(IRREPX,SCR,MAXCOR,IUHF,ISIDE,
      &                 Z*(ONE+DFLOAT(1-IUHF)),Z0,ROOT,CORE_SEARCH)
                     IF (IFLAGS(87) .EQ. 8) THEN
-                      CALL PRINTSUM(ROOT,FSTR,CORE_SEARCH)
+                      CALL PRINTSUM(ROOT,FSTR)
                     ELSE
                       CALL CALCFSTR(ROOT,FSTR)
                     ENDIF

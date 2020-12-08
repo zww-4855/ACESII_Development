@@ -13,9 +13,7 @@ CEND
       LOGICAL CIS,RPA,EOMCC,CISD,FULDIAG,INCORE,READGUES
       LOGICAL MBPT2,CC,CCD,RCCD,DRCCD,LCCD,LCCSD,CC2
       LOGICAL EOM_S_RCCD,EOM_S_DRCCD
-      LOGICAL EOM_SF_RCCD,EOM_SF_DRCCD
       LOGICAL NONHF 
-      LOGICAL EOM_S_DXRCCD,EOM_SF_DXRCCD 
       DOUBLE PRECISION ONE,ONEM,TWO,HALF
       DIMENSION ICORE(MAXCOR),IOFFO(2),IOFFV(2)
 C
@@ -37,21 +35,8 @@ C
      &         IFLAGS(h_IFLAGS_excite)  .EQ. 15)
       NONHF =  (IFLAGS(h_IFLAGS_nonhf)  .GT. 0)
 
-      EOM_S_DRCCD   = (IFLAGS(h_IFLAGS_excite) .EQ.13)
-      EOM_S_RCCD    = (IFLAGS(h_IFLAGS_excite) .EQ.15)
-      EOM_SF_RCCD   = (IFLAGS(h_IFLAGS_excite) .EQ.17)
-      EOM_SF_DRCCD  = (IFLAGS(h_IFLAGS_excite) .EQ.18)
-      EOM_S_DXRCCD  = (IFLAGS(h_IFLAGS_excite) .EQ.19)
-      EOM_SF_DXRCCD = (IFLAGS(h_IFLAGS_excite) .EQ.20)
-
-C Form lists and quantities needed for doubles correction
-
-#ifdef _D_CIS 
-      CIS = .TRUE.
-      CALL FORM_MODF_HBAR_MBEJ_4EE_CORR(ICORE,MAXCOR,IUHF)
-      CALL FORM_EXTRA_LISTS(ICORE,MAXCOR,IUHF)
-      IF (NONHF) CALL FORM_MODF_FBAR(ICORE,MAXCOR,IUHF,IMULT) 
-#endif 
+      EOM_S_DRCCD = (IFLAGS(h_IFLAGS_excite) .EQ.13)
+      EOM_S_RCCD  = (IFLAGS(h_IFLAGS_excite) .EQ.15)
 
 C Occ-Occ block
 
@@ -84,7 +69,7 @@ C These methods are designated as EOM(Sf)-RCCD or  EOM(Sf)-DRCCD
 
           HEFF = .FALSE.
           TDA  = .FALSE. 
-          IF (EOM_S_DRCCD .OR. EOM_S_RCCD .OR. EOM_S_DXRCCD)  THEN
+          IF (EOM_S_DRCCD .OR. EOM_S_RCCD) THEN
 
 C This is EOM-drCCD or EOM-rCCD. Here we use the full Hbar of drCCD or rCCD
 C These methods are designated as EOM(S)-RCCD or  EOM(S)-DRCCD
@@ -98,19 +83,8 @@ C These methods are designated as EOM(S)-RCCD or  EOM(S)-DRCCD
 
 C If Hbar(i,j) and Hbar(a,b) must be used; load them here. 
          
-          IF (IMULT .EQ. 1) THEN
-             CALL GETLST(ICORE(I000),1, 1, 1, 1, 91)
-             CALL GETLST(ICORE(I020),1, 1, 1, 1, 92)
-          ELSE IF (IMULT .EQ. 2) THEN
-             IF (DRCCD) THEN
-                 CALL GETLST(ICORE(I000),1, 1, 1, 1, 91)
-                 CALL GETLST(ICORE(I020),1, 1, 1, 1, 92)
-             ELSE 
-                 CALL GETLST(ICORE(I000),1, 1, 1, 10, 91)
-                 CALL GETLST(ICORE(I020),1, 1, 1, 10, 92)
-             ENDIF 
-          ENDIF
-
+          CALL GETLST(ICORE(I000),1, 1, 1, 1, 91)
+          CALL GETLST(ICORE(I020),1, 1, 1, 1, 92)
           IF (IUHF .EQ. 1) THEN
             CALL GETLST(ICORE(I010),1, 1, 1, 2, 91)
             CALL GETLST(ICORE(I030),1, 1, 1, 2, 92)
@@ -123,8 +97,7 @@ C the Hbar(a,b) and Hbar(i,j). But for EOM(SF)-RCC or -DRCC we need to
 C add them here.
 
           IF (NONHF) THEN
-             IF (RPA .OR. EOM_SF_RCCD .OR. EOM_SF_DRCCD .OR.
-     &           EOM_SF_RXCCD) THEN
+             IF (RPA .OR. EOM_SFRCCD .OR. EOM_SFDRCCD) THEN
                 CALL GETLST(ICORE(I000),1, 1, 1, 3, 91)
                 CALL GETLST(ICORE(I020),1, 1, 1, 3, 92)
                 IF (IUHF .EQ. 1) THEN
@@ -226,7 +199,7 @@ CSSS              IF (DRCCD) CALL SSCAL(ISIZE,HALF,ICORE(I040),1)
      &                                        IEND,MAXCOR)
            CALL GETALL(ICORE(I040),ISIZE,1,LISTAA)
            IF (TDA) CALL VMINUS(ICORE(I040),ISIZE)
-          ENDIF
+          enDIF
 
 C Reorder; (ai,bj) -> (ab,ij)
 

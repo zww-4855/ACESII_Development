@@ -41,247 +41,18 @@ c sympop.com : begin
       common /sympop/ irpdpd,       isytyp,        id
 c sympop.com : end
 
-      logical ispar,coulomb
-      double precision paralpha, parbeta, pargamma
-      double precision pardelta, Parepsilon
-      double precision Fae_scale,Fmi_scale,Wmnij_scale,Wmbej_scale
-      double precision Gae_scale,Gmi_scale
-      common/parcc_real/ paralpha,parbeta,pargamma,pardelta,Parepsilon
-      common/parcc_log/ ispar,coulomb
-      common/parcc_scale/Fae_scale,Fmi_scale,Wmnij_scale,Wmbej_scale,
-     &                   Gae_scale,Gmi_scale 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-c This common block contains the IFLAGS and IFLAGS2 arrays for JODA ROUTINES
-c ONLY! The reason is that it contains both arrays back-to-back. If the
-c preprocessor define MONSTER_FLAGS is set, then the arrays are compressed
-c into one large (currently) 600 element long array; otherwise, they are
-c split into IFLAGS(100) and IFLAGS2(500).
-
-c iflags(100)  ASVs reserved for Stanton, Gauss, and Co.
-c              (Our code is already irrevocably split, why bother anymore?)
-c iflags2(500) ASVs for everyone else
-
-      integer        iflags(100), iflags2(500)
-      common /flags/ iflags,      iflags2
-      save   /flags/
-
-
-
-
-
       UHF = .FALSE.
       UHF = (IUhf .EQ. 1)
 
 C First Hbar(A,E), Hbar(M,I) and Hbar(M,E) 
 
-      IRREPX =1
+      IRREPX =1 
       HHA_LENGTH = IRPDPD(IRREPX,21)
       HHB_LENGTH = IRPDPD(IRREPX,22)
       CALL Getlst(Work,1,1,1,1,91)
       Call Checksum("FMI", Work, HHA_LENGTH,S)
-      IF (ISPAR) THEN
-         Call Getlst(Work,1,1,1,9,91)
-         Call Checksum("FMI", Work, HHA_LENGTH,S)
-      ENDIF
-      IF (UHF) Then
-         Call Getlst(Work,1,1,1,2,91)
-         Call Checksum("Fmi", Work, HHB_LENGTH,S)
-         IF (ISPAR) THEN
-            Call Getlst(Work,1,1,1,10,91)
-            Call Checksum("Fmi", Work, HHB_LENGTH,S)
-         ENDIF
-      ENDIF
+      IF (UHF) Call Getlst(Work,1,1,1,2,91)
+      IF (UHF) Call Checksum("Fmi", Work, HHB_LENGTH,S)
 
       HPA_LENGTH = IRPDPD(IRREPX,9)
       HPB_LENGTH = IRPDPD(IRREPX,10)
@@ -294,18 +65,8 @@ C First Hbar(A,E), Hbar(M,I) and Hbar(M,E)
       PPB_LENGTH = IRPDPD(IRREPX,20)
       CALL Getlst(Work,1,1,1,1,92)
       Call Checksum("FEA", Work, PPA_LENGTH, s)
-      If (Ispar) THEN
-         CALL Getlst(Work,1,1,1,9,92)
-         Call Checksum("FEA", Work, PPA_LENGTH, s)
-      Endif
-      IF (UHF) THEN
-        Call Getlst(Work,1,1,1,2,92)
-        Call Checksum("Fea", Work, PPB_LENGTH,S)
-        If (Ispar) Then
-           Call Getlst(Work,1,1,1,10,92)
-           Call Checksum("Fea", Work, PPB_LENGTH,S)
-        Endif
-      Endif
+      IF (UHF) Call Getlst(Work,1,1,1,2,92)
+      IF (UHF) Call Checksum("Fea", Work, PPB_LENGTH,S)
 
 C Hbar(MN,IJ)
   
@@ -392,7 +153,7 @@ C Hbar(MB,EJ)
          Call Getall(Work, BBAA_LENGTH_MBEJ, IRREPX, 57)
          Call Checksum("BBAA_MBEJ", Work, BBAA_LENGTH_MBEJ,S)
          Call Getall(Work, ABAB_LENGTH_MBEJ, IRREPX, 58)
-         Call Checksum("ABAB_MBEJ", Work, ABAB_LENGTH_MBEJ,S)
+         Call Checksum("ABAB_MBEJ", Work, AABB_LENGTH_MBEJ,S)
          Call Getall(Work, BABA_LENGTH_MBEJ, IRREPX, 59)
          Call Checksum("BABA_MBEJ", Work, BABA_LENGTH_MBEJ,S)
       Else
@@ -404,7 +165,7 @@ C Hbar(MB,EJ)
          Call Getall(Work, AABB_LENGTH_MBEJ, IRREPX, 56)
          Call Checksum("AABB_MBEJ", Work, AABB_LENGTH_MBEJ,S)
          Call Getall(Work, ABAB_LENGTH_MBEJ, IRREPX, 58)
-         Call Checksum("ABAB_MBEJ", Work, ABAB_LENGTH_MBEJ,S)
+         Call Checksum("ABAB_MBEJ", Work, AABB_LENGTH_MBEJ,S)
       Endif
 
 C Hbar(AB,CI)
@@ -454,27 +215,6 @@ CSSS         Call Checksum("AAAA_IAJK", Work, AAAA_LENGTH_IJKA,S)
          Call Getall(Work, ABBA_LENGTH_IJKA, IRREPX, 110)
          Call Checksum("ABBA_IAJK", Work, ABBA_LENGTH_IJKA,S)
       Endif
-
-C Hbar(AB,CD)
-      Write(*,*)
-      IF (IFLAGS(93) .EQ. 0) THEN
-      IF (UHF) Then
-         AAAA_LENGTH_ABCD = IDSYMSZ(IRREPX,ISYTYP(1,231),ISYTYP(2,231))
-         BBBB_LENGTH_ABCD = IDSYMSZ(IRREPX,ISYTYP(1,232),ISYTYP(2,232))
-         ABAB_LENGTH_ABCD = IDSYMSZ(IRREPX,ISYTYP(1,233),ISYTYP(2,233))
-         Call Getall(Work, AAAA_LENGTH_ABCD, IRREPX, 231)
-         Call Checksum("AAAA_ABCD", Work, AAAA_LENGTH_ABCD,S)
-         Call Getall(Work, BBBB_LENGTH_ABCD, IRREPX, 232)
-         Call Checksum("BBBB_ABCD", Work, BBBB_LENGTH_ABCD,S)
-         Call Getall(Work, ABAB_LENGTH_ABCD, IRREPX, 233)
-         Call Checksum("ABAB_ABCD", Work, ABAB_LENGTH_ABCD,S)
-      Else
-         ABAB_LENGTH_ABCD = IDSYMSZ(IRREPX,ISYTYP(1,233),ISYTYP(2,233))
-         Call Getall(Work, ABAB_LENGTH_ABCD, IRREPX, 233)
-         Call Checksum("ABAB_ABCD", Work, ABAB_LENGTH_ABCD,S)
-      Endif
-      Endif 
-
 
       Return
       End

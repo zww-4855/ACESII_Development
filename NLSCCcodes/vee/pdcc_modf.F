@@ -42,10 +42,6 @@ C
        IF(.NOT.CIS)THEN
         CALL GETLST(ICORE(I010),1,1,1,ISPIN+8,91)
         CALL GETLST(ICORE(I020),1,1,1,ISPIN+8,92)
-#ifdef _DEBUG_LVL0
-        call checksum("List91-9:",icore(i010),NFMI(ISPIN),s)
-        call checksum("List92-9:",icore(i020),NFEA(ISPIN),s)
-#endif 
        ENDIF
        IOFFO=I000
        IOFFV=NOCCO(ISPIN)*IINTFP+I000
@@ -71,10 +67,6 @@ C
        ENDIF
        CALL PUTLST(ICORE(I010),1,1,1,ISPIN+8,91)
        CALL PUTLST(ICORE(I020),1,1,1,ISPIN+8,92)
-#ifdef _DEBUG_LVL0
-        call checksum("List91-9:",icore(i010),NFMI(ISPIN),s)
-        call checksum("List92-9:",icore(i020),NFEA(ISPIN),s)
-#endif 
 10    CONTINUE
 C
       RETURN

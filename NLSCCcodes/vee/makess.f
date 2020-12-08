@@ -55,18 +55,11 @@ C         write(6,*) ' non-hf contributions are added in makess'
 C
 C   NON HARTREE FOCK ORBITALS ARE USED -> ADD IN OFF-DIAGONAL PARTS F
 C         
-         PRINT*, 'INSIDE FXN: NON-HF CONTRIBUTION'
          CALL GETLST(ICORE(I000),1, 1, 1, 3, 91)
          CALL GETLST(ICORE(I020),1, 1, 1, 3, 92)
-         print*, 'i000&i020',I000,I020
-         call output(ICORE(I000),1,3,1,3,3,3,1)
-         call output(ICORE(I002),1,3,1,3,3,3,1)
          IF (IUHF .EQ. 1) THEN
-           print*, 'inside UHF call'
            CALL GETLST(ICORE(I010),1, 1, 1, 4, 91)
            CALL GETLST(ICORE(I030),1, 1, 1, 4, 92)
-         call output(ICORE(I010),1,3,1,3,3,3,1)
-         call output(ICORE(I030),1,3,1,3,3,3,1)
          ENDIF
        ELSE
          CALL IZERO(ICORE(I000),I040-1)
@@ -82,8 +75,6 @@ C
         IOFFE=IOFFE+NOCC*IINTFP
         IOFFTO=IOFFTO+NOCC*NOCC*IINTFP
 10     CONTINUE
-        print*,'added eigenvalues'
-         call output(ICORE(IOFFTO),1,3,1,3,3,3,1)
        DO 11 IRREP=1,NIRREP
         NVRT=VRT(IRREP,1)
         CALL SAXPY(NVRT,ONE,ICORE(IOFFE),1,ICORE(IOFFTV),NVRT+1)
@@ -120,7 +111,6 @@ C READ IN ALL OF THE TWO-PARTICLE CONTRIBUTIONS, RESORT THEM AND
 C HOLD IN CORE
 C
       DO 100 ISPIN=1,1+IUHF
-        PRINT*, 'ISPIN:', ISPIN,IUHF
        IF(CIS)THEN
         LISTAA=22+ISPIN
         ISIZE=ISYMSZ(ISYTYP(1,LISTAA),ISYTYP(1,LISTAA))
@@ -175,7 +165,6 @@ C
 cmn       IF(iuhf.eq.0.and.(IRES.NE.1.OR.CIS).or.
 cmn     &    (cis.and.iflags(87).eq.1).or.
 cmn     &    (cis.and.iflags(87).eq.6))THEN
-        print*, 'Dumped to ', LISTDUMP
         CALL PUTALL(ICORE(I040),ISIZE,1,LISTDUMP)
 cmn       ENDIF
 C

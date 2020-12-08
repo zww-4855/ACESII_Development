@@ -127,7 +127,6 @@ C
           IF (SCR(IOFF+I) .GT. EMINPREV .AND. SCR(IOFF+I) .LT. EMIN)
      &       EMIN = SCR(IOFF+I)
         ENDDO
-        write(6,"(2I2,1x,F15.10)") jcalc,icalc, Emin
         IF (EMIN .LT. -4.0) THEN
 C
 C   CORE-LEVEL ENERGY IS FOUND
@@ -142,7 +141,6 @@ C
 C
 C  FIND NEXT CORE-SITE
 C
-        write(6,"(2I2,1x,F15.10)") jcalc,icalc, Emin
         IF (JCALC .LT. ICALC) GOTO 100
 C
 C  OCCUPIED ORBITALS NEAR EMIN ARE OF 'INTEREST', THIS DEPENDS ON IOPT
@@ -194,12 +192,10 @@ CSS        DO ISPIN = 1, 1 + IUHF
         ELSEIF (CORE_WINDOW .GT. 0 .AND. .NOT. NONSTD) THEN
 
         CALL DRIVE_CORE_TDA_WINDOW(SCR,MAXCOR,IRREPX,IUHF)
-        IF (IOPT .EQ. 1) THEN
         write(6,*)
         write(6,"(a,a)") '  Core excited state are searched using',
      &                   ' the core-window defined by the user'
         Write(6,"(a)")   '  input'
-        ENDIF 
         ENDIF 
 C
       ELSEIF (IPATTERN .EQ. 2) THEN

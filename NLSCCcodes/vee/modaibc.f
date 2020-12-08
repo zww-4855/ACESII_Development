@@ -121,7 +121,12 @@ C
        DO 310 IRREPDO=1,NIRREP
         DISSYW=IRPDPD(IRREPDO,ISYTYP(1,LISTW))
         NUMDSW=IRPDPD(IRREPDO,ISYTYP(2,LISTW))
-        NUMDSW0=IRPDPD(IRREPDO,18+ISPIN)
+CSSS        NUMDSW0=IRPDPD(IRREPDO,18+ISPIN)
+C This was wrong and I am not sure why this was waited to be
+C found on Oct 5 2020 (3 days after a historical election)
+C This worked because most cases vrt*vrt >>> occ*occ. 
+
+        NUMDSW0=IRPDPD(IRREPDO,20+ISPIN)
         DISSYZ=IRPDPD(IRREPDO,ISYTYP(1,LISTZ))
         NUMDSZ=IRPDPD(IRREPDO,ISYTYP(2,LISTZ))
         MAXZ=MAX(NUMDSZ,DISSYZ)

@@ -87,7 +87,7 @@ C
       
 #ifdef _DEBUG_LVL0
       call checksum("doo",DOO,LENOO(1)+IUHF*LENOO(2),s)
-      call checksum("dvv",DVV,LENvv(1)+IUHF*LENvv(2),s)
+      call checksum("dvv",DOO,LENvv(1)+IUHF*LENvv(2),s)
       call checksum("dvo",DVO,LENvO(1)+IUHF*LENvO(2),s)
       call checksum("dvo",DOV,LENvO(1)+IUHF*LENvO(2),s)
 #endif 

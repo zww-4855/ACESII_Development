@@ -227,11 +227,13 @@ C
       if (DONLS) THEN
         PRINT*, 'CALLING DRIVE_NLS.F FROM DOEOMEE.F'
         CALL DRIVE_NLS(ICORE,MAXCOR/IINTFP,IRREPX,IUHF,IROOT+1)
+        print*,'IPROJECT: ',IPROJECT
         DO ITOP=1,2
              CALL PUTEXCP(IUHF, ICORE, MAXCOR/IINTFP, IRREPX,
      &                   IPROJECT, LISTH0, ICOLPR1, NSIZEC,ITOP)
         enddo
       endif
+      print*,'OUTSIDE DRIVE_NLS.F'
 ! **********************************************
 ! **********************************************
 ! ********************************************** 

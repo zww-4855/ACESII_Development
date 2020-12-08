@@ -38,9 +38,6 @@ C
       DO 10 ISPIN=3,3-2*IUHF,-1
         CALL ZEROLIST(ICORE,MAXCOR,LISTT2IN-1+ISPIN)
  10   CONTINUE
-#ifdef _DEBUG_LVLM
-        call Check_vee_lists_init(icore,Maxcor,Irrepx,Iuhf,Iside)
-#endif 
 C
 C CALCULATE H x C1 -> C1
 C
@@ -120,7 +117,7 @@ C
 C
       ENDIF 
 C
-#ifdef _DEBUG_LVLM
+#ifdef _DEBUG_LVL0
       call Check_vee_lists(icore,Maxcor,Irrepx,Iuhf,Iside)
 #endif 
       CALL TIMER(1)      

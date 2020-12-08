@@ -37,8 +37,8 @@ C
        R(INDXF(I,1,MAXORD))=SDOT(NSIZEC,SCR(I000),1,SCR(I010),1) 
 14    CONTINUE
 C
-#ifdef _DEBUG_LVLM
-      do i=1,ndimr
+#ifdef _DEBUG_LVL0
+      do i=1, ndimr
       do j=1,ndimr
       call getlst(scr(i000),iget(i),1,1,iside,470)
       call getlst(scr(i010),iget(i),1,1,iside,470)

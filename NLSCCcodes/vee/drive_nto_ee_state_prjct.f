@@ -411,6 +411,16 @@ CYCP             AA = IMAP_A(A+VRB_OFF(IIRREP))
                 ENDIF 
               ENDIF
 
+CSSS                 IF (DABS(O_SCALE(I,IIRREP)) .GT. THRES .AND.
+CSSS     +               DABS(V_SCALE(A,AIRREP)) .GT. THRES) THEN
+CSSS                     IF (IORB_A(IROOT) .EQ. II) THEN
+
+C               IF (I .EQ. 1 .AND. A .EQ. 1) THEN
+C                   WRITE(6,*) 'IIRREP/AIRREP',IIRREP,AIRREP
+C                   SCR(ICOUNT) = 1.0D0
+C               ELSE 
+C                   SCR(ICOUNT) = 0.0D0
+C               ENDIF 
 
               ICOUNT = ICOUNT + 1
     2       CONTINUE
@@ -508,10 +518,6 @@ C
 
       ENDIF
 
-! ***********************************************************
-! ***********************************************************!
-! ***********************************************************
-! * ICASE=1 is only case in RHF; other ICASE available in UHF
       IF (ICASE .EQ. 1) THEN
          CALL PUTLST(SCR(I000), 1, NUMDSS, 1, RIRREP,
      $               LISTS2EX)

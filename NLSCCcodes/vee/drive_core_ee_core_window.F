@@ -36,10 +36,10 @@ C
       PROJECT_SINGLES = (Iflags2(h_IFLAGS2_prjct_single) .NE. 0)
 
 #ifdef _DEBUG_LVL0
-      Write(6,"(a,a)") "  Entering the core projection for", 
+      Write(6,"(a,a)") " Entering the core projection for", 
      &                 " core-window option"
 #endif 
-      Write(6,"(a,l,8i2)") "  Project singles and window: ", 
+      Write(6,"(a,l,8i2)") " Project singles and window: ", 
      &                     PROJECT_SINGLES,(iwindow(i),i=1,NirreP)
       Write(6,*)
 C

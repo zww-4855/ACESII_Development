@@ -77,15 +77,14 @@ C IFLAGS(87) refers to EXCITE keyword ILFAGS(2) is CALCLEVEL.
       RPA  = (IFLAGS(2).EQ. 48 .AND. IFLAGS(87).EQ.17) .OR. 
      &       (IFLAGS(2).EQ. 49 .AND. IFLAGS(87).EQ.18) .OR.
      &       (IFLAGS(2).EQ. 48 .AND. IFLAGS(87).EQ.15) .OR.
-     &       (IFLAGS(2).EQ. 49 .AND. IFLAGS(87).EQ.13) .OR.
-     &       (IFLAGS(2).EQ. 49 .AND. IFLAGS(87).EQ.19) .OR.
-     &       (IFLAGS(2).EQ. 49 .AND. IFLAGS(87).EQ.20) 
+     &       (IFLAGS(2).EQ. 49 .AND. IFLAGS(87).EQ.13) 
 
       EOMCC=IFLAGS(87).EQ.3  .OR. IFLAGS(87) .EQ. 7  .OR.
      &      IFLAGS(87).EQ.8  .OR. IFLAGS(87) .EQ. 9  .OR. 
      &      IFLAGS(87).EQ.4  .OR. IFLAGS(87) .EQ. 10 .OR. 
      &      IFLAGS(87).EQ.11 .OR. IFLAGS(87) .EQ. 12 .OR. 
      &      IFLAGS(87).EQ.14 .OR. IFLAGS(87) .EQ. 16 
+
 C
 C  determine reference state (IFLAGS2(117) referes to EOMREF)
 C
@@ -96,9 +95,8 @@ c        iflags2(117) = 1
         CCSD  = IFLAGS2(117) .EQ. 1
         MBPT2 = IFLAGS2(117) .EQ. 2
         CCD   = IFLAGS2(117) .EQ. 3
-        RCCD  = (IFLAGS2(117).EQ. 10 .OR. IFLAGS(2) .EQ. 48)
-        DRCCD = (IFLAGS2(117).EQ. 11 .OR. IFLAGS2(117) .EQ. 15
-     &          .OR. IFLAGS(2) .EQ. 49)
+        RCCD  = (IFLAGS2(117) .EQ. 10 .OR. IFLAGS(2) .EQ. 48)
+        DRCCD = (IFLAGS2(117) .EQ. 11 .OR. IFLAGS(2) .EQ. 49)
         LCCD  = IFLAGS2(117) .EQ. 6
         LCCSD = IFLAGS2(117) .EQ. 7 
     
@@ -115,8 +113,7 @@ C
       ELSE IF (RPA) THEN
 
         RCCD  = (IFLAGS2(117) .EQ. 10 .OR. IFLAGS(2) .EQ. 48)
-        DRCCD = (IFLAGS2(117) .EQ. 11 .OR. IFLAGS2(117) .EQ. 15 
-     &          .OR. IFLAGS(2) .EQ. 49)
+        DRCCD = (IFLAGS2(117) .EQ. 11 .OR. IFLAGS(2) .EQ. 49)
       ENDIF 
 C
       ESPROP=IFLAGS(91).NE.0
@@ -428,7 +425,7 @@ C Ajith Perera.
          IPROJECT = 4
       ELSE
          IWINDOW(1)=0
-         IF (IPROJECT .NE. 1) IPROJECT = 2
+         IPROJECT = 2
       ENDIF
 
 C If the user specified the core site he wants, do not try to automatically

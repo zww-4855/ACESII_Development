@@ -61,7 +61,7 @@ C
 C
 C BUILD HBAR MATRIX
 C
-        DO 50 I=1,NSIZEC
+       DO 50 I=1,NSIZEC
         CALL ZERO(SCR(IA),NSIZEC)
         SCR(IA-1+I)=ONE
         IF(IUHF.EQ.0)THEN
@@ -114,8 +114,8 @@ C
 c
 CSSS       write(6,*)' denominator '
 CSSS       write(6,'((4f20.10))')(scr(j),j=i0,i0+ndimr*ndimr-1,ndimr+1)
-       write(6,*)' right hbar matrix '
-       call output(scr(i0),1,ndimr,1,ndimr,ndimr,ndimr,1)
+CSSS       write(6,*)' right hbar matrix '
+CSSS       call output(scr(i0),1,ndimr,1,ndimr,ndimr,ndimr,1)
 CSSS       Write(6,*)' left hbar matrix '
 CSSS      call output(scr(i0l),1,ndimr,1,ndimr,ndimr,ndimr,1)
 c
@@ -194,7 +194,7 @@ C
          CALL TDENS  (IRREPX,SCR(I0),MAXCOR,IUHF,ISIDE,
      &                (ONE+DFLOAT(1-IUHF)),Z0,EVAL,CORE_SEARCH)
 C
-         CALL PRINTSUM(EVAL,FSTR,.FALSE.)
+         CALL PRINTSUM(EVAL,FSTR)
 c
         ENDIF
         IOFFEVCR=IOFFEVCR+NDIMR

@@ -8,8 +8,6 @@ C
       LOGICAL MBPT2,CC,CCD,RCCD,DRCCD,LCCD,LCCSD,CC2
       LOGICAL METH, CIS,RPA,EOMCC,CISD,FULDIAG,INCORE,READGUES
       LOGICAL EOM_S_RCCD,EOM_S_DRCCD,EOM_SF_RCCD,EOM_SF_DRCCD
-      LOGICAL EOM_S_DXRCCD,EOM_SF_DXRCCD
-      LOGICAL ADD_DBLS_CORR
       DOUBLE PRECISION W(MAXCOR)
 
       COMMON/MACHSP/IINTLN,IFLTLN,IINTFP,IALONE,IBITWD
@@ -27,22 +25,20 @@ C
       ELSE
          LISTDIAG = 56
       ENDIF 
-      EOM_SF_RCCD   = (IFLAGS(h_IFLAGS_excite) .EQ.17) 
-      EOM_SF_DRCCD  = (IFLAGS(h_IFLAGS_excite) .EQ.18)
-      EOM_S_RCCD    = (IFLAGS(h_IFLAGS_excite) .EQ.15) 
-      EOM_S_DRCCD   = (IFLAGS(h_IFLAGS_excite) .EQ.13)
-      EOM_S_DXRCCD  = (IFLAGS(h_IFLAGS_excite) .EQ.19)
-      EOM_SF_DXRCCD = (IFLAGS(h_IFLAGS_excite) .EQ.20)
+      EOM_SF_RCCD  = (IFLAGS(h_IFLAGS_excite) .EQ.17) 
+      EOM_SF_DRCCD = (IFLAGS(h_IFLAGS_excite) .EQ.18)
+      EOM_S_RCCD   = (IFLAGS(h_IFLAGS_excite) .EQ.15) 
+      EOM_S_DRCCD  = (IFLAGS(h_IFLAGS_excite) .EQ.13)
          
       Write(6,*)
       IF (CIS) THEN
          Write(6,"(a)") " CIS H(ai,bj) is fully diagonalized" 
       ELSEIF (RPA) THEN
          IF (EOM_SF_RCCD) THEN
-            Write(6,"(a,a)") " EOM(SF)-RCCD (RPA) Heff(ai,bj) is",
+            Write(6,"(a,a)") " EOM(Sf)-CCD (RPA) Heff(ai,bj) is",
      +                       " fully diagonalized"    
          ELSEIF(EOM_SF_DRCCD) THEN
-            Write(6,"(a,a)") " EOM(SF)-RCCD (DRPA) Heff(ai,bj) is",
+            Write(6,"(a,a)") " EOM(Sf)-RCCD (DRPA) Heff(ai,bj) is",
      +                       " fully diagonalized"    
          ELSEIF (EOM_S_RCCD) THEN
             Write(6,"(a,a)") " EOM(S)-RCCD Heff(ai,bj) is fully",
@@ -50,18 +46,11 @@ C
          ELSEIF (EOM_S_DRCCD) THEN
             Write(6,"(a,a)") " EOM(S)-DRCCD Heff(ai,bj) is fully ",
      +                    " diagonalized" 
-         ELSEIF (EOM_S_DXRCCD) THEN
-            Write(6,"(a,a)") " EOM(S)-DXRCCD Heff(ai,bj) is fully ",
-     +                       " diagonalized"
-         ELSEIF (EOM_SF_DXRCCD) THEN
-            Write(6,"(a,a)") " EOM(SF)-DXRCCD Heff(ai,bj) is fully ",
-     +                       " diagonalized"
          ENDIF 
       ENDIF 
 
 C LOOP OVER SYMMETRY BLOCKS, READ THE MATRIX IN AND DIAGONALIZE IT
 C
-      JROOT = 0
       DO IRREP=1,NIRREP
 
 C RHF block
@@ -150,7 +139,7 @@ C Do a full non-symmetric diagonalization
          I040 = I030 + MATDIM * MATDIM
          I050 = I040 + MATDIM * MATDIM
          IEND = I050
-          IF (IEND .GT. MAXCOR) CALL INSMEM("@--eom_rcc_diags",IEND,
+          IF (IEND .GT. MAXCOR) CALL INSMEM("RCL_DRVRPA",IEND,
      +                                       MAXCOR)
 
           CALL DGEEV("V","V",MATDIM,W(I000),MATDIM,W(I010),W(I020),
@@ -173,40 +162,16 @@ C Do a full non-symmetric diagonalization
        Write(6,"(a)") "The sorted right eigenvectors"
        call output(W(I040),1,MATDIM,1,MATDIM,MATDIM,MATDIM,1)
 #endif 
-
-       I100 = 1
-       I110 = I100 + MATDIM
-       I120 = I110 + MATDIM*MATDIM
-       I130 = I120 + MATDIM*MATDIM
-       I140 = I130 + MATDIM*8
-       IEND = I140
-       IF (IEND .GT. MAXCOR) CALL INSMEM("@-eom_rcc_diags",IEND,MAXCOR)
-       MEMLEFT = MAXCOR - IEND 
-
-       CALL DCOPY(MATDIM,W(I010),1,W(I100),1)
-       CALL DCOPY(MATDIM*MATDIM,W(I030),1,W(I110),1)
-       CALL DCOPY(MATDIM*MATDIM,W(I040),1,W(I120),1)
-
-       CALL DZERO(W(I130),MATDIM*8)
-       ADD_DBLS_CORR = .TRUE.
-
-       IF (ADD_DBLS_CORR) THEN
-       CALL NEWLST(IRREP,W(IEND),LENGTH,IUHF)
-       CALL FORM_DBLS_CORRECTNS_2RCC(W(I100),W(I110),W(I120),
-     +                               W(I130),W(IEND),
-     +                               MEMLEFT,IUHF,MATDIM,IRREP,
-     +                               IMULT,EOM_SF_RCCD,EOM_SF_DRCCD)
-       ENDIF 
        
-       IF (IUHF .EQ. 0) CALL PROCESS_RHF_CCD_ROOTS(W(I120),W(I110),
-     +                       W(I100),W(I130),MATDIM,IRREP,1,RPA,
+       IF (IUHF .EQ. 0) CALL PROCESS_RHF_CCD_ROOTS(W(I040),W(I030),
+     +                       W(I010),MATDIM,IRREP,1,RPA,
      +                       EOM_SF_RCCD,EOM_SF_DRCCD,
-     +                       EOM_S_RCCD,EOM_S_DRCCD,IMULT,JROOT)
+     +                       EOM_S_RCCD,EOM_S_DRCCD,IMULT)
 
-       IF (IUHF .EQ. 1) CALL PROCESS_UHF_CCD_ROOTS(W(I120),W(I110),
-     +                       W(I100),W(I130),MATDIM,NUMAA,NUMBB,IRREP,
-     +                       IUHF,RPA,EOM_SF_RCCD,EOM_SF_DRCCD,
-     +                       EOM_S_RCCD,EOM_S_DRCCD,JROOT)
+       IF (IUHF .EQ. 1) CALL PROCESS_UHF_CCD_ROOTS(W(I040),W(I030),
+     +                       W(I010),MATDIM,NUMAA,NUMBB,IRREP,IUHF,
+     +                       RPA,EOM_SF_RCCD,EOM_SF_DRCCD,
+     +                       EOM_S_RCCD,EOM_S_DRCCD)
 
       ENDDO 
 

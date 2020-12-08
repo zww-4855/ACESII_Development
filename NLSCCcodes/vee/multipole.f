@@ -17,7 +17,7 @@
       Dimension Am_r(3),Am_l(3),Dm_r(3),Dm_l(3)
       Dimension Mq_r(3),Mq_l(3)
       Dimension A_strength(3),Q_strength(9),O_strength(10)
-      Dimension D_strength(3),M_strength(9)
+      Dimension D_strength(3),M_strength(27)
       Character*8 Q_string(2),O_string(2),A_string(2)
       Character*8 D_string(2),M_string(2)
 
@@ -102,12 +102,12 @@ C Oxxz;rz,Oyyx;rx,Oyyz;rz,Ozzx;rx,Ozzy;ry)
       M_strength(19) = Mq_r(7)*Dm_l(1)+Mq_l(7)*Dm_r(1)
       M_strength(20) = Mq_r(7)*Dm_l(2)+Mq_l(7)*Dm_r(2)
       M_strength(21) = Mq_r(7)*Dm_l(3)+Mq_l(7)*Dm_r(3)
-      M_strength(20) = Mq_r(8)*Dm_l(1)+Mq_l(8)*Dm_r(1)
-      M_strength(21) = Mq_r(8)*Dm_l(2)+Mq_l(8)*Dm_r(2)
-      M_strength(22) = Mq_r(8)*Dm_l(3)+Mq_l(8)*Dm_r(3)
-      M_strength(21) = Mq_r(9)*Dm_l(1)+Mq_l(9)*Dm_r(1)
-      M_strength(22) = Mq_r(9)*Dm_l(2)+Mq_l(9)*Dm_r(2)
-      M_strength(23) = Mq_r(9)*Dm_l(3)+Mq_l(9)*Dm_r(3)
+      M_strength(22) = Mq_r(8)*Dm_l(1)+Mq_l(8)*Dm_r(1)
+      M_strength(23) = Mq_r(8)*Dm_l(2)+Mq_l(8)*Dm_r(2)
+      M_strength(24) = Mq_r(8)*Dm_l(3)+Mq_l(8)*Dm_r(3)
+      M_strength(25) = Mq_r(9)*Dm_l(1)+Mq_l(9)*Dm_r(1)
+      M_strength(26) = Mq_r(9)*Dm_l(2)+Mq_l(9)*Dm_r(2)
+      M_strength(27) = Mq_r(9)*Dm_l(3)+Mq_l(9)*Dm_r(3)
 
 C Istropic averaging 
 
@@ -115,6 +115,7 @@ C Istropic averaging
       One_ov_three = Done/Three
       One_ov_tzero = Done/Twozero 
       One_ov_nine  = Done/Dnine 
+      Half         = Done/Two 
       Fsc   = Done/Recp_fsc
 
       D_iso = Dzero
@@ -129,7 +130,7 @@ C Istropic averaging
       Enddo
       A_iso = Two_ov_three*Root*A_iso
 
-      Q_fac = One_ov_tzero*Fsc**2
+      Q_fac = One_ov_three*One_ov_tzero*Fsc**2
       Q_iso_1 = Two*(Q_strength(1)+Q_strength(2)+Q_strength(3))
       Q_iso_2 = Three*(Q_strength(4)+Q_strength(5)+Q_strength(6))
 C The elements 7, 8 and 9 are build with a factor of two.
@@ -147,11 +148,12 @@ C The elements 7, 8 and 9 are build with a factor of two.
       O_iso = O_fac*O_iso*Root**3
 
 C The factor 1/3c associated with the integral is also absorbed 
-C in here.
-    
+C in here. The factor half is to account for the factor two 
+C introduced in the symmetrization (see above)
+
       M_iso = Dzero 
-      M_fac = One_ov_nine*Fsc**2 
-      Do Icomp = 1, 23
+      M_fac = Half*One_ov_nine*Fsc**2 
+      Do Icomp = 1, 27
          M_iso = M_iso + M_strength(Icomp)
       Enddo
       M_iso = M_fac*M_iso*Root**2

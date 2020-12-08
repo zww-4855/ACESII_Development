@@ -17,8 +17,8 @@ C
        CALL GETLST(TMP,IGET(I),1,1,ILIST1,ILIST2)
 #ifdef _DEBUG_LVL0
        Write(6,"(a,i4)") "Checksum of basis vectors in list",ilist2
-       call checksum("@-forms          :",tmp,length,s)
-       write(6,"(a,3x,F15.7)") "The coefficients            :",coeff(i)
+       call checksum("@-forms:",tmp,length,s)
+       write(6,"(a,F15.7)") "The coefficients:",coeff(i)
 #endif
        CALL SAXPY (LENGTH,COEFF(I),TMP,1,A,1)
 10    CONTINUE

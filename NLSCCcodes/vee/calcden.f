@@ -27,16 +27,11 @@ C
 C CALCULATE DENSITY MATRIX CONTRIBUTIONS      
 C
        CALL DENS11(SCR(IOFF),SCR(IDOO),SCR(IDVV),IRREPX,ISPIN,IUHF)
-       
 C
 10    CONTINUE
-C This and the all the calling routines are borrowed from John
-C to debug RPA(D) and commented for standard runs.
-CSSSS      Call Mtdaener(SCR,MAXCOR,IUHF,IRREPX,.TRUE.,ETDA)
 C
       IONE=1
       CALL PUTREC(20,'JOBARC','IOPTSYM ',IONE,IRREPX)
-      
 C
       RETURN
       END

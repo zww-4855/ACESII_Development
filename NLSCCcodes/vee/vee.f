@@ -340,7 +340,6 @@ C
         MAXCOR=ICRSIZ
 CMN END
       IF(CIS)THEN
-        print*,'value of Ispar', Ispar
        If (Ispar) CALL RESTORE_CC_WMBEJ(ICORE(I0),MAXCOR,IUHF)
        CALL MAKESS(ICORE(I0),MAXCOR,IUHF)
        CALL DRVTDA(ICORE(I0),MAXCOR/IINTFP,IUHF)
@@ -362,6 +361,7 @@ C READGUES is set to tru  and NONSTD is TRUE only if %EXCITE*, So
 C if GUESS vector is to be read from ZMAT then use the %EXCITE*.
 C
         IF (.NOT. NONSTD) THEN
+         Print*, "Enter drvtda"
          CALL DRVTDA(ICORE(I0),MAXCOR/IINTFP,IUHF)
         ENDIF 
 

@@ -631,7 +631,7 @@ C
                STOP
            ELSE 
 
-               IF (IROOT .EQ. NROOT) THEN
+              IF (IROOT .EQ. NROOT) THEN
                    CALL INIGAM(IUHF)
                    CALL EDENS(IRREPX,SCR,MAXCOR,IUHF,ISIDE,
      &                        Z*(ONE+DFLOAT(1-IUHF)),Z0)
@@ -642,9 +642,9 @@ C CALCULATE EOM-CCSD TWO-PARTICLE DENSITY
                    CALL ACES_FIN
                    STOP
 
-               ELSE 
+               ELSE
 C
-C This block is added to compute the S^2 for many states in a 
+C This block is added to compute the S^2 for many states in a
 C single run
                    CALL SAVE_HBAR(SCR,MAXCOR,IUHF)
                    CALL INIGAM(IUHF)
@@ -656,10 +656,10 @@ C
                    CALL TPDENS(SCR,IINTFP*MAXCOR,IUHF,Z0)
                    CALL COPY_HBAR(SCR,MAXCOR,IUHF)
                    IF (IROOT .EQ. NROOT) THEN
-                      CALL ACES_IO_REMOVE(54,"DERGAM")  
+                      CALL ACES_IO_REMOVE(54,"DERGAM")
                       CALL MAKLST(SCR,MAXCOR,IUHF)
                       RETURN
-                   ENDIF 
+                   ENDIF
 
                ENDIF 
            ENDIF

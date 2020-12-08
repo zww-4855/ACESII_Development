@@ -547,7 +547,7 @@ C
             else
               SCR(ICOUNT) =1.0d0
             endif
-
+                print*,'SCR val:', SCR(ICOUNT)
 !                       IF (ICASE .EQ. 1) THEN
 !
 !                          SCR(ICOUNT) = 1.0D0

@@ -610,8 +610,8 @@ C
                   CALL LNORM(IRREPX,ROOT,SCR,MAXCOR,IUHF,Z,Z0)
                   IF(LAMTHERE)THEN
                     CALL TDENS(IRREPX,SCR,MAXCOR,IUHF,ISIDE,
-     &                 Z*(ONE+DFLOAT(1-IUHF)),Z0,ROOT,CORE_SEARCH)
-                    CALL PRINTSUM(ROOT,FSTR,CORE_SEARCH)
+     &                 Z*(ONE+DFLOAT(1-IUHF)),Z0,ROOT,CoRE_SEARCH)
+                    CALL PRINTSUM(ROOT,FSTR)
                     OSCSTR(IROOT,IRREPX) = FSTR
                   ENDIF
                   CALL GETLST(SCR(I000),3,1,1,1,472)

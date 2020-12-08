@@ -1,7 +1,9 @@
-      SUBROUTINE TRNMOM1(VDIP,VECTOR,ISCR,MXCOR,NROOT,IUHF)
+      SUBROUTINE TRNMOM1(VDIP,VECTOR,ISCR,MXCOR,NROOT,NROOT_ORG,IUHF)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
       INTEGER DIRPRD
       LOGICAL CIS,RPA,EOMCC,CISD,FULDIAG,INCORE,READGUES
+      LOGICAL WARN
+      DIMENSION NROOT_ORG(8)
       DIMENSION VDIP(*),VECTOR(*),TRNMOM(3),NROOT(8),ISCR(MXCOR)
       COMMON/METH/CIS,RPA,EOMCC,CISD,FULDIAG,INCORE,READGUES
       COMMON/SYMINF/NSTART,NIRREP,IRREPS(255,2),DIRPRD(8,8)
@@ -38,12 +40,16 @@ C
 C
 C NOW READ IN EIGENVECTORS
 C
+       WARN = .FALSE.
        DO 20 IROOT=1,NROOT(IRREPX)
 C
 C LOOP OVER SPIN CASES
 C
         CALL GETLST(VECTOR,IROOT,1,1,IRREPX,94)
         CALL GETLST(ROOT  ,IROOT,1,1,IRREPX,95)
+        IF (NROOT(IRREPX) .NE. NROOT_ORG(IRREPX)) THEN
+            WARN = .TRUE.
+        ENDIF 
 C
 C NOW LOOP OVER CARTESIAN DIRECTIONS
 C
@@ -61,6 +67,13 @@ C
 5     CONTINUE
       CALL PUTREC(20,'JOBARC','TOTENER2',IINTFP,EGS+ROOT)
       WRITE(6,1003)
+
+      IF (WARN) THEN
+          WRITE(6,*)
+          WRITE(6,"(2a)") " The number of roots printed per irrep. is",
+     &                    " is less than requested. This means"
+          WRITE(6,"(a)")  " fewer than requested were located."
+      ENDIF 
 C 
 1000  FORMAT(T5,'Tamm-Dancoff (CIS) Excitation Energies and ',
      &        'Transition Moments',/)

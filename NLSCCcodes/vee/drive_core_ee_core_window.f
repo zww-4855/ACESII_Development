@@ -249,7 +249,7 @@ c flags2.com : end
 C
       PROJECT_SINGLES = (Iflags2(173) .NE. 0)
 
-      Write(6,"(a,l,8i2)") "  Project singles and window: ", 
+      Write(6,"(a,l,8i2)") " Project singles and window: ", 
      &                     PROJECT_SINGLES,(iwindow(i),i=1,NirreP)
       Write(6,*)
 C
