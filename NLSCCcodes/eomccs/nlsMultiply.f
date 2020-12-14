@@ -19,7 +19,7 @@
 
         integer::iter,next,offset,MATDIM,root,i,a
         integer::compareIA(2),QMregIA(2),test(5)
-        double precision::temp
+        double precision::trace,temp
         double precision::intermed(2*nocc*nvirt)
         double precision::matmulcopy(2*nocc*nvirt)
       !  allocate(intermed(roots*2*nocc*nvirt))
@@ -34,6 +34,35 @@
 
            call output(acesCISevecs,1,2*nocc*nvirt,1,2*nocc*nvirt,
      &          2*nocc*nvirt,2*nocc*nvirt,1)
+
+
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+        print*,'printing NLS-CIS matrix to output file for heatmap...'
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+        trace=0.0d0
+        open(unit=2500, file='NLS_CISmat.txt')
+        do i=1,2*nocc*nvirt
+          do j=1,2*nocc*nvirt
+            if (i.eq.j) then
+                trace=trace+CISmat(i,i)
+            endif
+            write(2500,*) CISmat(j,i)
+          enddo
+        enddo
+        write(2500,*) 'trace: ',trace
+        close(2500)
+
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+        
+
+
+
+
 
         print*,'nbas',nocc,nvirt,nbas
         intermed=0.0d0
