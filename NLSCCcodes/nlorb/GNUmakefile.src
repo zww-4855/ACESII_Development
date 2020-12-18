@@ -1,0 +1,35 @@
+#-D_NONO_SKIP will do the original transformation
+#-D_READ_ONLY do the new transformation but built on old structure
+#-D_2HOT is new transformation on the new structure.
+#
+#DEFINES_EXTRA += -D_READ_ONLY -D_DEBUG_LVL0# -D_DEBUG_LVLM1 -D_ASSERT
+#DEFINES_EXTRA += -D_DEBUG_LVLM1 -D_DEBUG_LVL0 -D_NONOSKIP   -D_ASSERT
+#DEFINES_EXTRA += -D_2HOT -D_ASSERT #-D_DEBUG_LVL0 #-D_DEBUG_LVLM1 -D_DEBUG_LVL0  -D_DEBUG_LVLM2
+#(This is only for PDENS)DEFINES_EXTRA = -D_ASSERT -D_KEEP -D_DEBUG_LVL0 -D_TDENS -D_MKLST -D_GETPTS  -D_WPTS
+DEFINES_EXTRA +=  -D_ASSERT -D_DPOCC #-D_DEBUG_LVL0 #-D_ORTHO #-D_2ND_ORD_PROPS -D_COT -D_DORNG -D_DEBUG_LVL0 
+#DEFINES_EXTRA = -D_ASSERT -D_KEEP -D_TDENS -D_MKLST -D_GETPTS  -D_WPTS -D_DEBUG_LVL0 # -D_DEBUG_LVLM2 
+OPTIMIZE=1
+DEBUG=0
+64BIT=1
+INCDIRS= ./include ../include/mpi ../include ../intgrt/include/ ../sbtools/include
+#LDFLAGS_NUMLIBS := -L/share/aces/ACESII_Dev/lib  -llinpack -leispack -llb
+#LDFLAGS_NUMLIBS:= -L/opt/intel/mkl/11.1.064/lib/em64t/ -Bstatic -lmkl_intel_lp64 -lmkl_lapack -lmkl_sequential -lmkl_core -Bdynamic -pthread -L/home/perera/lib -llb -llinpack
+MKL_GRP:= -Bstatic -lmkl_intel_ilp64 -lmkl_lapack95_ilp64 -lmkl_sequential -lmkl_core -Bdynamic 
+LDFLAGS_NUMLIBS:= -L/opt/intel/mkl/11.1.064/lib/em64t -Wl,--start-group $(MKL_GRP) -Wl,--end-group -pthread -L/home/auybv/ACESII/lib -llb -llinpack
+DIR_INSTBIN := /home/auybv/ACESII/bin
+DIR_INSTLIB := /home/auybv/ACESII/lib 
+DIR_SRCLIB  := ${DIR_INSTLIB}
+
+###################################
+## AME and ASL specific settings ##
+###################################
+
+ifeq (${CURR},asv)
+   LIST_DEF_LIBS :=
+   ACES_LINK_LISTS :=
+   LD := $(filter-out -c,${CC})
+   LDFLAGS := ${CFLAGS}
+   LDFLAGS_EXTRA := ../joda/asv_ctl.o
+   LDFLAGS_NUMLIBS :=
+endif
+

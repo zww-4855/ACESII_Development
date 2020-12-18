@@ -60,6 +60,31 @@
 
         print*,'nbas',nocc,nvirt,nbas
 >>>>>>> simplifyCIS
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+        print*,'printing NLS-CIS matrix to output file for heatmap...'
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+        trace=0.0d0
+        open(unit=2500, file='NLS_CISmat.txt')
+        do i=1,2*nocc*nvirt
+          do j=1,2*nocc*nvirt
+            if (i.eq.j) then
+                trace=trace+CISmat(i,i)
+            endif
+            write(2500,*) CISmat(j,i)
+          enddo
+        enddo
+        write(2500,*) 'trace: ',trace
+        close(2500)
+
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+        print*,'*****************************************************'
+
+
+
         intermed=0.0d0
         iter=1
         next=1
